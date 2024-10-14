@@ -11,6 +11,7 @@ using namespace std;
 class View
 {
 private:
+    // Recomendación Linter: Tener solo un método público
     SNIESController controlador;
 
 public:
