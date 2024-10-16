@@ -15,18 +15,6 @@ using std::vector;
 
 class ProgramaAcademico
 {
-    int codigoDeLaInstitucion;
-    int iesPadre;
-    string institucionDeEducacionSuperiorIes;
-    string principalOSeccional;
-    int idSectorIes;
-    string sectorIes;
-    int idCaracter;
-    string caracterIes;
-    int codigoDelDepartamentoIes;
-    string departamentoDeDomicilioDeLaIes;
-    int codigoDelMunicipioIes;
-    string municipioDeDomicilioDeLaIes;
     int codigoSniesDelPrograma;
     string programaAcademico;
     int idNivelAcademico;
@@ -53,42 +41,6 @@ class ProgramaAcademico
 
 public:
     ProgramaAcademico();
-
-    void setCodigoDeLaInstitucion(int);
-    int getCodigoDeLaInstitucion();
-
-    void setIesPadre(int);
-    int getIesPadre();
-
-    void setInstitucionDeEducacionSuperiorIes(string &);
-    string getInstitucionDeEducacionSuperiorIes();
-
-    void setPrincipalOSeccional(string &);
-    string getPrincipalOSeccional();
-
-    void setIdSectorIes(int);
-    int getIdSectorIes();
-
-    void setSectorIes(string &);
-    string getSectorIes();
-
-    void setIdCaracter(int);
-    int getIdCaracter();
-
-    void setCaracterIes(string &);
-    string getCaracterIes();
-
-    void setCodigoDelDepartamentoIes(int);
-    int getCodigoDelDepartamentoIes();
-
-    void setDepartamentoDeDomicilioDeLaIes(string &);
-    string getDepartamentoDeDomicilioDeLaIes();
-
-    void setCodigoDelMunicipioIes(int);
-    int getCodigoDelMunicipioIes();
-
-    void setMunicipioDeDomicilioDeLaIes(string &);
-    string getMunicipioDeDomicilioDeLaIes();
 
     void setCodigoSniesDelPrograma(int);
     int getCodigoSniesDelPrograma();
