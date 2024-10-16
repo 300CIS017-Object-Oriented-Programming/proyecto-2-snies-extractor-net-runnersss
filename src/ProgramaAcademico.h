@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <iostream>
 #include "Consolidado.h"
 
@@ -48,7 +49,7 @@ class ProgramaAcademico
     string departamentoDeOfertaDelPrograma;
     int codigoDelMunicipioPrograma;
     string municipioDeOfertaDelPrograma;
-    vector<Consolidado *> consolidados;
+    unordered_map<int, Consolidado *> consolidados;
 
 public:
     ProgramaAcademico();
