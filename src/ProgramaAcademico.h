@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+
 #include <iostream>
 #include "Consolidado.h"
 
@@ -11,7 +12,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-using std::vector;
+using std::map;
+
 
 class ProgramaAcademico
 {
@@ -95,7 +97,11 @@ public:
     string getMunicipioDeOfertaDelPrograma();
     void setConsolidado(Consolidado *, int);
     Consolidado *getConsolidado(int);
+
     ~ProgramaAcademico();
+    void setDato(string, string);
+    string getDato(string);
+    Consolidado *getConsolidado(int);
 };
 
 #endif
