@@ -1,7 +1,5 @@
 #include "View.h"
 
-// Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
-// archivo de configuración
 View::View()
 {
     // NEW quitar estas variables de aquí y del constructor del SNIESController
@@ -17,100 +15,114 @@ View::View()
     controlador = SNIESController(ruta1, ruta2, ruta3, ruta4, ruta5, ruta6, ruta7);
 }
 
-// Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
-//  del View sea por defecto y el de controlador se llame automáticamente al salir del programa
 View::~View()
 {
     controlador.~SNIESController();
 }
 
+bool View::esEntero(const std::string &str)
+{
+    if (str.empty())
+        return false;
+
+    for (char const &c : str)
+    {
+        if (!std::isdigit(c))
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 bool View::mostrarPantallaBienvenido()
 {
-    // Mantenimiento: Nombre confuso de la variable, cambiar a algo más descriptivo
-    bool parametrizacionBool = false;
+    char userAnswer;
+    cout << "=================Bienvenido al SNIES-Extractor!=====================" << endl;
+    cout << "====================================================================" << endl;
+    cout << "Recuerde: Los archivos deben estar en una carpeta SNIES_EXTRACTOR" << endl;
+    cout << "con sus respectivas carpetas inputs y outputs, donde se encuentren" << endl;
+    cout << "todos los archivos CSV del SNIES." << endl;
+    cout << "====================================================================" << endl;
+    parametrizacion();
 
-    cout << "Bienvenido al SNIES-Extractor!" << endl;
-    cout << "=========================================" << endl;
-    cout << "Recuerde que para el correcto funcionamiento del programa tuvo que haber parametrizado" << endl;
-    cout << "antes la carpeta SNIES_EXTRACTOR en el disco duro C:, con sus respectivas carpetas inputs y outputs" << endl;
-    cout << "y todos los archivo CSV del SNIES." << endl;
-    cout << "Si ya hizo esto, escriba 'Y', de lo contrario 'N', y Enter: " << end;
-    char userAnswer = 'Y';
-    // cin >> userAnswer;
-    // cout << endl;
-    userAnswer = static_cast<char>(tolower(userAnswer));
-    // Código muy extenso, se puede simplificar
-    if (userAnswer == 'y')
+    string userText;
+    cout << endl;
+    cout << "A continuacion, se procesaran los datos de los programas academicos seleccionados" << endl;
+
+    string anio1;
+    string anio2;
+    cout << "Escriba el primer anio de busqueda: ";
+    cin >> anio1;
+    cout << endl;
+
+    if (!esEntero(anio1))
     {
-        parametrizacionBool = true;
-
-        string userText;
-        cout << "A continuacion se procesaran los datos de los programas academicos seleccionados en /programas.csv..." << endl;
-        // Manteniemiento: Cambiar el nombre de las variables a algo más descriptivo
-        // y quitar las variables que no se usan
-        string anio1("abc");
-        string ano2("abc");
-        string anoAux;
-        int i = 0;
-        bool anosValido = false;
-        // FIXME pasar la lógica del bucle a un método reutlizable
-        // Usar en el while una bandera y simplificar el código
-        // Bucle para leer un valor valido del año1
-        // Mantenimiento: Alta complejidad y repetición de código, refactorizar.
-        while (!(isConvetibleToInt(anio1)))
-        {
-            if (i == 1)
-            {
-                cout << "El valor ingresado fue invalido!" << endl;
-                cout << "Por favor ingrese un valor valido la proxima" << endl;
-                cout << "Presione 'OK' y Enter para continuar: " << endl;
-                cin >> userText;
-                cout << endl;
-            }
-            cout << "Escriba el primer ano de busqueda: " << endl;
-            cin >> anio1;
-            cout << endl;
-            i = 1;
-        }
-
-        i = 0;
-        // Bucle para leer un valor valido del año2
-        while (!(isConvetibleToInt(ano2)))
-        {
-            if (i == 1)
-            {
-                cout << "El valor ingresado fue invalido!" << endl;
-                cout << "Por favor ingrese un valor valido la proxima" << endl;
-                cout << "Presione 'OK' y Enter para continuar: " << endl;
-                cin >> userText;
-                cout << endl;
-            }
-            cout << "Escriba el segundo ano de busqueda: " << endl;
-            cin >> ano2;
-            cout << endl;
-            i = 1;
-        }
-
-        // Organizo los años
-        // FIXME: Crear un método para hacer que el segundo año sea siempre
-        // mayor que el primer año
-        // Mantenimiento: Simplificar el código, implementar o usar funciones auxiliares como swap
-        if (stoi(ano2) < stoi(anio1))
-        {
-            anoAux = anio1;
-            anio1 = ano2;
-            ano2 = anoAux;
-        }
-
-        cout << "Procesando datos ..." << endl;
-        controlador.procesarDatosCsv(anio1, ano2);
-        cout << "Datos procesados con exito!" << endl;
+        throw std::invalid_argument("El valor ingresado no es correcto");
     }
-    return parametrizacionBool;
+
+    cout << "Escriba el segundo ano de busqueda: ";
+    cin >> anio2;
+    cout << endl;
+
+    if (!esEntero(anio2))
+    {
+        throw std::invalid_argument("El valor ingresado no es correcto");
+    }
+
+    if (anio1 >= anio2)
+    {
+        throw std::invalid_argument("El segundo anio debe ser mayor que el primero");
+    }
+
+    cout << "Procesando datos ..." << endl;
+    controlador.procesarDatosCsv(anio1, anio2);
+    cout << "Datos procesados con exito!" << endl;
+
+    return true;
 }
 
-// Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
+void View::parametrizacion()
+{
+    string anioProgramas;
+    cout << "=============Parametros Por Defecto================" << endl;
+    cout << "Ruta base de la carpeta SNIES_EXTRACTOR/inputs es: " << endl;
+    cout << Settings::BASE_PATH << std::endl;
+    cout << "Delimitador por defecto: " << Settings::DELIMITADOR<< std::endl;
+    cout << "Desea realizar cambios?" << std::endl;
+    cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
+    
+    if(eleccionUsuario()){
+        string nuevaRuta;
+        char delimitador;
+        cout<<"Ingrese la nueva ruta base: "<< std::endl;
+        cin >> nuevaRuta;
+        ajustes.setRutaBase(nuevaRuta);
+        
+        cout<<"Ingrese el nuevo delimitador: "<< std::endl;
+        cin >> delimitador;
+        ajustes.setDelimitador(delimitador);
+    }
+
+    cout <<"Ingrese el anio que se va a tomar como base"<<endl;
+    cout <<"para extraer los programas academicos"<<endl;
+    cin >>anioProgramas;
+    ajustes.setAnioProgramas(anioProgramas);
+}
+bool View::eleccionUsuario()
+{
+    char userAnswer;
+    cin >> userAnswer;
+    userAnswer = static_cast<char>(tolower(userAnswer));
+    if (userAnswer != 'y' && userAnswer != 'n')
+    {
+        throw std::invalid_argument("La opcion ingresada es incorrecta");
+    }
+    if (userAnswer == 'y')
+        return true;
+
+    return false;
+}
 void View::salir()
 {
     cout << "Cerrando programa..." << endl;
@@ -118,17 +130,13 @@ void View::salir()
     cout << "Programa Cerrado con exito!" << endl;
 }
 
-// Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
 void View::mostrarDatosExtra()
 {
-    // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
-    // mismo nombre, la estructura es confusa.
     char opcionYN;
     cout << "A continuacion vamos a mostrar datos relevantes de los programas academicos seleccionados" << "\n"
          << endl;
     cout << "Desea Convertir los datos a un archivo CSV?(Y/N): " << endl;
     cin >> opcionYN;
-    // Recomendacion Linter: No dejar la conversión implicita de int a char.
     opcionYN = tolower(opcionYN);
     cout << "\n";
     // FIXME verificar que el usuario ingrese un valor igual al esperado, return true si es Y, false si es N, y no sale si no retorna un valor válido
@@ -144,11 +152,8 @@ void View::mostrarDatosExtra()
     }
 }
 
-// Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
 void View::buscarPorPalabraClaveYFormacion()
 {
-    // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
-    // mismo nombre, la estructura es confusa.
     char opcionYN = 'y', opcionCSV;
     string palabraClave;
     bool convertirCSV;
@@ -158,11 +163,9 @@ void View::buscarPorPalabraClaveYFormacion()
     {
         cout << "Desea hacer una busqueda por palabra clave del nombre del programa(Y/N): " << endl;
         cin >> opcionYN;
-        // Recomendacion Linter: es preferible usar endl a \n.
         cout << "\n";
         opcionYN = tolower(opcionYN);
 
-        // Alta complejidad ciclomática, refactorizar
         if (opcionYN == 'y')
         {
             cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
@@ -179,8 +182,7 @@ void View::buscarPorPalabraClaveYFormacion()
             {
                 convertirCSV = false;
             }
-            // Coesión y Organización: Baja coesión, este metodo hace cosas que no debería,
-            // separar en métodos más pequeños
+
             cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
             cin >> palabraClave;
             cout << endl;
@@ -205,7 +207,6 @@ bool View::isConvetibleToInt(const string &str)
     try
     {
         std::size_t pos;
-        // Recomendación Linter: La variable num nunca se usa.
         int num = std::stoi(str, &pos);
 
         // Verificamos si se ha convertido toda la cadena

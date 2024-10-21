@@ -1,35 +1,209 @@
 #include "GestorCsv.h"
-// FIXME: LA LECTURA DE ARCHIVOS CON GETLINE FUNCIONA HORRIBLEMENTE, NO TENEMOS IDEA DE POR QUÉ
+std::unordered_map<std::string, int> GestorCsv::extraerEncabezados(string const &ruta)
+{
+    std::unordered_map<std::string, int> encabezados;
+    std::ifstream archivoBase(ruta, std::ios::binary);
+
+    if (!(archivoBase.is_open()))
+    {
+        throw std::ios_base::failure("No se pudo abrir el archivo");
+    }
+
+    string linea;
+    int indice = 0;
+
+    getline(archivoBase, linea);
+    std::stringstream ss(linea);
+    std::string encabezado;
+
+    while (getline(ss, encabezado, ';'))
+    {
+        encabezados[encabezado] = indice++;
+    }
+    archivoBase.close();
+
+    return encabezados;
+}
+
+unordered_map<std::string, std::string> GestorCsv::definirProgramas()
+{
+    std::unordered_map<std::string, std::string> programas;
+    std::unordered_map<std::string, int> encabezados;
+    string linea;
+    encabezados = extraerEncabezados(Settings::PROGRAMAS_FILTRAR_FILE_PATH);
+    std::ifstream archivoBase(Settings::PROGRAMAS_FILTRAR_FILE_PATH, std::ios::binary);
+    if (!archivoBase.is_open())
+    {
+        throw std::ios_base::failure("No se pudo abrir el archivo");
+    }
+
+    int indicadorClave = encabezados["CÓDIGO SNIES DEL PROGRAMA"];
+    int valorInteres = encabezados["PROGRAMA ACADÉMICO"];
+    linea = "";
+
+    while (getline(archivoBase, linea))
+    {
+        std::stringstream ss(linea);
+        std::string item;
+        std::vector<std::string> elementos;
+
+        while (getline(ss, item, ';'))
+        {
+            elementos.push_back(item);
+        }
+
+        std::string clave = elementos[indicadorClave];
+        programas[clave] = elementos[valorInteres];
+    }
+    archivoBase.close();
+
+    std::string rutaSalida = Settings::BASE_PATH + "programas2.csv";
+    std::ofstream archivoSalida(rutaSalida, std::ios::binary);
+
+    if (!archivoSalida.is_open())
+    {
+        throw std::ios_base::failure("No se pudo abrir el archivo de salida");
+    }
+    // Utiliza UTF-8 BOM para permitir caracteres especiales
+    archivoSalida << "\xEF\xBB\xBF";
+    archivoSalida << "CÓDIGO SNIES DEL PROGRAMA; PROGRAMA ACADÉMICO" << std::endl;
+
+    for (const auto &par : programas)
+    {
+        archivoSalida << par.first << ";" << par.second << std::endl;
+    }
+
+    archivoSalida.close();
+
+    return programas;
+}
+
 vector<int> GestorCsv::leerProgramasCsv(string &ruta)
 {
     vector<int> codigosSniesRetorno;
     ifstream archivoProgramasCsv(ruta);
     if (!(archivoProgramasCsv.is_open()))
     {
-        cout << "Archivo " << ruta << " no se pudo abrir correctamente" << endl;
+        throw std::ios_base::failure("No se pudo abrir el archivo");
     }
-    else
+
+    string linea;
+    string dato;
+    // Saltarse la primera linea
+    getline(archivoProgramasCsv, linea);
+    // Leer los programas
+    while (getline(archivoProgramasCsv, linea))
     {
-        string linea;
-        string dato;
-        // Saltarse la primera linea
-        getline(archivoProgramasCsv, linea);
-        // Leer los programas
-        while (getline(archivoProgramasCsv, linea))
-        {
-            stringstream streamLinea(linea);
-            getline(streamLinea, dato, ';');
-            codigosSniesRetorno.push_back(stoi(dato));
-        }
+        stringstream streamLinea(linea);
+        getline(streamLinea, dato, ';');
+        codigosSniesRetorno.push_back(stoi(dato));
     }
+
     archivoProgramasCsv.close();
+    // Recorre el vector e imprime cada elemento
+    // for (size_t i = 0; i < codigosSniesRetorno.size(); ++i) {
+    //     std::cout << "Elemento " << i << ": " << codigosSniesRetorno[i] << std::endl;
+    // }
     return codigosSniesRetorno;
 }
 
+    archivoProgramasCsv.close();
+    // Recorre el vector e imprime cada elemento
+    // for (size_t i = 0; i < codigosSniesRetorno.size(); ++i) {
+    //     std::cout << "Elemento " << i << ": " << codigosSniesRetorno[i] << std::endl;
+    // }
+    return codigosSniesRetorno;
+}
+
+
+std::unordered_map<std::string,int> GestorCsv::extraerIndices(){
+    std::unordered_map<std::string, int> indices;
+    std::unordered_map<std::string, int> encabezados;
+
+    encabezados=extraerEncabezados(Settings::ADMITIDOS_FILE_PATH+"2022"+".csv");
+    
+    for (const auto& encabezado : encabezados) {
+        auto it = find(Settings::camposImportantes.begin(), Settings::camposImportantes.end(), encabezado.first);
+        if (it == Settings::camposImportantes.end()) {
+            indices[encabezado.first] = encabezado.second;
+        }
+    }
+    return indices;
+}
+
+std::vector<std::vector<std::string>> GestorCsv::extraerDatos(){
+    std::vector<std::vector<std::string>> datos;  
+    std::ifstream archivo(Settings::ADMITIDOS_FILE_PATH+"2022"+".csv");         
+    std::string linea;
+
+    if (!archivo.is_open())
+    {
+        throw std::ios_base::failure("No se pudo abrir el archivo");
+    }
+
+    //Leer y descartar la primera línea (encabezado)
+    std::getline(archivo, linea);
+
+    while (std::getline(archivo, linea)) {
+        std::vector<std::string> fila;          
+        std::stringstream sstream(linea);      
+        std::string valor;
+
+        
+        while (std::getline(sstream, valor, ';')) {
+            fila.push_back(valor);              
+        }
+
+        datos.push_back(fila);                  
+    }
+
+    archivo.close();    
+    std::unordered_map<std::string, int> indices = extraerIndices();
+    
+    eliminarIndices(indices,datos);
+    return datos;
+}
+void GestorCsv::eliminarIndices(std::unordered_map<std::string, int>& indices, std::vector<std::vector<std::string>>& datos) {
+    
+    for (auto& fila : datos) {
+        
+        std::vector<std::string> fila_filtrada;
+        
+        
+        for (size_t i = 0; i < fila.size(); ++i) {
+            
+            bool eliminar = false;
+            for (const auto& par : indices) {
+                if (i == par.second) {
+                    eliminar = true;
+                    break;
+                }
+            }
+            
+            if (!eliminar) {
+                fila_filtrada.push_back(fila[i]);
+            }
+        }
+        
+        fila = fila_filtrada;
+    }
+}
+
+
+
+
 vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
 {
+    // Estructura: La estructura es confusa.
+    // Mantenimiento: Se pueden mejorar los nombres de las variables.
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
+
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+    cout << "Posicion Codigo SNIES: " << POS_COD_SNIES << endl;
+    int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
+
     ifstream archivoPrimero(rutaCompleta);
     if (!(archivoPrimero.is_open()))
     {
@@ -44,13 +218,17 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
         int columna;
         vector<int>::iterator it;
 
+        // Conseguir posiciones de las columnas
+
+
         // Primera iteracion del ciclo para guardar las etiquetas
         getline(archivoPrimero, fila);
-        vectorFila = vector<string>(39);
+        vectorFila = vector<string>(TAMANIO_ARCHIVO);
         streamFila = stringstream(fila);
         columna = 0;
         while ((getline(streamFila, dato, ';')))
         {
+
             vectorFila[columna] = dato;
             columna++;
         }
@@ -61,14 +239,14 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
         {
             streamFila = stringstream(fila);
             columna = 0;
-            while ((getline(streamFila, dato, ';')) && (columna < 13))
+            while ((getline(streamFila, dato, ';')) && (columna <= POS_COD_SNIES))
             {
                 vectorFila[columna] = dato;
                 columna++;
             }
 
             // Verificamos que la fila no sea una fila de error
-            if (vectorFila[12] != "Sin programa especifico")
+            if (vectorFila[POS_COD_SNIES] != "Sin programa especifico")
             {
                 it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[12]));
             }
@@ -549,4 +727,91 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
 
     archivoExtra.close();
     return estadoCreacion;
+}
+
+map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
+    // TODO: agregar las claves sin espacio y todo en mayúsculas
+    map<string, int> mapaConPosiciones;
+
+    ifstream archivo(rutaArchivo);
+    // TODO: manejar la excepción. Throw a dónde? Al SNIESController?
+    if (!(archivo.is_open()))
+    {
+        cout << "Archivo " << rutaArchivo << " no se pudo abrir correctamente" << endl;
+    }
+    else {
+        string fila;
+        string dato;
+        vector<string> vectorFila;
+        stringstream streamFila;
+        int columna;
+
+
+        // Primera iteracion del ciclo para guardar las etiquetas
+        getline(archivo, fila);
+        streamFila = stringstream(fila);
+        columna = 0;
+        while ((getline(streamFila, dato, ';')))
+        {
+            dato = quitarEspacioYAgregarMayus(dato);
+            mapaConPosiciones[dato] = columna;
+            columna++;
+        }
+    }
+    archivo.close();
+
+    // Imprimir el mapa
+    /*
+    for (const auto& par : mapaConPosiciones) {
+        cout << "Nombre: " << par.first << ", Posicion: " << par.second << endl;
+    }
+    */
+
+    return mapaConPosiciones;
+}
+
+int GestorCsv::conseguirCantColumnas(map<string, int> mapa) {
+    int maxPosicion = 0;
+
+    // Recorrer el mapa y encontrar la posición más grande
+    for (const auto& par : mapa) {
+        if (par.second > maxPosicion) {
+            maxPosicion = par.second;
+        }
+    }
+    cout << "La posicion mas grande es: " << maxPosicion << endl;
+
+    return maxPosicion;
+}
+
+string GestorCsv::quitarEspacioYAgregarMayus(string cadena) {
+    std::transform(cadena.begin(), cadena.end(), cadena.begin(), ::toupper);
+    std::replace(cadena.begin(), cadena.end(), ' ', '_');
+
+    return cadena;
+}
+
+string GestorCsv::convertirStringFormaEstandar(string &stringIn) {
+    static const unordered_map<char, char> tildesMap = {
+        {'á', 'a'}, {'Á', 'a'},
+        {'é', 'e'}, {'É', 'e'},
+        {'í', 'i'}, {'Í', 'i'},
+        {'ó', 'o'}, {'Ó', 'o'},
+        {'ú', 'u'}, {'Ú', 'u'}
+    };
+
+    string ans;
+    for (int i = 0; i < stringIn.length(); ++i) {
+        char letra = tolower(stringIn[i]);  // Se convierte a minúscula
+
+        if (tildesMap.count(letra)) {
+            letra = tildesMap.at(letra);  // Se reemplaza la vocal con tilde
+        }
+
+        if (letra != ' ' && letra != '-') {
+            ans += letra;
+        }
+    }
+
+    return ans;
 }

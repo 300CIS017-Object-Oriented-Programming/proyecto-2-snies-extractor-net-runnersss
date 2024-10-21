@@ -16,31 +16,32 @@
  *
  */
 
+
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <vector> 
 #include <string>
+using namespace std;
+
 class Settings
 {
 public:
-    // En la clase Settings, las variables ADMITIDOS_FILE_PATH, MATRICULADOS_FILE_PATH y ETC se declaran como static const std::string. Esto significa que son constantes de tipo string que pertenecen a la clase en lugar de a instancias individuales de la clase.
-    static const std::string ADMITIDOS_FILE_PATH;
-    static const std::string MATRICULADOS_FILE_PATH;
-    static const std::string INSCRITOS_FILE_PATH;
-    static const std::string PROGRAMAS_FILTRAR_FILE_PATH;
-    static const std::string BASE_PATH;
-    static const std::string DELIMITADOR;
-
+    // En la clase Settings, las variables ADMITIDOS_FILE_PATH, MATRICULADOS_FILE_PATH y ETC se declaran como static const std::string.
+    // Esto significa que son constantes de tipo string que pertenecen a la clase en lugar de a instancias individuales de la clase.
     // FIXME completar para el resto de constantes
+    static string ADMITIDOS_FILE_PATH;
+    static string MATRICULADOS_FILE_PATH;
+    static string INSCRITOS_FILE_PATH;
+    static string PROGRAMAS_FILTRAR_FILE_PATH;
+    static string BASE_PATH;
+    static string DELIMITADOR;
+    static string GRADUADOS_FILE_PATH;
+    static std::vector<std::string> camposImportantes;
+
+    static void setRutaBase(const string &nuevaRutaBase);
+    static void setAnioProgramas(string anioProgramas);
+    static void setDelimitador(const char &delimitador);
+
 };
-
-// Declaración:
-// Inicialización: La inicialización de estas variables se realiza fuera de la clase. Esto es necesario porque las variables estáticas deben ser definidas en un solo lugar en el archivo de implementación (o en el mismo archivo, pero fuera de la clase) para que el compilador sepa cuánto espacio reservar en memoria.
-const std::string Settings::BASE_PATH = "C:/SNIES_EXTRACTOR/inputs/";
-const std::string Settings::PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "programas.csv";
-const std::string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
-const std::string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
-const std::string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
-const std::string Settings::DELIMITADOR = ";";
-
 #endif // SETTINGS_H
