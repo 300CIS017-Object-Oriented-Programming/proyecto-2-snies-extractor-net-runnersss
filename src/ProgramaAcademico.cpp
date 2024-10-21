@@ -4,126 +4,7 @@ using namespace std;
 
 ProgramaAcademico::ProgramaAcademico()
 {
-    consolidados = vector<Consolidado *>(8);
-}
-
-void ProgramaAcademico::setCodigoDeLaInstitucion(int nuevoCodigoDeLaInstitucion)
-{
-    codigoDeLaInstitucion = nuevoCodigoDeLaInstitucion;
-}
-
-int ProgramaAcademico::getCodigoDeLaInstitucion()
-{
-    return codigoDeLaInstitucion;
-}
-
-void ProgramaAcademico::setIesPadre(int nuevoIesPadre)
-{
-    iesPadre = nuevoIesPadre;
-}
-
-int ProgramaAcademico::getIesPadre()
-{
-    return iesPadre;
-}
-
-void ProgramaAcademico::setInstitucionDeEducacionSuperiorIes(string &nuevoInstitucionDeEducacionSuperiorIes)
-{
-    institucionDeEducacionSuperiorIes = nuevoInstitucionDeEducacionSuperiorIes;
-}
-string ProgramaAcademico::getInstitucionDeEducacionSuperiorIes()
-{
-    return institucionDeEducacionSuperiorIes;
-}
-
-void ProgramaAcademico::setPrincipalOSeccional(string &nuevoPrincipalOSeccional)
-{
-    principalOSeccional = nuevoPrincipalOSeccional;
-}
-
-string ProgramaAcademico::getPrincipalOSeccional()
-{
-    return principalOSeccional;
-}
-
-void ProgramaAcademico::setIdSectorIes(int nuevoIdSectorIes)
-{
-    idSectorIes = nuevoIdSectorIes;
-}
-
-int ProgramaAcademico::getIdSectorIes()
-{
-    return idSectorIes;
-}
-
-void ProgramaAcademico::setSectorIes(string &nuevoSectorIes)
-{
-    sectorIes = nuevoSectorIes;
-}
-
-string ProgramaAcademico::getSectorIes()
-{
-    return sectorIes;
-}
-
-void ProgramaAcademico::setIdCaracter(int nuevoIdCaracter)
-{
-    idCaracter = nuevoIdCaracter;
-}
-
-int ProgramaAcademico::getIdCaracter()
-{
-    return idCaracter;
-}
-
-void ProgramaAcademico::setCaracterIes(string &nuevoCaracterIes)
-{
-    caracterIes = nuevoCaracterIes;
-}
-
-string ProgramaAcademico::getCaracterIes()
-{
-    return caracterIes;
-}
-
-void ProgramaAcademico::setCodigoDelDepartamentoIes(int nuevoCodigoDelDepartamentoIes)
-{
-    codigoDelDepartamentoIes = nuevoCodigoDelDepartamentoIes;
-}
-
-int ProgramaAcademico::getCodigoDelDepartamentoIes()
-{
-    return codigoDelDepartamentoIes;
-}
-
-void ProgramaAcademico::setDepartamentoDeDomicilioDeLaIes(string &nuevoDepartamentoDeDomicilioDeLaIes)
-{
-    departamentoDeDomicilioDeLaIes = nuevoDepartamentoDeDomicilioDeLaIes;
-}
-
-string ProgramaAcademico::getDepartamentoDeDomicilioDeLaIes()
-{
-    return departamentoDeDomicilioDeLaIes;
-}
-
-void ProgramaAcademico::setCodigoDelMunicipioIes(int nuevoCodigoDelMunicipioIes)
-{
-    codigoDelMunicipioIes = nuevoCodigoDelMunicipioIes;
-}
-
-int ProgramaAcademico::getCodigoDelMunicipioIes()
-{
-    return codigoDelMunicipioIes;
-}
-
-void ProgramaAcademico::setMunicipioDeDomicilioDeLaIes(string &nuevoMunicipioDeDomicilioDeLaIes)
-{
-    municipioDeDomicilioDeLaIes = nuevoMunicipioDeDomicilioDeLaIes;
-}
-
-string ProgramaAcademico::getMunicipioDeDomicilioDeLaIes()
-{
-    return municipioDeDomicilioDeLaIes;
+    consolidados = unordered_map<int, Consolidado *>(8);
 }
 
 void ProgramaAcademico::setCodigoSniesDelPrograma(int nuevoCodigoSniesDelPrograma)
@@ -346,8 +227,8 @@ Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado)
 
 ProgramaAcademico::~ProgramaAcademico()
 {
-    for (Consolidado *consolidado : consolidados)
+    for (auto &pair : consolidados)
     {
-        delete consolidado;
+        delete pair.second; // pair.second es el puntero Consolidado*
     }
 }
