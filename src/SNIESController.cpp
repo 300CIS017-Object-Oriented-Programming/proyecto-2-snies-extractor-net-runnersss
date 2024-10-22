@@ -1,14 +1,10 @@
 #include "SNIESController.h"
 
-#include "GestorJson.h"
-#include "GestorTxt.h"
-
 using namespace std;
 
 SNIESController::SNIESController()
 {
     gestorCsvObj = new GestorCsv();
-
 }
 
 SNIESController::~SNIESController()
@@ -20,24 +16,27 @@ SNIESController::~SNIESController()
     // }
 }
 
-void SNIESController::determinarObjetosDatos(string &anio1){
-    std::string ruta=Settings::ADMITIDOS_FILE_PATH+anio1+".csv";
+void SNIESController::determinarObjetosDatos(string &anio1)
+{
+    std::string ruta = Settings::ADMITIDOS_FILE_PATH + anio1 + ".csv";
     std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta);
     std::vector<std::vector<std::string>> datos;
-    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());  
-    datos=gestorCsvObj->extraerDatos(ruta);
-    gestorCsvObj->eliminarIndices(indices,datos);
-    
-    //Extrae Encabezados Para realizar parametrización de índices
+    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());
+    datos = gestorCsvObj->extraerDatos(ruta);
+    gestorCsvObj->eliminarIndices(indices, datos);
+
+    // Extrae Encabezados Para realizar parametrización de índices
     std::vector<string> encabezados = datos.at(0); // También puedes usar vecDeVectores[0]
-    datos.erase(datos.begin()); 
-    
-    for (size_t i = 0; i < encabezados.size(); ++i) {
+    datos.erase(datos.begin());
+
+    for (size_t i = 0; i < encabezados.size(); ++i)
+    {
         posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
     }
 
-    for (const auto& fila : datos) {
-        DatosInstitucion* institucion = new DatosInstitucion();
+    for (const auto &fila : datos)
+    {
+        DatosInstitucion *institucion = new DatosInstitucion();
 
         institucion->setCodigoDeLaInstitucion(fila[posicionesEncabezados["CÓDIGO DE LA INSTITUCIÓN"]]);
         institucion->setIesPadre(fila[posicionesEncabezados["IES_PADRE"]]);
@@ -52,12 +51,13 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         institucion->setCodigoDelMunicipioIes(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO IES"]]);
         institucion->setMunicipioDeDomicilioDeLaIes(fila[posicionesEncabezados["MUNICIPIO DE DOMICILIO DE LA IES"]]);
 
-        string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]; 
-        datosInstituciones.insert({codigoSnies, institucion}); 
+        string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
+        datosInstituciones.insert({codigoSnies, institucion});
     }
 
-    for (const auto& fila : datos) {
-        ProgramaAcademico* programa = new ProgramaAcademico();
+    for (const auto &fila : datos)
+    {
+        ProgramaAcademico *programa = new ProgramaAcademico();
 
         programa->setCodigoSniesDelPrograma(fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]);
         programa->setProgramaAcademico(fila[posicionesEncabezados["PROGRAMA ACADÉMICO"]]);
@@ -87,8 +87,8 @@ void SNIESController::determinarObjetosDatos(string &anio1){
     }
 }
 
-void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2){
-
+void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2)
+{
 }
 
 // void SNIESController::procesarDatosCsv(string &ano1, string &anio2)
@@ -105,7 +105,6 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
 //     vector<vector<string>> programasAcademicosVector;
 //     int posicion;
 //     int columna;
-
 
 //     // cout << "antes leer programas csv" << endl;
 //     codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
@@ -213,9 +212,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
 //         }
 //     }
 
-
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaGraduados, anio2, codigosSnies, 13);
-
 
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
@@ -259,7 +256,6 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
 
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaInscritos, anio2, codigosSnies, columna);
 
-
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
 //         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
@@ -294,7 +290,6 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
 
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculados, anio2, codigosSnies, 13);
 
-
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
 //         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
@@ -328,7 +323,6 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
 //     }
 
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anio2, codigosSnies, 13);
-
 
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
