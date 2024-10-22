@@ -1,14 +1,10 @@
 #include "SNIESController.h"
 
-#include "GestorJson.h"
-#include "GestorTxt.h"
-
 using namespace std;
 
 SNIESController::SNIESController()
 {
     gestorCsvObj = new GestorCsv();
-
 }
 
 SNIESController::~SNIESController()
@@ -36,8 +32,9 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
     }
 
-    for (const auto& fila : datos) {
-        DatosInstitucion* institucion = new DatosInstitucion();
+    for (const auto &fila : datos)
+    {
+        DatosInstitucion *institucion = new DatosInstitucion();
 
         institucion->setCodigoDeLaInstitucion(fila[posicionesEncabezados["CÓDIGO DE LA INSTITUCIÓN"]]);
         institucion->setIesPadre(fila[posicionesEncabezados["IES_PADRE"]]);
@@ -52,12 +49,13 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         institucion->setCodigoDelMunicipioIes(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO IES"]]);
         institucion->setMunicipioDeDomicilioDeLaIes(fila[posicionesEncabezados["MUNICIPIO DE DOMICILIO DE LA IES"]]);
 
-        string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]; 
-        datosInstituciones.insert({codigoSnies, institucion}); 
+        string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
+        datosInstituciones.insert({codigoSnies, institucion});
     }
 
-    for (const auto& fila : datos) {
-        ProgramaAcademico* programa = new ProgramaAcademico();
+    for (const auto &fila : datos)
+    {
+        ProgramaAcademico *programa = new ProgramaAcademico();
 
         programa->setCodigoSniesDelPrograma(fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]);
         programa->setProgramaAcademico(fila[posicionesEncabezados["PROGRAMA ACADÉMICO"]]);
@@ -235,7 +233,6 @@ void SNIESController::asignarMatriculados(int anio) {
 //     int posicion;
 //     int columna;
 
-
 //     // cout << "antes leer programas csv" << endl;
 //     codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
 
@@ -342,9 +339,7 @@ void SNIESController::asignarMatriculados(int anio) {
 //         }
 //     }
 
-
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaGraduados, anio2, codigosSnies, 13);
-
 
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
@@ -388,7 +383,6 @@ void SNIESController::asignarMatriculados(int anio) {
 
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaInscritos, anio2, codigosSnies, columna);
 
-
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
 //         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
@@ -423,7 +417,6 @@ void SNIESController::asignarMatriculados(int anio) {
 
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculados, anio2, codigosSnies, 13);
 
-
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {
 //         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
@@ -457,7 +450,6 @@ void SNIESController::asignarMatriculados(int anio) {
 //     }
 
 //     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anio2, codigosSnies, 13);
-
 
 //     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
 //     {

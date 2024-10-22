@@ -2,7 +2,6 @@
 #ifndef GESTOR_CSV_H
 #define GESTOR_CSV_H
 
-#include "GestorBase.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -16,18 +15,18 @@
 #include <sstream>
 #include <cctype>
 
-
-using std::string;
-using std::vector;
-using std::map;
-using std::list;
-using std::unordered_map;
 using std::getline;
+using std::list;
+using std::map;
+using std::string;
+using std::unordered_map;
+using std::vector;
 
-class GestorCsv : public GestorBase
+class GestorCsv
 {
 private:
     string convertirStringFormaEstandar(string &stringIn);
+
 public:
     GestorCsv() = default;
     // unordered_map<std::string,std::string> definirProgramas();
@@ -40,13 +39,12 @@ public:
     vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies);
-    bool crearArchivo(string &, map<int, ProgramaAcademico*>&, vector<string>) override;
-    bool crearArchivoBuscados(string &, list<ProgramaAcademico*>&, vector<string>) override;
-    bool crearArchivoExtra(string &, vector<vector<string>>) override;
+    bool crearArchivo(string &, map<int, ProgramaAcademico *> &, vector<string>);
+    bool crearArchivoBuscados(string &, list<ProgramaAcademico *> &, vector<string>);
+    bool crearArchivoExtra(string &, vector<vector<string>>);
     map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
     int conseguirCantColumnas(map<string, int>);
     string quitarEspacioYAgregarMayus(string cadena);
-
 };
 
 #endif
