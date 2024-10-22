@@ -1,6 +1,7 @@
 #ifndef DATOSESTUDIANTE_H
 #define DATOSESTUDIANTE_H
 
+#include "ProgramaAcademico.h"
 #include <string>
 using std::string;
 #include <iostream>
@@ -9,10 +10,10 @@ using namespace std;
 class DatosInstitucion
 {
 private:
-//Se almacena todos los datos como string para evitar la périda de información
-//Por ejemplo un código 0504 perdería el primer 0 al ser almacenado como int
-//Además, no se van a realizar operaciones numéricas por lo que
-//no es necesario un tipo de dato numérico
+    // Se almacena todos los datos como string para evitar la périda de información
+    // Por ejemplo un código 0504 perdería el primer 0 al ser almacenado como int
+    // Además, no se van a realizar operaciones numéricas por lo que
+    // no es necesario un tipo de dato numérico
     string codigoDeLaInstitucion;
     string iesPadre;
     string institucionDeEducacionSuperiorIes;
@@ -29,43 +30,44 @@ private:
 public:
     ~DatosInstitucion();
 
-    void setCodigoDeLaInstitucion(const std::string&);
+    void setCodigoDeLaInstitucion(const std::string &);
     string getCodigoDeLaInstitucion();
 
-    void setIesPadre(const std::string&);
+    void setIesPadre(const std::string &);
     string getIesPadre();
 
-    void setInstitucionDeEducacionSuperiorIes(const std::string&);
+    void setInstitucionDeEducacionSuperiorIes(const std::string &);
     string getInstitucionDeEducacionSuperiorIes();
 
-    void setPrincipalOSeccional(const std::string&);
+    void setPrincipalOSeccional(const std::string &);
     string getPrincipalOSeccional();
 
-    void setIdSectorIes(const std::string&);
+    void setIdSectorIes(const std::string &);
     string getIdSectorIes();
 
-    void setSectorIes(const std::string&);
+    void setSectorIes(const std::string &);
     string getSectorIes();
 
-    void setIdCaracter(const std::string&);
+    void setIdCaracter(const std::string &);
     string getIdCaracter();
 
-    void setCaracterIes(const std::string&);
+    void setCaracterIes(const std::string &);
     string getCaracterIes();
 
-    void setCodigoDelDepartamentoIes(const std::string&);
+    void setCodigoDelDepartamentoIes(const std::string &);
     string getCodigoDelDepartamentoIes();
 
-    void setDepartamentoDeDomicilioDeLaIes(const std::string&);
+    void setDepartamentoDeDomicilioDeLaIes(const std::string &);
     string getDepartamentoDeDomicilioDeLaIes();
 
-    void setCodigoDelMunicipioIes(const std::string&);
+    void setCodigoDelMunicipioIes(const std::string &);
     string getCodigoDelMunicipioIes();
 
-    void setMunicipioDeDomicilioDeLaIes(const std::string&);
+    void setMunicipioDeDomicilioDeLaIes(const std::string &);
     string getMunicipioDeDomicilioDeLaIes();
 
-    void imprimir() const {
+    void imprimir() const
+    {
         std::cout << "Código de la Institución: " << codigoDeLaInstitucion << std::endl;
         std::cout << "IES Padre: " << iesPadre << std::endl;
         std::cout << "Institución de Educación Superior: " << institucionDeEducacionSuperiorIes << std::endl;

@@ -18,7 +18,7 @@
 class ArchivoTXT : public Archivo
 {
 public:
-    void guardar(const std::string &ruta, multimap<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas) override;
+    void guardar(const std::string &ruta, multimap<int, ProgramaAcademico *> &mapadeProgramasAcademicos, multimap<string, DatosInstitucion *> &datosInstituciones, vector<string> etiquetasColumnas) override;
 };
 
 #endif

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 
-void ArchivoCSV::guardar(const std::string &ruta, multimap<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+void ArchivoCSV::guardar(const std::string &ruta, multimap<int, ProgramaAcademico *> &mapadeProgramasAcademicos, multimap<string, DatosInstitucion *> &datosInstituciones, vector<string> etiquetasColumnas)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "resultados.csv";
@@ -17,6 +17,7 @@ void ArchivoCSV::guardar(const std::string &ruta, multimap<int, ProgramaAcademic
         archivoResultados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << endl;
 
         multimap<int, ProgramaAcademico *>::iterator it;
+        multimap<string, DatosInstitucion *>::iterator it2;
         // Leemos todos los programas del mapa para imprimirlos en el archivo
         for (it = mapadeProgramasAcademicos.begin(); it != mapadeProgramasAcademicos.end(); it++)
         {
@@ -24,18 +25,18 @@ void ArchivoCSV::guardar(const std::string &ruta, multimap<int, ProgramaAcademic
             for (int i = 0; i < 8; i++)
             {
                 // Imprimimos toda la información base del programa academico
-                archivoResultados << (it->second)->getCodigoDeLaInstitucion() << ";";
-                archivoResultados << (it->second)->getIesPadre() << ";";
-                archivoResultados << (it->second)->getInstitucionDeEducacionSuperiorIes() << ";";
-                archivoResultados << (it->second)->getPrincipalOSeccional() << ";";
-                archivoResultados << (it->second)->getIdSectorIes() << ";";
-                archivoResultados << (it->second)->getSectorIes() << ";";
-                archivoResultados << (it->second)->getIdCaracter() << ";";
-                archivoResultados << (it->second)->getCaracterIes() << ";";
-                archivoResultados << (it->second)->getCodigoDelDepartamentoIes() << ";";
-                archivoResultados << (it->second)->getDepartamentoDeDomicilioDeLaIes() << ";";
-                archivoResultados << (it->second)->getCodigoDelMunicipioIes() << ";";
-                archivoResultados << (it->second)->getMunicipioDeDomicilioDeLaIes() << ";";
+                archivoResultados << (it2->second)->getCodigoDeLaInstitucion() << ";";
+                archivoResultados << (it2->second)->getIesPadre() << ";";
+                archivoResultados << (it2->second)->getInstitucionDeEducacionSuperiorIes() << ";";
+                archivoResultados << (it2->second)->getPrincipalOSeccional() << ";";
+                archivoResultados << (it2->second)->getIdSectorIes() << ";";
+                archivoResultados << (it2->second)->getSectorIes() << ";";
+                archivoResultados << (it2->second)->getIdCaracter() << ";";
+                archivoResultados << (it2->second)->getCaracterIes() << ";";
+                archivoResultados << (it2->second)->getCodigoDelDepartamentoIes() << ";";
+                archivoResultados << (it2->second)->getDepartamentoDeDomicilioDeLaIes() << ";";
+                archivoResultados << (it2->second)->getCodigoDelMunicipioIes() << ";";
+                archivoResultados << (it2->second)->getMunicipioDeDomicilioDeLaIes() << ";";
                 archivoResultados << (it->second)->getCodigoSniesDelPrograma() << ";";
                 archivoResultados << (it->second)->getProgramaAcademico() << ";";
                 archivoResultados << (it->second)->getIdNivelAcademico() << ";";
