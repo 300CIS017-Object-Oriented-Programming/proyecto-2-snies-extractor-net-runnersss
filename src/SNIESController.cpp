@@ -53,7 +53,7 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         institucion->setMunicipioDeDomicilioDeLaIes(fila[posicionesEncabezados["MUNICIPIO DE DOMICILIO DE LA IES"]]);
 
         string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]; 
-        datosInstituciones[codigoSnies] = institucion; 
+        datosInstituciones.insert({codigoSnies, institucion}); 
     }
 
     for (const auto& fila : datos) {
@@ -70,27 +70,24 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         programa->setIdArea(fila[posicionesEncabezados["ID ÁREA"]]);
         programa->setAreaDeConocimiento(fila[posicionesEncabezados["ÁREA DE CONOCIMIENTO"]]);
         programa->setIdNucleo(fila[posicionesEncabezados["ID NÚCLEO"]]);
-        programa->setNucleoBasicoDelConocimientoNbc(fila[posicionesEncabezados["NÚCLEO BÁSICO DEL CONOCIMIENTO"]]);
+        programa->setNucleoBasicoDelConocimientoNbc(fila[posicionesEncabezados["NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)"]]);
         programa->setIdCineCampoAmplio(fila[posicionesEncabezados["ID CINE CAMPO AMPLIO"]]);
-        programa->setDescCineCampoAmplio(fila[posicionesEncabezados["DESCRIPCIÓN CINE CAMPO AMPLIO"]]);
-        programa->setIdCineCampoEspecifico(fila[posicionesEncabezados["ID CINE CAMPO ESPECÍFICO"]]);
-        programa->setDescCineCampoEspecifico(fila[posicionesEncabezados["DESCRIPCIÓN CINE CAMPO ESPECÍFICO"]]);
-        programa->setIdCineCodigoDetallado(fila[posicionesEncabezados["ID CINE CÓDIGO DETALLADO"]]);
-        programa->setDescCineCodigoDetallado(fila[posicionesEncabezados["DESCRIPCIÓN CINE CÓDIGO DETALLADO"]]);
-        programa->setCodigoDelDepartamentoPrograma(fila[posicionesEncabezados["CÓDIGO DEL DEPARTAMENTO DEL PROGRAMA"]]);
+        programa->setDescCineCampoAmplio(fila[posicionesEncabezados["DESC CINE CAMPO ESPECIFICO"]]);
+        programa->setIdCineCampoEspecifico(fila[posicionesEncabezados["ID CINE CAMPO ESPECIFICO"]]);
+        programa->setDescCineCampoEspecifico(fila[posicionesEncabezados["DESC CINE CAMPO ESPECIFICO"]]);
+        programa->setIdCineCodigoDetallado(fila[posicionesEncabezados["ID CINE CODIGO DETALLADO"]]);
+        programa->setDescCineCodigoDetallado(fila[posicionesEncabezados["DESC CINE CODIGO DETALLADO"]]);
+        programa->setCodigoDelDepartamentoPrograma(fila[posicionesEncabezados["CÓDIGO DEL DEPARTAMENTO (PROGRAMA)"]]);
         programa->setDepartamentoDeOfertaDelPrograma(fila[posicionesEncabezados["DEPARTAMENTO DE OFERTA DEL PROGRAMA"]]);
-        programa->setCodigoDelMunicipioPrograma(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO DEL PROGRAMA"]]);
+        programa->setCodigoDelMunicipioPrograma(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
         programa->setMunicipioDeOfertaDelPrograma(fila[posicionesEncabezados["MUNICIPIO DE OFERTA DEL PROGRAMA"]]);
 
         std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
-        programasAcademicos[codigoSnies] = programa;
+        programasAcademicos.insert({codigoSnies, programa});
     }
+}
 
-    for (const auto& par : programasAcademicos) {
-    std::cout << "Código SNIES del Programa: " << par.first << std::endl; // Imprimir la clave
-    par.second->imprimir(); // Llamar al método de impresión del objeto
-    }
-
+void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2){
 
 }
 

@@ -7,15 +7,15 @@
 #include "ProgramaAcademico.h"
 #include "GestorCsv.h"
 #include "DatosInstitucion.h"
-using std::map;
+using std::multimap;
 using std::string;
 #include "Settings.h"
 
 class SNIESController
 {
 private:
-    map<string, ProgramaAcademico *> programasAcademicos;
-    map<string, DatosInstitucion*> datosInstituciones;
+    multimap<string, ProgramaAcademico *> programasAcademicos;
+    multimap<string, DatosInstitucion*> datosInstituciones;
     GestorCsv *gestorCsvObj;
     vector<string> etiquetasColumnas;
     string rutaProgramasCSV;
@@ -29,6 +29,7 @@ public:
     SNIESController();
     ~SNIESController();
     void determinarObjetosDatos(string &anio1);
+    void determinarObjetosConsolidados(string &anio1, string &anio2);
     void procesarDatosCsv(string &, string &);
     // Mantenimiento: Este método tiene un nombre confuso.
     void calcularDatosExtra(bool);
