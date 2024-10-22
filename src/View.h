@@ -9,7 +9,7 @@ using namespace std;
 class View
 {
 private:
-    SNIESController controlador;
+    SNIESController *controlador;
     Settings ajustes;
     bool esEntero(const std::string& str);
     bool eleccionUsuario();

@@ -1,56 +1,120 @@
 #include "DatosInstitucion.h"
 
-int DatosInstitucion::getCodigoInstitucion() const
+void DatosInstitucion::setCodigoDeLaInstitucion(const std::string& nuevoCodigoDeLaInstitucion)
 {
-    return codigoInstitucion;
+    codigoDeLaInstitucion = nuevoCodigoDeLaInstitucion;
 }
 
-int DatosInstitucion::getIesPadre() const
+string DatosInstitucion::getCodigoDeLaInstitucion()
+{
+    return codigoDeLaInstitucion;
+}
+
+void DatosInstitucion::setIesPadre(const std::string& nuevoIesPadre)
+{
+    iesPadre = nuevoIesPadre;
+}
+
+string DatosInstitucion::getIesPadre()
 {
     return iesPadre;
 }
 
-bool DatosInstitucion::getEsPrincipal() const
+void DatosInstitucion::setInstitucionDeEducacionSuperiorIes(const std::string& nuevoInstitucionDeEducacionSuperiorIes)
 {
-    return esPrincipal;
+    institucionDeEducacionSuperiorIes = nuevoInstitucionDeEducacionSuperiorIes;
+}
+string DatosInstitucion::getInstitucionDeEducacionSuperiorIes()
+{
+    return institucionDeEducacionSuperiorIes;
 }
 
-int DatosInstitucion::getIdSectorIes() const
+void DatosInstitucion::setPrincipalOSeccional(const std::string& nuevoPrincipalOSeccional)
+{
+    principalOSeccional = nuevoPrincipalOSeccional;
+}
+
+string DatosInstitucion::getPrincipalOSeccional()
+{
+    return principalOSeccional;
+}
+
+void DatosInstitucion::setIdSectorIes(const std::string& nuevoIdSectorIes)
+{
+    idSectorIes = nuevoIdSectorIes;
+}
+
+string DatosInstitucion::getIdSectorIes()
 {
     return idSectorIes;
 }
 
-std::string DatosInstitucion::getSectorIes() const
+void DatosInstitucion::setSectorIes(const std::string& nuevoSectorIes)
+{
+    sectorIes = nuevoSectorIes;
+}
+
+string DatosInstitucion::getSectorIes()
 {
     return sectorIes;
 }
 
-int DatosInstitucion::getIdCaracter() const
+void DatosInstitucion::setIdCaracter(const std::string& nuevoIdCaracter)
+{
+    idCaracter = nuevoIdCaracter;
+}
+
+string DatosInstitucion::getIdCaracter()
 {
     return idCaracter;
 }
 
-std::string DatosInstitucion::getCaracterIes() const
+void DatosInstitucion::setCaracterIes(const std::string& nuevoCaracterIes)
+{
+    caracterIes = nuevoCaracterIes;
+}
+
+string DatosInstitucion::getCaracterIes()
 {
     return caracterIes;
 }
 
-int DatosInstitucion::getCodigoDepartamentoIes() const
+void DatosInstitucion::setCodigoDelDepartamentoIes(const std::string& nuevoCodigoDelDepartamentoIes)
 {
-    return codigoDepartamentoIes;
+    codigoDelDepartamentoIes = nuevoCodigoDelDepartamentoIes;
 }
 
-std::string DatosInstitucion::getDepartamentoIes() const
+string DatosInstitucion::getCodigoDelDepartamentoIes()
 {
-    return departamentoIes;
+    return codigoDelDepartamentoIes;
 }
 
-int DatosInstitucion::getCodigoMunicipioIes() const
+void DatosInstitucion::setDepartamentoDeDomicilioDeLaIes(const std::string& nuevoDepartamentoDeDomicilioDeLaIes)
 {
-    return codigoMunicipioIes;
+    departamentoDeDomicilioDeLaIes = nuevoDepartamentoDeDomicilioDeLaIes;
 }
 
-std::string DatosInstitucion::getMunicipioIes() const
+string DatosInstitucion::getDepartamentoDeDomicilioDeLaIes()
 {
-    return municipioIes;
+    return departamentoDeDomicilioDeLaIes;
+}
+
+void DatosInstitucion::setCodigoDelMunicipioIes(const std::string& nuevoCodigoDelMunicipioIes)
+{
+    codigoDelMunicipioIes = nuevoCodigoDelMunicipioIes;
+}
+
+string DatosInstitucion::getCodigoDelMunicipioIes()
+{
+    return codigoDelMunicipioIes;
+}
+
+void DatosInstitucion::setMunicipioDeDomicilioDeLaIes(const std::string& nuevoMunicipioDeDomicilioDeLaIes)
+{
+    municipioDeDomicilioDeLaIes = nuevoMunicipioDeDomicilioDeLaIes;
+}
+
+string DatosInstitucion::getMunicipioDeDomicilioDeLaIes()
+{
+    return municipioDeDomicilioDeLaIes;
 }

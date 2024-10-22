@@ -13,6 +13,7 @@
 #include "Consolidado.h"
 #include "Settings.h"
 #include <fstream>
+#include <sstream>
 #include <cctype>
 
 
@@ -21,6 +22,7 @@ using std::vector;
 using std::map;
 using std::list;
 using std::unordered_map;
+using std::getline;
 
 class GestorCsv : public GestorBase
 {
@@ -30,8 +32,8 @@ public:
     GestorCsv() = default;
     unordered_map<std::string,std::string> definirProgramas();
     std::unordered_map<std::string,int> extraerEncabezados(const string& ruta);
-    std::vector<std::vector<std::string>> extraerDatos();
-    std::unordered_map<std::string,int> extraerIndices();
+    std::vector<std::vector<std::string>> extraerDatos(string &ruta);
+    std::unordered_map<std::string,int> extraerIndices(string &ruta);
     void eliminarIndices(std::unordered_map<std::string, int>& indices, std::vector<std::vector<std::string>>& datos);
     vector<int> leerProgramasCsv(string &ruta);
     // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva
@@ -44,6 +46,7 @@ public:
     map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
     int conseguirCantColumnas(map<string, int>);
     string quitarEspacioYAgregarMayus(string cadena);
+
 };
 
 #endif

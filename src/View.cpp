@@ -2,22 +2,12 @@
 
 View::View()
 {
-    // NEW quitar estas variables de aquí y del constructor del SNIESController
-    //  estas constantes las leerá el SNIESController del archivo de Settings.h
-    //  Completar el archivo con el resto de constantes necesarias
-    string ruta1 = string("C:/SNIES_EXTRACTOR/inputs/programas.csv");
-    string ruta2 = string("C:/SNIES_EXTRACTOR/inputs/admitidos");
-    string ruta3 = string("C:/SNIES_EXTRACTOR/inputs/graduados");
-    string ruta4 = string("C:/SNIES_EXTRACTOR/inputs/inscritos");
-    string ruta5 = string("C:/SNIES_EXTRACTOR/inputs/matriculados");
-    string ruta6 = string("C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre");
-    string ruta7 = string("C:/SNIES_EXTRACTOR/outputs/");
-    controlador = SNIESController(ruta1, ruta2, ruta3, ruta4, ruta5, ruta6, ruta7);
+    controlador = new SNIESController();
 }
 
 View::~View()
 {
-    controlador.~SNIESController();
+    controlador->~SNIESController();
 }
 
 bool View::esEntero(const std::string &str)
@@ -76,7 +66,8 @@ bool View::mostrarPantallaBienvenido()
     }
 
     cout << "Procesando datos ..." << endl;
-    controlador.procesarDatosCsv(anio1, anio2);
+    controlador->determinarObjetosDatos(anio1);
+    // controlador.procesarDatosCsv(anio1, anio2);
     cout << "Datos procesados con exito!" << endl;
 
     return true;
@@ -104,10 +95,10 @@ void View::parametrizacion()
         ajustes.setDelimitador(delimitador);
     }
 
-    cout <<"Ingrese el anio que se va a tomar como base"<<endl;
-    cout <<"para extraer los programas academicos"<<endl;
-    cin >>anioProgramas;
-    ajustes.setAnioProgramas(anioProgramas);
+    // cout <<"Ingrese el anio que se va a tomar como base"<<endl;
+    // cout <<"para extraer los programas academicos"<<endl;
+    // cin >>anioProgramas;
+    
 }
 bool View::eleccionUsuario()
 {
@@ -123,84 +114,84 @@ bool View::eleccionUsuario()
 
     return false;
 }
-void View::salir()
-{
-    cout << "Cerrando programa..." << endl;
-    cout << "Recuerde revisar la carpeta de outputs para los archivos .csv exportados" << endl;
-    cout << "Programa Cerrado con exito!" << endl;
-}
+// void View::salir()
+// {
+//     cout << "Cerrando programa..." << endl;
+//     cout << "Recuerde revisar la carpeta de outputs para los archivos .csv exportados" << endl;
+//     cout << "Programa Cerrado con exito!" << endl;
+// }
 
-void View::mostrarDatosExtra()
-{
-    char opcionYN;
-    cout << "A continuacion vamos a mostrar datos relevantes de los programas academicos seleccionados" << "\n"
-         << endl;
-    cout << "Desea Convertir los datos a un archivo CSV?(Y/N): " << endl;
-    cin >> opcionYN;
-    opcionYN = tolower(opcionYN);
-    cout << "\n";
-    // FIXME verificar que el usuario ingrese un valor igual al esperado, return true si es Y, false si es N, y no sale si no retorna un valor válido
-    // Simplificar el código de acuerdo a ese ajuste
-    if (opcionYN == 'y')
-    {
-        controlador.calcularDatosExtra(true);
-    }
+// void View::mostrarDatosExtra()
+// {
+//     char opcionYN;
+//     cout << "A continuacion vamos a mostrar datos relevantes de los programas academicos seleccionados" << "\n"
+//          << endl;
+//     cout << "Desea Convertir los datos a un archivo CSV?(Y/N): " << endl;
+//     cin >> opcionYN;
+//     opcionYN = tolower(opcionYN);
+//     cout << "\n";
+//     // FIXME verificar que el usuario ingrese un valor igual al esperado, return true si es Y, false si es N, y no sale si no retorna un valor válido
+//     // Simplificar el código de acuerdo a ese ajuste
+//     if (opcionYN == 'y')
+//     {
+//         controlador.calcularDatosExtra(true);
+//     }
 
-    else
-    {
-        controlador.calcularDatosExtra(false);
-    }
-}
+//     else
+//     {
+//         controlador.calcularDatosExtra(false);
+//     }
+// }
 
-void View::buscarPorPalabraClaveYFormacion()
-{
-    char opcionYN = 'y', opcionCSV;
-    string palabraClave;
-    bool convertirCSV;
-    int idFormacionAcademica;
+// void View::buscarPorPalabraClaveYFormacion()
+// {
+//     char opcionYN = 'y', opcionCSV;
+//     string palabraClave;
+//     bool convertirCSV;
+//     int idFormacionAcademica;
 
-    while (opcionYN == 'y')
-    {
-        cout << "Desea hacer una busqueda por palabra clave del nombre del programa(Y/N): " << endl;
-        cin >> opcionYN;
-        cout << "\n";
-        opcionYN = tolower(opcionYN);
+//     while (opcionYN == 'y')
+//     {
+//         cout << "Desea hacer una busqueda por palabra clave del nombre del programa(Y/N): " << endl;
+//         cin >> opcionYN;
+//         cout << "\n";
+//         opcionYN = tolower(opcionYN);
 
-        if (opcionYN == 'y')
-        {
-            cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
-            cin >> opcionCSV;
-            cout << "\n";
-            opcionCSV = tolower(opcionCSV);
+//         if (opcionYN == 'y')
+//         {
+//             cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
+//             cin >> opcionCSV;
+//             cout << "\n";
+//             opcionCSV = tolower(opcionCSV);
 
-            if (opcionCSV == 'y')
-            {
-                convertirCSV = true;
-            }
+//             if (opcionCSV == 'y')
+//             {
+//                 convertirCSV = true;
+//             }
 
-            else
-            {
-                convertirCSV = false;
-            }
+//             else
+//             {
+//                 convertirCSV = false;
+//             }
 
-            cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
-            cin >> palabraClave;
-            cout << endl;
+//             cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
+//             cin >> palabraClave;
+//             cout << endl;
 
-            cout << "Seleccione un nivel de formacion para filtrar: \n 1->Especializacion Universitaria\n 2->Maestria\n 3->Doctorado\n 4->Formacion Tecnica Profesional \n 5->Tecnologico\n 6->Universitario\n 7->Especializacion Tecnico Profesional\n 8->Especializacion Tecnologica\n 10->Especializacion Medico Quirurgica\n " << endl;
-            cin >> idFormacionAcademica;
-            cout << "\n";
-            while ((idFormacionAcademica > 10) || (idFormacionAcademica == 9) || (idFormacionAcademica < 1))
-            {
-                cout << "Seleccione una opcion entre 1-10 excluyendo el 9\n"
-                     << endl;
-                cin >> idFormacionAcademica;
-            }
+//             cout << "Seleccione un nivel de formacion para filtrar: \n 1->Especializacion Universitaria\n 2->Maestria\n 3->Doctorado\n 4->Formacion Tecnica Profesional \n 5->Tecnologico\n 6->Universitario\n 7->Especializacion Tecnico Profesional\n 8->Especializacion Tecnologica\n 10->Especializacion Medico Quirurgica\n " << endl;
+//             cin >> idFormacionAcademica;
+//             cout << "\n";
+//             while ((idFormacionAcademica > 10) || (idFormacionAcademica == 9) || (idFormacionAcademica < 1))
+//             {
+//                 cout << "Seleccione una opcion entre 1-10 excluyendo el 9\n"
+//                      << endl;
+//                 cin >> idFormacionAcademica;
+//             }
 
-            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
-        }
-    }
-}
+//             controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
+//         }
+//     }
+// }
 
 bool View::isConvetibleToInt(const string &str)
 {
