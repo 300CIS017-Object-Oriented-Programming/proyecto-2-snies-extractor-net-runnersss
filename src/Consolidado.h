@@ -27,16 +27,12 @@ private:
     int graduados;
 
 public:
-    Consolidado();
-    // Mantenimiento: Gran cantidad de atributos en la firma del constructor
-    Consolidado(int, string, int, int, int, int, int, int, int);
-
     // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
     int getIdSexo();
     void setIdSexo(int);
 
     string getSexo();
-    void setSexo(string &);
+    void setSexo(const std::string&);
 
     int getAno();
     void setAno(int);
@@ -58,6 +54,11 @@ public:
 
     int getGraduados();
     void setGraduados(int);
+    void imprimir() const {
+        std::cout << "Sexo: " << sexo << ", Año: " << ano << ", Semestre: " << semestre
+                  << ", Inscritos: " << inscritos << ", Admitidos: " << admitidos
+                  << ", Matriculados: " << matriculados << ", Graduados: " << graduados << std::endl;
+    }
 };
 
 #endif // CONSOLIDADO_H

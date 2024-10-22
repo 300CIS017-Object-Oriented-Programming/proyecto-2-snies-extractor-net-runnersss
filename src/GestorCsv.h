@@ -30,10 +30,10 @@ private:
     string convertirStringFormaEstandar(string &stringIn);
 public:
     GestorCsv() = default;
-    unordered_map<std::string,std::string> definirProgramas();
+    // unordered_map<std::string,std::string> definirProgramas();
     std::unordered_map<std::string,int> extraerEncabezados(const string& ruta);
     std::vector<std::vector<std::string>> extraerDatos(string &ruta);
-    std::unordered_map<std::string,int> extraerIndices(string &ruta);
+    std::unordered_map<std::string,int> extraerIndices(string &ruta,std::vector<std::string> camposImportantes);
     void eliminarIndices(std::unordered_map<std::string, int>& indices, std::vector<std::vector<std::string>>& datos);
     vector<int> leerProgramasCsv(string &ruta);
     // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva

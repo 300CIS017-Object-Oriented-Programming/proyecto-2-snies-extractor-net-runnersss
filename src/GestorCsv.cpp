@@ -117,7 +117,7 @@ std::string normalizarCadena(const std::string& str) {
     return resultado;
 }
 
-std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta){
+std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta,std::vector<std::string> camposImportantes){
     std::unordered_map<std::string, int> indices;
     std::unordered_map<std::string, int> encabezados;
 
@@ -126,12 +126,12 @@ std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta){
     for (const auto& encabezado : encabezados) {
         std::string encabezadoNormalizado = normalizarCadena(encabezado.first);
 
-        auto it = std::find_if(Settings::camposImportantes.begin(), Settings::camposImportantes.end(),
+        auto it = std::find_if(camposImportantes.begin(), camposImportantes.end(),
             [&encabezadoNormalizado](const std::string& campo) {
                 return normalizarCadena(campo) == encabezadoNormalizado;
             });
 
-        if (it == Settings::camposImportantes.end()) {
+        if (it == camposImportantes.end()) {
             indices[encabezado.first] = encabezado.second;
         }
     }

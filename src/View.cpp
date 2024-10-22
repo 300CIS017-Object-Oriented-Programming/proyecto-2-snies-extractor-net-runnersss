@@ -67,6 +67,7 @@ bool View::mostrarPantallaBienvenido()
 
     cout << "Procesando datos ..." << endl;
     controlador->determinarObjetosDatos(anio1);
+    controlador->determinarObjetosConsolidados(anio1,anio2);
     // controlador.procesarDatosCsv(anio1, anio2);
     cout << "Datos procesados con exito!" << endl;
 

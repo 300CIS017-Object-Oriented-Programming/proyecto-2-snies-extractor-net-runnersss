@@ -38,7 +38,7 @@ public:
     static string DELIMITADOR;
     static string GRADUADOS_FILE_PATH;
     static std::vector<std::string> camposImportantes;
-
+    static std::vector<std::string> camposConsolidados;
     static void setRutaBase(const string &nuevaRutaBase);
     static void setAnioProgramas(string anioProgramas);
     static void setDelimitador(const char &delimitador);

@@ -22,14 +22,14 @@ SNIESController::~SNIESController()
 
 void SNIESController::determinarObjetosDatos(string &anio1){
     std::string ruta=Settings::ADMITIDOS_FILE_PATH+anio1+".csv";
-    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta);
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta,Settings::camposImportantes);
     std::vector<std::vector<std::string>> datos;
     std::unordered_map<std::string, int> posicionesEncabezados(indices.size());  
     datos=gestorCsvObj->extraerDatos(ruta);
     gestorCsvObj->eliminarIndices(indices,datos);
     
     //Extrae Encabezados Para realizar parametrización de índices
-    std::vector<string> encabezados = datos.at(0); // También puedes usar vecDeVectores[0]
+    std::vector<string> encabezados = datos.at(0); 
     datos.erase(datos.begin()); 
     
     for (size_t i = 0; i < encabezados.size(); ++i) {
@@ -85,10 +85,139 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
         programasAcademicos.insert({codigoSnies, programa});
     }
+
+    // for (const auto& par : programasAcademicos) {
+    // std::cout << "Código SNIES del Programa: " << par.first << std::endl; // Imprimir la clave
+    // par.second->imprimir(); // Llamar al método de impresión del objeto
+    // }
+}
+void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2){
+    for (int incremento = stoi(anio1); incremento <= stoi(anio2); incremento++) {
+        asignarAdmitidos(incremento); 
+        
+    }
 }
 
-void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2){
+void SNIESController::asignarAdmitidos(int anio){
 
+    std::string ruta = Settings::ADMITIDOS_FILE_PATH + std::to_string(anio) + ".csv";
+
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta,Settings::camposConsolidados);
+    std::vector<std::vector<std::string>> datos;
+    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());  
+    datos=gestorCsvObj->extraerDatos(ruta);
+
+    gestorCsvObj->eliminarIndices(indices,datos);
+
+    //Extrae Encabezados Para realizar parametrización de índices
+    std::vector<string> encabezados = datos.at(0); 
+    datos.erase(datos.begin()); 
+
+    for (size_t i = 0; i < encabezados.size(); ++i) {
+        posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
+    }
+
+    for (const auto& fila : datos) {
+        Consolidado* consolidado = new Consolidado();
+
+        consolidado->setIdSexo(std::stoi(fila[posicionesEncabezados["ID SEXO"]]));
+        consolidado->setSexo(fila[posicionesEncabezados["SEXO"]]);
+        consolidado->setAno(std::stoi(fila[posicionesEncabezados["AÑO"]]));
+        consolidado->setSemestre(std::stoi(fila[posicionesEncabezados["SEMESTRE"]]));
+        consolidado->setAdmitidos(std::stoi(fila[posicionesEncabezados["ADMITIDOS"]]));
+
+        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
+        consolidados.insert({codigoSnies, consolidado});
+    }
+
+    asignarInscritos(anio);
+    asignarMatriculados(anio);
+    
+    for (const auto& par : consolidados) {
+    std::cout << "Código SNIES del Programa: " << par.first << std::endl; // Imprimir la clave
+    par.second->imprimir(); // Llamar al método de impresión del objeto
+    }
+
+}
+
+void SNIESController::asignarInscritos(int anio) {
+
+    std::string ruta = Settings::INSCRITOS_FILE_PATH + std::to_string(anio) + ".csv";
+
+    // Extraer los índices y datos del archivo de inscritos
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta, Settings::camposConsolidados);
+    std::vector<std::vector<std::string>> datos;
+    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());
+    datos = gestorCsvObj->extraerDatos(ruta);
+
+    gestorCsvObj->eliminarIndices(indices, datos);
+
+    // Extrae encabezados para realizar parametrización de índices
+    std::vector<std::string> encabezados = datos.at(0);
+    datos.erase(datos.begin());
+
+    for (size_t i = 0; i < encabezados.size(); ++i) {
+        posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
+    }
+
+    for (const auto& fila : datos) {
+        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
+
+        auto rangoConsolidado = consolidados.equal_range(codigoSnies);
+        for (auto it = rangoConsolidado.first; it != rangoConsolidado.second; ++it) {
+            Consolidado* consolidado = it->second;
+
+            // Verificar coincidencias en los campos clave
+            if (consolidado->getIdSexo() == std::stoi(fila[posicionesEncabezados["ID SEXO"]]) &&
+                consolidado->getSexo() == fila[posicionesEncabezados["SEXO"]] &&
+                consolidado->getAno() == std::stoi(fila[posicionesEncabezados["AÑO"]]) &&
+                consolidado->getSemestre() == std::stoi(fila[posicionesEncabezados["SEMESTRE"]])) {
+
+                // Agregar inscritos al consolidado correspondiente
+                consolidado->setInscritos(std::stoi(fila[posicionesEncabezados["INSCRITOS"]]));
+            }
+        }
+    }
+}
+
+void SNIESController::asignarMatriculados(int anio) {
+
+    std::string ruta = Settings::MATRICULADOS_FILE_PATH + std::to_string(anio) + ".csv";
+
+    // Extraer los índices y datos del archivo de matriculados
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta, Settings::camposConsolidados);
+    std::vector<std::vector<std::string>> datos;
+    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());
+    datos = gestorCsvObj->extraerDatos(ruta);
+
+    gestorCsvObj->eliminarIndices(indices, datos);
+
+    // Extrae encabezados para realizar parametrización de índices
+    std::vector<std::string> encabezados = datos.at(0);
+    datos.erase(datos.begin());
+
+    for (size_t i = 0; i < encabezados.size(); ++i) {
+        posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
+    }
+
+    for (const auto& fila : datos) {
+        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
+
+        auto rangoConsolidado = consolidados.equal_range(codigoSnies);
+        for (auto it = rangoConsolidado.first; it != rangoConsolidado.second; ++it) {
+            Consolidado* consolidado = it->second;
+
+            // Verificar coincidencias en los campos clave
+            if (consolidado->getIdSexo() == std::stoi(fila[posicionesEncabezados["ID SEXO"]]) &&
+                consolidado->getSexo() == fila[posicionesEncabezados["SEXO"]] &&
+                consolidado->getAno() == std::stoi(fila[posicionesEncabezados["AÑO"]]) &&
+                consolidado->getSemestre() == std::stoi(fila[posicionesEncabezados["SEMESTRE"]])) {
+
+                // Agregar matriculados al consolidado correspondiente
+                consolidado->setMatriculados(std::stoi(fila[posicionesEncabezados["MATRICULADOS"]]));
+            }
+        }
+    }
 }
 
 // void SNIESController::procesarDatosCsv(string &ano1, string &anio2)
