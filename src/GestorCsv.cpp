@@ -107,40 +107,48 @@ std::unordered_map<std::string, int> GestorCsv::extraerEncabezados(string const 
 //     return codigosSniesRetorno;
 // }
 
-std::string normalizarCadena(const std::string& str) {
+std::string normalizarCadena(const std::string &str)
+{
     std::string resultado;
-    for (char c : str) {
-        if (std::isalnum(c)) { // Mantener solo caracteres alfanuméricos
+    for (char c : str)
+    {
+        if (std::isalnum(c))
+        {                                 // Mantener solo caracteres alfanuméricos
             resultado += std::tolower(c); // Convertir a minúsculas
         }
     }
     return resultado;
 }
 
-std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta){
+std::unordered_map<std::string, int> GestorCsv::extraerIndices(string &ruta)
+{
     std::unordered_map<std::string, int> indices;
     std::unordered_map<std::string, int> encabezados;
 
-    encabezados=extraerEncabezados(ruta);
+    encabezados = extraerEncabezados(ruta);
 
-    for (const auto& encabezado : encabezados) {
+    for (const auto &encabezado : encabezados)
+    {
         std::string encabezadoNormalizado = normalizarCadena(encabezado.first);
 
         auto it = std::find_if(Settings::camposImportantes.begin(), Settings::camposImportantes.end(),
-            [&encabezadoNormalizado](const std::string& campo) {
-                return normalizarCadena(campo) == encabezadoNormalizado;
-            });
+                               [&encabezadoNormalizado](const std::string &campo)
+                               {
+                                   return normalizarCadena(campo) == encabezadoNormalizado;
+                               });
 
-        if (it == Settings::camposImportantes.end()) {
+        if (it == Settings::camposImportantes.end())
+        {
             indices[encabezado.first] = encabezado.second;
         }
     }
     return indices;
 }
 
-std::vector<std::vector<std::string>> GestorCsv::extraerDatos(string &ruta){
-    std::vector<std::vector<std::string>> datos;  
-    std::ifstream archivo(ruta);         
+std::vector<std::vector<std::string>> GestorCsv::extraerDatos(string &ruta)
+{
+    std::vector<std::vector<std::string>> datos;
+    std::ifstream archivo(ruta);
     std::string linea;
 
     if (!archivo.is_open())
@@ -148,61 +156,67 @@ std::vector<std::vector<std::string>> GestorCsv::extraerDatos(string &ruta){
         throw std::ios_base::failure("No se pudo abrir el archivo");
     }
 
-    while (std::getline(archivo, linea)) {
-        std::vector<std::string> fila;          
-        std::stringstream sstream(linea);      
+    while (std::getline(archivo, linea))
+    {
+        std::vector<std::string> fila;
+        std::stringstream sstream(linea);
         std::string valor;
 
-        
-        while (std::getline(sstream, valor, ';')) {
-            fila.push_back(valor);              
+        while (std::getline(sstream, valor, ';'))
+        {
+            fila.push_back(valor);
         }
 
-        datos.push_back(fila);                  
+        datos.push_back(fila);
     }
 
-    archivo.close();    
+    archivo.close();
     return datos;
 }
 
-void GestorCsv::eliminarIndices(std::unordered_map<std::string, int>& indices, std::vector<std::vector<std::string>>& datos) {
-    
-    for (auto& fila : datos) {
-        
+void GestorCsv::eliminarIndices(std::unordered_map<std::string, int> &indices, std::vector<std::vector<std::string>> &datos)
+{
+
+    for (auto &fila : datos)
+    {
+
         std::vector<std::string> fila_filtrada;
-        
-        
-        for (size_t i = 0; i < fila.size(); ++i) {
-            
+
+        for (size_t i = 0; i < fila.size(); ++i)
+        {
+
             bool eliminar = false;
-            for (const auto& par : indices) {
-                if (i == par.second) {
+            for (const auto &par : indices)
+            {
+                if (i == par.second)
+                {
                     eliminar = true;
                     break;
                 }
             }
-            
-            if (!eliminar) {
+
+            if (!eliminar)
+            {
                 fila_filtrada.push_back(fila[i]);
             }
         }
-        
+
         fila = fila_filtrada;
     }
 }
 
-
-
-bool GestorCsv::crearArchivo(string&, map<int, ProgramaAcademico*>&, vector<string>){
-return true;
+bool GestorCsv::crearArchivo(string &, map<int, ProgramaAcademico *> &, vector<string>)
+{
+    return true;
 }
-bool GestorCsv::crearArchivoBuscados(string&, list<ProgramaAcademico*>&, vector<string>){
-return true;
+bool GestorCsv::crearArchivoBuscados(string &, list<ProgramaAcademico *> &, vector<string>)
+{
+    return true;
 }
-bool GestorCsv::crearArchivoExtra(string&, vector<vector<string>>){
-return true;
+bool GestorCsv::crearArchivoExtra(string &, vector<vector<string>>)
+{
+    return true;
 }
-
 
 // vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
 // {
@@ -231,7 +245,6 @@ return true;
 //         vector<int>::iterator it;
 
 //         // Conseguir posiciones de las columnas
-
 
 //         // Primera iteracion del ciclo para guardar las etiquetas
 //         std::getline(archivoPrimero, fila);
@@ -758,7 +771,6 @@ return true;
 //         stringstream streamFila;
 //         int columna;
 
-
 //         // Primera iteracion del ciclo para guardar las etiquetas
 //         getline(archivo, fila);
 //         streamFila = stringstream(fila);
@@ -827,3 +839,85 @@ return true;
 
 //     return ans;
 // }
+
+bool GestorCsv::escrituraJson(map<std::string, UnionDatos *> unificacion, string &ruta)
+{
+    bool confirmacion = true;
+    json jMap;
+    map<std::string, UnionDatos *>::iterator it;
+    for (it = unificacion.begin(); it != unificacion.end(); it++)
+    {
+        jMap[it->first] = convertirDatosJson(it->second);
+    }
+
+    std::ofstream archivo(ruta);
+
+    if (!archivo.is_open())
+    {
+        confirmacion = false;
+    }
+
+    archivo << jMap.dump(4);
+    archivo.close();
+
+    return confirmacion;
+}
+
+json GestorCsv::convertirDatosJson(const UnionDatos *unionDatos)
+{
+    json j;
+    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+    j["programa"] = {
+        {"CoditoSnies", programaActual->getCodigoSniesDelPrograma()},
+        {"ProgramaAcademico", programaActual->getProgramaAcademico()},
+        {"IdNivelAcademico", programaActual->getIdNivelAcademico()},
+        {"NivelAcademico", programaActual->getNivelAcademico()},
+        {"IdNivelFormacion", programaActual->getIdNivelDeFormacion()},
+        {"NivelFormacion", programaActual->getNivelDeFormacion()},
+        {"IdMetodologia", programaActual->getIdMetodologia()},
+        {"Metodologia", programaActual->getMetodologia()},
+        {"IdArea", programaActual->getIdArea()},
+        {"AreaConocimiento", programaActual->getAreaDeConocimiento()},
+        {"IdNucleo", programaActual->getIdNucleo()},
+        {"NucleoBasicoConocimineto", programaActual->getNucleoBasicoDelConocimientoNbc()},
+        {"IdCineCampoAmplio", programaActual->getIdCineCampoAmplio()},
+        {"DescCinecampoAmplio", programaActual->getDescCineCampoAmplio()},
+        {"IdCineCampoEspecifico", programaActual->getIdCineCampoEspecifico()},
+        {"DescCineCampoEspecifico", programaActual->getDescCineCampoEspecifico()},
+        {"IdCineCodigoDetallado", programaActual->getIdCineCodigoDetallado()},
+        {"DescCineCodigoDetalaldo", programaActual->getDescCineCodigoDetallado()},
+        {"CodigoDepartamentoPrograma", programaActual->getCodigoDelDepartamentoPrograma()},
+        {"DepartamentoOfertaPrograma", programaActual->getDepartamentoDeOfertaDelPrograma()},
+        {"CodigoMunicipio", programaActual->getCodigoDelMunicipioPrograma()},
+        {"MunicioDeOfertaPrograma", programaActual->getMunicipioDeOfertaDelPrograma()}};
+    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    j["datosInstitucion"] = {
+        {"CodigoInstitucion", datosInstiActuales->getCodigoDeLaInstitucion()},
+        {"IesPadre", datosInstiActuales->getIesPadre()},
+        {"InstitucionEducacionSuperiorIes", datosInstiActuales->getInstitucionDeEducacionSuperiorIes()},
+        {"PrincipalOSeccional", datosInstiActuales->getPrincipalOSeccional()},
+        {"IdSectorIes", datosInstiActuales->getIdSectorIes()},
+        {"SectorIes", datosInstiActuales->getSectorIes()},
+        {"IdCaracter", datosInstiActuales->getIdCaracter()},
+        {"CaracterIes", datosInstiActuales->getCaracterIes()},
+        {"CodigoDepartamentoIes", datosInstiActuales->getCodigoDelDepartamentoIes()},
+        {"DepartamentoDeDomiciolioDeLaIes", datosInstiActuales->getDepartamentoDeDomicilioDeLaIes()},
+        {"CodigoDelMunicipioIes", datosInstiActuales->getCodigoDelMunicipioIes()},
+        {"municioDeDomicilioDeLaIes", datosInstiActuales->getMunicipioDeDomicilioDeLaIes()}};
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    j["consolidados"] = json::array();
+    for (int i = 0; i < consolidadosActuales.size(); i++)
+    {
+        j["consolidados"].push_back({{"IdSexo", consolidadosActuales[i]->getIdSexo()},
+                                     {"Sexo", consolidadosActuales[i]->getSexo()},
+                                     {"Anio", consolidadosActuales[i]->getAno()},
+                                     {"Semetre", consolidadosActuales[i]->getSemestre()},
+                                     {"Inscritos", consolidadosActuales[i]->getInscritos()},
+                                     {"Admitidos", consolidadosActuales[i]->getAdmitidos()},
+                                     {"Matriculados", consolidadosActuales[i]->getMatriculados()},
+                                     {"MatriculadosPrimerSemestre", consolidadosActuales[i]->getMatriculadosPrimerSemestre()},
+                                     {"Graduados", consolidadosActuales[i]->getGraduados()}});
+    }
+
+    return j;
+}
