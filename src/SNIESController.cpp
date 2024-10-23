@@ -49,8 +49,8 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         institucion->setCodigoDelMunicipioIes(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO IES"]]);
         institucion->setMunicipioDeDomicilioDeLaIes(fila[posicionesEncabezados["MUNICIPIO DE DOMICILIO DE LA IES"]]);
 
-        string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
-        datosInstituciones.insert({codigoSnies, institucion});
+        string codigo = (fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
+        datosInstituciones[codigo] = institucion;
     }
 
     for (const auto &fila : datos)
@@ -80,65 +80,84 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         programa->setCodigoDelMunicipioPrograma(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
         programa->setMunicipioDeOfertaDelPrograma(fila[posicionesEncabezados["MUNICIPIO DE OFERTA DEL PROGRAMA"]]);
 
-        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
-        programasAcademicos.insert({codigoSnies, programa});
+        string codigo = (fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
+        programasAcademicos[codigo]=programa;
     }
-
-    // for (const auto& par : programasAcademicos) {
-    // std::cout << "Código SNIES del Programa: " << par.first << std::endl; // Imprimir la clave
-    // par.second->imprimir(); // Llamar al método de impresión del objeto
-    // }
 }
 void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2){
-    for (int incremento = stoi(anio1); incremento <= stoi(anio2); incremento++) {
-        asignarAdmitidos(incremento); 
-        
+
+    std::vector<std::vector<std::string>> admitidos=asignarAdmitidos(stoi(anio1));
+    std::vector<std::vector<std::string>> inscritos=asignarInscritos(stoi(anio1));
+    std::vector<std::vector<std::string>> matriculados=asignarMatriculados(stoi(anio1));
+    std::vector<std::vector<std::string>> graduados=asignarGraduados(stoi(anio1));
+
+    std::unordered_map<std::string, int> admitidosIndices=nombresEncabezados(admitidos);
+    std::unordered_map<std::string, int> inscritosIndices=nombresEncabezados(inscritos);
+    std::unordered_map<std::string, int> matriculadosIndices=nombresEncabezados(matriculados);
+    std::unordered_map<std::string, int> graduadosIndices=nombresEncabezados(graduados);
+
+    for (const auto &fila : admitidos)
+    {
+        Consolidado *consolidado = new Consolidado();
+        consolidado->setIdSexo(fila[admitidosIndices["ID SEXO"]]);
+        consolidado->setSexo(fila[admitidosIndices["SEXO"]]);
+        consolidado->setAno(fila[admitidosIndices["AÑO"]]);
+        consolidado->setSemestre(fila[admitidosIndices["SEMESTRE"]]);
+        consolidado->setAdmitidos(fila[admitidosIndices["ADMITIDOS"]]);
+        consolidado->setInscritos("0");
+        consolidado->setMatriculados("0");
+        consolidado->setGraduados("0");
+        string codigo = (fila[admitidosIndices["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[admitidosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]])+","+(fila[admitidosIndices["ID SEXO"]])+","+(fila[admitidosIndices["AÑO"]])+","+(fila[admitidosIndices["SEMESTRE"]]);
+        listaConsolidados[codigo] = consolidado;
+    }
+
+    for(const auto &fila : inscritos){ 
+        string codigo = (fila[inscritosIndices["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[inscritosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]])+","+(fila[inscritosIndices["ID SEXO"]])+","+(fila[inscritosIndices["AÑO"]])+","+(fila[inscritosIndices["SEMESTRE"]]);
+
+        if(listaConsolidados.find(codigo) != listaConsolidados.end()) {
+            listaConsolidados[codigo]->setInscritos(fila[inscritosIndices["INSCRITOS"]]);
+        }
+    }
+
+    for(const auto &fila : matriculados){ 
+        string codigo = (fila[matriculadosIndices["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[matriculadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]])+","+(fila[matriculadosIndices["ID SEXO"]])+","+(fila[matriculadosIndices["AÑO"]])+","+(fila[matriculadosIndices["SEMESTRE"]]);
+        if(listaConsolidados.find(codigo) != listaConsolidados.end()) {
+            listaConsolidados[codigo]->setMatriculados(fila[matriculadosIndices["MATRICULADOS"]]);
+        }
+    }
+
+    for(const auto &fila : graduados){ 
+        string codigo = (fila[graduadosIndices["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[graduadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]])+","+(fila[graduadosIndices["ID SEXO"]])+","+(fila[graduadosIndices["AÑO"]])+","+(fila[graduadosIndices["SEMESTRE"]]);
+        if(listaConsolidados.find(codigo) != listaConsolidados.end()) {
+            listaConsolidados[codigo]->setGraduados(fila[graduadosIndices["GRADUADOS"]]);
+        }
     }
 }
 
-void SNIESController::asignarAdmitidos(int anio){
-
-    std::string ruta = Settings::ADMITIDOS_FILE_PATH + std::to_string(anio) + ".csv";
-
-    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta,Settings::camposConsolidados);
-    std::vector<std::vector<std::string>> datos;
-    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());  
-    datos=gestorCsvObj->extraerDatos(ruta);
-
-    gestorCsvObj->eliminarIndices(indices,datos);
-
-    //Extrae Encabezados Para realizar parametrización de índices
+std::unordered_map<std::string, int> SNIESController::nombresEncabezados(std::vector<std::vector<std::string>> datos){
+    std::unordered_map<std::string, int> posicionesEncabezados;  
     std::vector<string> encabezados = datos.at(0); 
     datos.erase(datos.begin()); 
 
     for (size_t i = 0; i < encabezados.size(); ++i) {
         posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
     }
+    return posicionesEncabezados;
+}
+std::vector<std::vector<std::string>> SNIESController::asignarAdmitidos(int anio){
+    std::string ruta = Settings::ADMITIDOS_FILE_PATH+std::to_string(anio)+".csv";
 
-    for (const auto& fila : datos) {
-        Consolidado* consolidado = new Consolidado();
-
-        consolidado->setIdSexo(std::stoi(fila[posicionesEncabezados["ID SEXO"]]));
-        consolidado->setSexo(fila[posicionesEncabezados["SEXO"]]);
-        consolidado->setAno(std::stoi(fila[posicionesEncabezados["AÑO"]]));
-        consolidado->setSemestre(std::stoi(fila[posicionesEncabezados["SEMESTRE"]]));
-        consolidado->setAdmitidos(std::stoi(fila[posicionesEncabezados["ADMITIDOS"]]));
-
-        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
-        consolidados.insert({codigoSnies, consolidado});
-    }
-
-    asignarInscritos(anio);
-    asignarMatriculados(anio);
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta,Settings::camposConsolidados);
+    std::vector<std::vector<std::string>> datos;
     
-    for (const auto& par : consolidados) {
-    std::cout << "Código SNIES del Programa: " << par.first << std::endl; // Imprimir la clave
-    par.second->imprimir(); // Llamar al método de impresión del objeto
-    }
+    datos=gestorCsvObj->extraerDatos(ruta);
 
+    gestorCsvObj->eliminarIndices(indices,datos);
+
+    return datos;
 }
 
-void SNIESController::asignarInscritos(int anio) {
+std::vector<std::vector<std::string>> SNIESController::asignarInscritos(int anio) {
 
     std::string ruta = Settings::INSCRITOS_FILE_PATH + std::to_string(anio) + ".csv";
 
@@ -150,35 +169,10 @@ void SNIESController::asignarInscritos(int anio) {
 
     gestorCsvObj->eliminarIndices(indices, datos);
 
-    // Extrae encabezados para realizar parametrización de índices
-    std::vector<std::string> encabezados = datos.at(0);
-    datos.erase(datos.begin());
-
-    for (size_t i = 0; i < encabezados.size(); ++i) {
-        posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
-    }
-
-    for (const auto& fila : datos) {
-        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
-
-        auto rangoConsolidado = consolidados.equal_range(codigoSnies);
-        for (auto it = rangoConsolidado.first; it != rangoConsolidado.second; ++it) {
-            Consolidado* consolidado = it->second;
-
-            // Verificar coincidencias en los campos clave
-            if (consolidado->getIdSexo() == std::stoi(fila[posicionesEncabezados["ID SEXO"]]) &&
-                consolidado->getSexo() == fila[posicionesEncabezados["SEXO"]] &&
-                consolidado->getAno() == std::stoi(fila[posicionesEncabezados["AÑO"]]) &&
-                consolidado->getSemestre() == std::stoi(fila[posicionesEncabezados["SEMESTRE"]])) {
-
-                // Agregar inscritos al consolidado correspondiente
-                consolidado->setInscritos(std::stoi(fila[posicionesEncabezados["INSCRITOS"]]));
-            }
-        }
-    }
+    return datos;
 }
 
-void SNIESController::asignarMatriculados(int anio) {
+std::vector<std::vector<std::string>> SNIESController::asignarMatriculados(int anio) {
 
     std::string ruta = Settings::MATRICULADOS_FILE_PATH + std::to_string(anio) + ".csv";
 
@@ -190,290 +184,24 @@ void SNIESController::asignarMatriculados(int anio) {
 
     gestorCsvObj->eliminarIndices(indices, datos);
 
-    // Extrae encabezados para realizar parametrización de índices
-    std::vector<std::string> encabezados = datos.at(0);
-    datos.erase(datos.begin());
+    return datos;
+}
+std::vector<std::vector<std::string>> SNIESController::asignarGraduados(int anio) {
 
-    for (size_t i = 0; i < encabezados.size(); ++i) {
-        posicionesEncabezados[encabezados[i]] = static_cast<int>(i);
-    }
+    std::string ruta = Settings::GRADUADOS_FILE_PATH + std::to_string(anio) + ".csv";
 
-    for (const auto& fila : datos) {
-        std::string codigoSnies = fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]];
+    // Extraer los índices y datos del archivo de graduados
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta, Settings::camposConsolidados);
+    std::vector<std::vector<std::string>> datos;
+    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());
+    datos = gestorCsvObj->extraerDatos(ruta);
 
-        auto rangoConsolidado = consolidados.equal_range(codigoSnies);
-        for (auto it = rangoConsolidado.first; it != rangoConsolidado.second; ++it) {
-            Consolidado* consolidado = it->second;
+    gestorCsvObj->eliminarIndices(indices, datos);
 
-            // Verificar coincidencias en los campos clave
-            if (consolidado->getIdSexo() == std::stoi(fila[posicionesEncabezados["ID SEXO"]]) &&
-                consolidado->getSexo() == fila[posicionesEncabezados["SEXO"]] &&
-                consolidado->getAno() == std::stoi(fila[posicionesEncabezados["AÑO"]]) &&
-                consolidado->getSemestre() == std::stoi(fila[posicionesEncabezados["SEMESTRE"]])) {
-
-                // Agregar matriculados al consolidado correspondiente
-                consolidado->setMatriculados(std::stoi(fila[posicionesEncabezados["MATRICULADOS"]]));
-            }
-        }
-    }
+    return datos;
 }
 
-// void SNIESController::procesarDatosCsv(string &ano1, string &anio2)
 
-// {
-//     GestorCsv *gestorCsv = new GestorCsv();
-//     GestorJson *gestorJson = new GestorJson();
-//     GestorTxt *gestorTxt = new GestorTxt();
-//     vector<GestorBase*> gestores;
-//     gestores.push_back(gestorCsv);
-//     gestores.push_back(gestorJson);
-//     gestores.push_back(gestorTxt);
-//     vector<int> codigosSnies;
-//     vector<vector<string>> programasAcademicosVector;
-//     int posicion;
-//     int columna;
-
-//     // cout << "antes leer programas csv" << endl;
-//     codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
-
-//     gestorCsvObj->definirProgramas();
-
-//     // cout << "despues leer programas csv" << endl;
-//      programasAcademicosVector = gestorCsvObj->leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
-
-//     // cout << "despues leer archivos Primera" << endl;
-//     etiquetasColumnas = programasAcademicosVector[0];
-
-//     for (int i = 1; i < programasAcademicosVector.size(); i += 4)
-//     {
-//         ProgramaAcademico *programaAcademico = new ProgramaAcademico();
-//         DatosInstitucion *datosInstitucion = new DatosInstitucion();
-//         datosInstitucion->setCodigoDeLaInstitucion(stoi(programasAcademicosVector[i][0]));          // CÓDIGO DE LA INSTITUCIÓN
-//         datosInstitucion->setIesPadre(stoi(programasAcademicosVector[i][1]));                       // IES_PADRE
-//         datosInstitucion->setInstitucionDeEducacionSuperiorIes(programasAcademicosVector[i][2]);    // INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
-//         datosInstitucion->setPrincipalOSeccional(programasAcademicosVector[i][3]);                  // PRINCIPAL O SECCIONAL
-//         datosInstitucion->setIdSectorIes(stoi(programasAcademicosVector[i][4]));                    // ID SECTOR IES
-//         datosInstitucion->setSectorIes(programasAcademicosVector[i][5]);                            // SECTOR IES
-//         datosInstitucion->setIdCaracter(stoi(programasAcademicosVector[i][6]));                     // ID CARÁCTER
-//         datosInstitucion->setCaracterIes(programasAcademicosVector[i][7]);                          // CARACTER IES
-//         datosInstitucion->setCodigoDelDepartamentoIes(stoi(programasAcademicosVector[i][8]));       // CÓDIGO DEL DEPARTAMENTO (IES)
-//         datosInstitucion->setDepartamentoDeDomicilioDeLaIes(programasAcademicosVector[i][9]);       // DEPARTAMENTO DE DOMICILIO DE LA IES
-//         datosInstitucion->setCodigoDelMunicipioIes(stoi(programasAcademicosVector[i][10]));         // CÓDIGO DEL MUNICIPIO IES
-//         datosInstitucion->setMunicipioDeDomicilioDeLaIes(programasAcademicosVector[i][11]);         // MUNICIPIO DE DOMICILIO DE LA IES
-//         programaAcademico->setCodigoSniesDelPrograma(stoi(programasAcademicosVector[i][12]));        // CÓDIGO SNIES DEL PROGRAMA
-//         programaAcademico->setProgramaAcademico(programasAcademicosVector[i][13]);                   // PROGRAMA ACADÉMICO
-//         programaAcademico->setIdNivelAcademico(stoi(programasAcademicosVector[i][14]));              // ID NIVEL ACADÉMICO
-//         programaAcademico->setNivelAcademico(programasAcademicosVector[i][15]);                      // NIVEL ACADÉMICO
-//         programaAcademico->setIdNivelDeFormacion(stoi(programasAcademicosVector[i][16]));            // ID NIVEL DE FORMACIÓN
-//         programaAcademico->setNivelDeFormacion(programasAcademicosVector[i][17]);                    // NIVEL DE FORMACIÓN
-//         programaAcademico->setIdMetodologia(stoi(programasAcademicosVector[i][18]));                 // ID METODOLOGÍA
-//         programaAcademico->setMetodologia(programasAcademicosVector[i][19]);                         // METODOLOGÍA
-//         programaAcademico->setIdArea(stoi(programasAcademicosVector[i][20]));                        // ID ÁREA
-//         programaAcademico->setAreaDeConocimiento(programasAcademicosVector[i][21]);                  // ÁREA DE CONOCIMIENTO
-//         programaAcademico->setIdNucleo(stoi(programasAcademicosVector[i][22]));                      // ID NÚCLEO
-//         programaAcademico->setNucleoBasicoDelConocimientoNbc(programasAcademicosVector[i][23]);      // NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
-//         programaAcademico->setIdCineCampoAmplio(stoi(programasAcademicosVector[i][24]));             // ID CINE CAMPO AMPLIO
-//         programaAcademico->setDescCineCampoAmplio(programasAcademicosVector[i][25]);                 // DESC CINE CAMPO AMPLIO
-//         programaAcademico->setIdCineCampoEspecifico(stoi(programasAcademicosVector[i][26]));         // ID CINE CAMPO ESPECÍFICO
-//         programaAcademico->setDescCineCampoEspecifico(programasAcademicosVector[i][27]);             // DESC CINE CAMPO ESPECÍFICO
-//         programaAcademico->setIdCineCodigoDetallado(stoi(programasAcademicosVector[i][28]));         // ID CINE CÓDIGO DETALLADO
-//         programaAcademico->setDescCineCodigoDetallado(programasAcademicosVector[i][29]);             // DESC CINE CÓDIGO DETALLADO
-//         programaAcademico->setCodigoDelDepartamentoPrograma(stoi(programasAcademicosVector[i][30])); // CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
-//         programaAcademico->setDepartamentoDeOfertaDelPrograma(programasAcademicosVector[i][31]);     // DEPARTAMENTO DE OFERTA DEL PROGRAMA
-//         programaAcademico->setCodigoDelMunicipioPrograma(stoi(programasAcademicosVector[i][32]));    // CÓDIGO DEL MUNICIPIO (PROGRAMA)
-//         programaAcademico->setMunicipioDeOfertaDelPrograma(programasAcademicosVector[i][33]);        // MUNICIPIO DE OFERTA DEL PROGRAMA
-//         Consolidado *consolidado[4];
-//         for (int m = 0; m < 4; ++m)
-//         {
-
-//             consolidado[m] = new Consolidado();
-//             consolidado[m]->setIdSexo(stoi(programasAcademicosVector[i + m][34]));
-//             consolidado[m]->setSexo(programasAcademicosVector[i + m][35]);
-//             consolidado[m]->setAno(stoi(programasAcademicosVector[i + m][36]));
-//             consolidado[m]->setSemestre(stoi(programasAcademicosVector[i + m][37]));
-//             consolidado[m]->setAdmitidos(stoi(programasAcademicosVector[i + m][38]));
-//             programaAcademico->setConsolidado(consolidado[m], m);
-//         }
-//         programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), programaAcademico);
-//     }
-//     // cout << "despues crear programas academicos" << endl;
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivoSegunda(rutaAdmitidos, anio2, codigosSnies);
-
-//     // cout << "despues leer archivos segunda" << endl;
-//     for (int j = 0; j < programasAcademicosVector.size(); j += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[j][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             Consolidado *consolidado[4];
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 consolidado[m] = new Consolidado();
-//                 consolidado[m]->setIdSexo(stoi(programasAcademicosVector[j + m][1]));
-//                 consolidado[m]->setSexo(programasAcademicosVector[j + m][2]);
-//                 consolidado[m]->setAno(stoi(programasAcademicosVector[j + m][3]));
-//                 consolidado[m]->setSemestre(stoi(programasAcademicosVector[j + m][4]));
-//                 consolidado[m]->setAdmitidos(stoi(programasAcademicosVector[j + m][5]));
-//                 programa->setConsolidado(consolidado[m], m + 4);
-//             }
-//         }
-//     }
-//     // cout << "despues crear todos los consolidados" << endl;
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaGraduados, ano1, codigosSnies, 13);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m);
-//                 consolidado->setGraduados(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaGraduados, anio2, codigosSnies, 13);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m + 4);
-//                 consolidado->setGraduados(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaInscritos, ano1, codigosSnies, 12);
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m);
-//                 consolidado->setInscritos(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     if (anio2 == "2022")
-//     {
-//         columna = 12;
-//     }
-//     else
-//     {
-//         columna = 13;
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaInscritos, anio2, codigosSnies, columna);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m + 4);
-//                 consolidado->setInscritos(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculados, ano1, codigosSnies, 13);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m);
-//                 consolidado->setMatriculados(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculados, anio2, codigosSnies, 13);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m + 4);
-//                 consolidado->setMatriculados(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, ano1, codigosSnies, 13);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m);
-//                 consolidado->setMatriculadosPrimerSemestre(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anio2, codigosSnies, 13);
-
-//     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
-//     {
-//         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
-//         if (it != programasAcademicos.end())
-//         {
-//             ProgramaAcademico *programa = it->second;
-
-//             for (int m = 0; m < 4; ++m)
-//             {
-//                 Consolidado *consolidado = programa->getConsolidado(m + 4);
-//                 consolidado->setMatriculadosPrimerSemestre(stoi(programasAcademicosVector[k + m][1]));
-//             }
-//         }
-//     }
-
-//     bool archivoCreado;
-//     cout << "Si desea crear un archivo .csv seleccione [0]" << endl;
-//     cout << "Si desea crear un archivos .json seleccione [1]" << endl;
-//     cout << "Si desea crear un archivo .txt seleccione [2]" << endl;
-//     cin >> archivoCreacionElegido;
-//     archivoCreado = gestores[archivoCreacionElegido]->crearArchivo(rutaOutput, programasAcademicos, etiquetasColumnas);
-//     // cout << archivoCreado << endl;
-// }
 
 // // Mantenimiento: El nombre de esta función es confuso.
 // void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)

@@ -16,44 +16,44 @@ using std::vector;
 class Consolidado
 {
 private:
-    int idSexo;
+    string idSexo;
     string sexo;
-    int ano;
-    int semestre;
-    int inscritos;
-    int admitidos;
-    int matriculados;
-    int matriculadosPrimerSemestre;
-    int graduados;
+    string  ano;
+    string  semestre;
+    string  inscritos;
+    string  admitidos;
+    string  matriculados;
+    string  matriculadosPrimerSemestre;
+    string  graduados;
 
 public:
     // Mantenimiento: Gran cantidad de métodos get y set que tal vez no son estrictamente necesarios
-    int getIdSexo();
-    void setIdSexo(int);
+    string  getIdSexo();
+    void setIdSexo(const std::string&);
 
     string getSexo();
     void setSexo(const std::string&);
 
-    int getAno();
-    void setAno(int);
+    string  getAno();
+    void setAno(const std::string&);
 
-    int getSemestre();
-    void setSemestre(int);
+    string  getSemestre();
+    void setSemestre(const std::string&);
 
-    int getInscritos();
-    void setInscritos(int);
+    string  getInscritos();
+    void setInscritos(const std::string&);
 
-    int getAdmitidos();
-    void setAdmitidos(int);
+    string  getAdmitidos();
+    void setAdmitidos(const std::string&);
 
-    int getMatriculados();
-    void setMatriculados(int);
+    string  getMatriculados();
+    void setMatriculados(const std::string&);
 
-    int getMatriculadosPrimerSemestre();
-    void setMatriculadosPrimerSemestre(int);
+    string  getMatriculadosPrimerSemestre();
+    void setMatriculadosPrimerSemestre(const std::string&);
 
-    int getGraduados();
-    void setGraduados(int);
+    string  getGraduados();
+    void setGraduados(const std::string&);
     void imprimir() const {
         std::cout << "Sexo: " << sexo << ", Año: " << ano << ", Semestre: " << semestre
                   << ", Inscritos: " << inscritos << ", Admitidos: " << admitidos

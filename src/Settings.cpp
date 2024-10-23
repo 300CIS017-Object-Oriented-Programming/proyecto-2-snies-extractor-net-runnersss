@@ -16,8 +16,8 @@ std::vector<std::string> Settings::camposImportantes = {"CÓDIGO DE LA INSTITUCI
 "ID NIVEL DE FORMACIÓN","NIVEL DE FORMACIÓN","ID METODOLOGÍA","METODOLOGÍA","ID ÁREA","ÁREA DE CONOCIMIENTO","ID NÚCLEO","NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)",
 "ID CINE CAMPO AMPLIO","DESC CINE CAMPO AMPLIO","ID CINE CAMPO ESPECIFICO","DESC CINE CAMPO ESPECIFICO","ID CINE CODIGO DETALLADO","DESC CINE CODIGO DETALLADO",
 "CÓDIGO DEL DEPARTAMENTO (PROGRAMA)","DEPARTAMENTO DE OFERTA DEL PROGRAMA","CÓDIGO DEL MUNICIPIO (PROGRAMA)","MUNICIPIO DE OFERTA DEL PROGRAMA"};
-//Se añade el CODIGO SNIES DEL PROGRAMA en consolidados para tener una clave de referencia que una los datos con los campos importates
-std::vector<std::string> Settings::camposConsolidados={"CÓDIGO SNIES DEL PROGRAMA","ID SEXO","SEXO","AÑO","SEMESTRE","ADMITIDOS","GRADUADOS","INSCRITOS","MATRICULADOS","PRIMER CURSO"};
+//Se añade el CODIGO SNIES DEL PROGRAMA y CÓDIGO DEL MUNICIPIO (PROGRAMA) en consolidados para tener una clave de referencia que una los datos con los campos importates
+std::vector<std::string> Settings::camposConsolidados={"CÓDIGO SNIES DEL PROGRAMA","CÓDIGO DEL MUNICIPIO (PROGRAMA)","ID SEXO","SEXO","AÑO","SEMESTRE","ADMITIDOS","GRADUADOS","INSCRITOS","MATRICULADOS","PRIMER CURSO"};
 
 void Settings::setRutaBase(const string& nuevaRutaBase){
     BASE_PATH = nuevaRutaBase;

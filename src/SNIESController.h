@@ -7,6 +7,7 @@
 #include "ProgramaAcademico.h"
 #include "GestorCsv.h"
 #include "DatosInstitucion.h"
+#include "Consolidado.h"
 using std::multimap;
 using std::string;
 using std::to_string;
@@ -16,8 +17,9 @@ using std::to_string;
 class SNIESController
 {
 private:
-    multimap<string, ProgramaAcademico *> programasAcademicos;
-    multimap<string, DatosInstitucion*> datosInstituciones;
+    map<string, ProgramaAcademico *> programasAcademicos;
+    map<string, DatosInstitucion*> datosInstituciones;
+    map<string, Consolidado*> listaConsolidados;
     std::unordered_multimap<string, Consolidado*> consolidados;
     GestorCsv *gestorCsvObj;
     vector<string> etiquetasColumnas;
@@ -33,10 +35,11 @@ public:
     ~SNIESController();
     void determinarObjetosDatos(string &anio1);
     void determinarObjetosConsolidados(string &anio1, string &anio2);
-    void asignarAdmitidos(int anio1);
-    void asignarInscritos(int anio);
-    void asignarMatriculados(int anio);
-    void procesarDatosCsv(string &, string &);
+    std::vector<std::vector<std::string>> asignarAdmitidos(int anio1);
+    std::vector<std::vector<std::string>> asignarInscritos(int anio);
+    std::vector<std::vector<std::string>> asignarMatriculados(int anio);
+    std::vector<std::vector<std::string>> asignarGraduados(int anio);
+    std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> datos);
     // Mantenimiento: Este método tiene un nombre confuso.
     void calcularDatosExtra(bool);
     void buscarProgramas(bool, string &, int);

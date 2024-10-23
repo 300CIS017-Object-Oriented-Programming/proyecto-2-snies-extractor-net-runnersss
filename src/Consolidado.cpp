@@ -1,11 +1,11 @@
 #include "Consolidado.h"
 
-int Consolidado::getIdSexo()
+string Consolidado::getIdSexo()
 {
     return idSexo;
 }
 
-void Consolidado::setIdSexo(int idSexo)
+void Consolidado::setIdSexo(const std::string& idSexo)
 {
     this->idSexo = idSexo;
 }
@@ -20,71 +20,71 @@ void Consolidado::setSexo(const std::string&sexo)
     this->sexo = sexo;
 }
 
-int Consolidado::getAno()
+string Consolidado::getAno()
 {
     return ano;
 }
 
-void Consolidado::setAno(int ano)
+void Consolidado::setAno(const std::string& ano)
 {
     this->ano = ano;
 }
 
-int Consolidado::getSemestre()
+string Consolidado::getSemestre()
 {
     return semestre;
 }
-void Consolidado::setSemestre(int semestre)
+void Consolidado::setSemestre(const std::string& semestre)
 {
     this->semestre = semestre;
 }
 
-int Consolidado::getInscritos()
+string Consolidado::getInscritos()
 {
     return inscritos;
 }
 
-void Consolidado::setInscritos(int inscritos)
+void Consolidado::setInscritos(const std::string& inscritos)
 {
     this->inscritos = inscritos;
 }
 
-int Consolidado::getAdmitidos()
+string Consolidado::getAdmitidos()
 {
     return admitidos;
 }
 
-void Consolidado::setAdmitidos(int admitidos)
+void Consolidado::setAdmitidos(const std::string& admitidos)
 {
     this->admitidos = admitidos;
 }
 
-int Consolidado::getMatriculados()
+string Consolidado::getMatriculados()
 {
     return matriculados;
 }
 
-void Consolidado::setMatriculados(int matriculados)
+void Consolidado::setMatriculados(const std::string& matriculados)
 {
     this->matriculados = matriculados;
 }
 
-int Consolidado::getMatriculadosPrimerSemestre()
+string Consolidado::getMatriculadosPrimerSemestre()
 {
     return matriculadosPrimerSemestre;
 }
 
-void Consolidado::setMatriculadosPrimerSemestre(int matriculadosPrimerSemestre)
+void Consolidado::setMatriculadosPrimerSemestre(const std::string& matriculadosPrimerSemestre)
 {
     this->matriculadosPrimerSemestre = matriculadosPrimerSemestre;
 }
 
-int Consolidado::getGraduados()
+string Consolidado::getGraduados()
 {
     return graduados;
 }
 
-void Consolidado::setGraduados(int graduados)
+void Consolidado::setGraduados(const std::string& graduados)
 {
     this->graduados = graduados;
 }
