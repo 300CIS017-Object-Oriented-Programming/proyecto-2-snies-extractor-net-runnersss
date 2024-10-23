@@ -35,22 +35,26 @@ void SNIESController::unificacionDatos(){
             unionDatos->setInstitucion(datosInstituciones[clave]);
 
             if (listaConsolidados.find(clave) != listaConsolidados.end()) {
-                map<string, Consolidado*> consolidadosPorClave = listaConsolidados[clave];
-                unionDatos->setConsolidados(consolidadosPorClave);
+                std::vector<Consolidado*> consolidadosVector;
+
+                for (const auto& par : listaConsolidados[clave]) {
+                    consolidadosVector.push_back(par.second); 
+                }
+                unionDatos->setConsolidados(consolidadosVector); 
             }
 
             unificacion[clave] = unionDatos;
         }
     }
-
-    // for (const auto& par : unificacion) {
-    //     std::cout << "Clave del mapa: " << par.first << std::endl;
-    //     if (par.second) {
-    //         par.second->imprimir();
-    //     } else {
-    //         std::cout << "UnionDatos es nulo." << std::endl;
-    //     }
-    // }
+    
+    for (const auto& par : unificacion) {
+        std::cout << "Clave del mapa: " << par.first << std::endl;
+        if (par.second) {
+            par.second->imprimir();
+        } else {
+            std::cout << "UnionDatos es nulo." << std::endl;
+        }
+    }
 
 }
 
