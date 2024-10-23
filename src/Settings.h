@@ -16,11 +16,10 @@
  *
  */
 
-
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <vector> 
+#include <vector>
 #include <string>
 using namespace std;
 
@@ -42,6 +41,6 @@ public:
     static void setRutaBase(const string &nuevaRutaBase);
     static void setAnioProgramas(string anioProgramas);
     static void setDelimitador(const char &delimitador);
-
+    static string getDelimitador();
 };
 #endif // SETTINGS_H
