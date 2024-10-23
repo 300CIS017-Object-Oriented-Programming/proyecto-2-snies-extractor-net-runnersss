@@ -39,7 +39,6 @@ class ProgramaAcademico
     string departamentoDeOfertaDelPrograma;
     string codigoDelMunicipioPrograma;
     string municipioDeOfertaDelPrograma;
-    unordered_map<int, Consolidado *> consolidados;
 
 public:
     ProgramaAcademico();

@@ -8,6 +8,7 @@
 #include "GestorCsv.h"
 #include "DatosInstitucion.h"
 #include "Consolidado.h"
+#include "UnionDatos.h" 
 using std::multimap;
 using std::string;
 using std::to_string;
@@ -19,20 +20,16 @@ class SNIESController
 private:
     map<string, ProgramaAcademico *> programasAcademicos;
     map<string, DatosInstitucion*> datosInstituciones;
-    map<string, Consolidado*> listaConsolidados;
-    std::unordered_multimap<string, Consolidado*> consolidados;
+    map<string, map<string, Consolidado*>> listaConsolidados;
+    map<std::string, UnionDatos*> unificacion;
     GestorCsv *gestorCsvObj;
     vector<string> etiquetasColumnas;
-    string rutaProgramasCSV;
-    string rutaAdmitidos;
-    string rutaGraduados;
-    string rutaInscritos;
-    string rutaMatriculados;
-    string rutaMatriculadosPrimerSemestre;
     string rutaOutput;
 public:
     SNIESController();
     ~SNIESController();
+    std::pair<std::string, std::string> dividirClave(const std::string& clave);
+    void unificacionDatos();
     void determinarObjetosDatos(string &anio1);
     void determinarObjetosConsolidados(string &anio1, string &anio2);
     std::vector<std::vector<std::string>> asignarAdmitidos(int anio1);
