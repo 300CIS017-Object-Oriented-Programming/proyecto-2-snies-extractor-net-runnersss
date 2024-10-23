@@ -32,6 +32,7 @@ public:
     // FIXME completar para el resto de constantes
     static string ADMITIDOS_FILE_PATH;
     static string MATRICULADOS_FILE_PATH;
+    static string NEOS_FILE_PATH;
     static string INSCRITOS_FILE_PATH;
     static string PROGRAMAS_FILTRAR_FILE_PATH;
     static string BASE_PATH;

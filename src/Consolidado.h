@@ -57,7 +57,8 @@ public:
     void imprimir() const {
         std::cout << "Sexo: " << sexo << ", Año: " << ano << ", Semestre: " << semestre
                   << ", Inscritos: " << inscritos << ", Admitidos: " << admitidos
-                  << ", Matriculados: " << matriculados << ", Graduados: " << graduados << std::endl;
+                  << ", Matriculados: " << matriculados << ", Graduados: " << graduados 
+                  << ", Matriculados Primer Semestre: "<<matriculadosPrimerSemestre<< std::endl;
     }
 };
 

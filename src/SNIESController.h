@@ -35,6 +35,7 @@ public:
     std::vector<std::vector<std::string>> asignarAdmitidos(int anio1);
     std::vector<std::vector<std::string>> asignarInscritos(int anio);
     std::vector<std::vector<std::string>> asignarMatriculados(int anio);
+    std::vector<std::vector<std::string>> asignarMatriculadosPrimerSemestre(int anio);
     std::vector<std::vector<std::string>> asignarGraduados(int anio);
     std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> datos);
     // Mantenimiento: Este método tiene un nombre confuso.

@@ -47,14 +47,14 @@ void SNIESController::unificacionDatos(){
         }
     }
     
-    for (const auto& par : unificacion) {
-        std::cout << "Clave del mapa: " << par.first << std::endl;
-        if (par.second) {
-            par.second->imprimir();
-        } else {
-            std::cout << "UnionDatos es nulo." << std::endl;
-        }
-    }
+    // for (const auto& par : unificacion) {
+    //     std::cout << "Clave del mapa: " << par.first << std::endl;
+    //     if (par.second) {
+    //         par.second->imprimir();
+    //     } else {
+    //         std::cout << "UnionDatos es nulo." << std::endl;
+    //     }
+    // }
 
 }
 
@@ -137,11 +137,13 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
     std::vector<std::vector<std::string>> inscritos=asignarInscritos(stoi(anio1));
     std::vector<std::vector<std::string>> matriculados=asignarMatriculados(stoi(anio1));
     std::vector<std::vector<std::string>> graduados=asignarGraduados(stoi(anio1));
+    std::vector<std::vector<std::string>> neos=asignarMatriculadosPrimerSemestre(stoi(anio1));
 
     std::unordered_map<std::string, int> admitidosIndices=nombresEncabezados(admitidos);
     std::unordered_map<std::string, int> inscritosIndices=nombresEncabezados(inscritos);
     std::unordered_map<std::string, int> matriculadosIndices=nombresEncabezados(matriculados);
     std::unordered_map<std::string, int> graduadosIndices=nombresEncabezados(graduados);
+    std::unordered_map<std::string, int> neosIndices=nombresEncabezados(neos);
 
     for (const auto &fila : admitidos) {
         Consolidado *consolidado = new Consolidado();
@@ -153,6 +155,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
         consolidado->setInscritos("0");
         consolidado->setMatriculados("0");
         consolidado->setGraduados("0");
+        consolidado->setMatriculadosPrimerSemestre("0");
 
         // Separar la clave en dos partes
         std::string claveExterior = fila[admitidosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[admitidosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
@@ -191,28 +194,43 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
             listaConsolidados[claveExterior][claveInterior]->setGraduados(fila[graduadosIndices["GRADUADOS"]]);
         }
     }
+    for(const auto &fila : neos) { 
+        std::string claveExterior = fila[neosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[neosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
+        std::string claveInterior = fila[neosIndices["ID SEXO"]] + "," + fila[neosIndices["AÑO"]] + "," + fila[neosIndices["SEMESTRE"]];
 
-    // for (const auto& exteriorPair : listaConsolidados) {
-    //     const std::string& claveExterior = exteriorPair.first;
-    //     const std::map<std::string, Consolidado*>& interiorMap = exteriorPair.second;
+        if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
+            listaConsolidados[claveExterior].find(claveInterior) != listaConsolidados[claveExterior].end()) {
+            auto it = neosIndices.find("PRIMER CURSO");
+            if(it != neosIndices.end()) {
+                listaConsolidados[claveExterior][claveInterior]->setMatriculadosPrimerSemestre(fila[neosIndices["PRIMER CURSO"]]);
+            } else if(neosIndices.find("MATRICULADOS PRIMER CURSO") != neosIndices.end()) {
+                listaConsolidados[claveExterior][claveInterior]->setMatriculadosPrimerSemestre(fila[neosIndices["MATRICULADOS PRIMER CURSO"]]);
+            }
+        }
+    }
 
-    //     std::cout << "Clave Exterior: " << claveExterior << std::endl;
+    for (const auto& exteriorPair : listaConsolidados) {
+        const std::string& claveExterior = exteriorPair.first;
+        const std::map<std::string, Consolidado*>& interiorMap = exteriorPair.second;
 
-    //     for (const auto& interiorPair : interiorMap) {
-    //         const std::string& claveInterior = interiorPair.first;
-    //         Consolidado* consolidado = interiorPair.second;
+        std::cout << "Clave Exterior: " << claveExterior << std::endl;
 
-    //         std::cout << "  Clave Interior: " << claveInterior << std::endl;
-    //         std::cout << "    IdSexo: " << consolidado->getIdSexo() << std::endl;
-    //         std::cout << "    Sexo: " << consolidado->getSexo() << std::endl;
-    //         std::cout << "    Año: " << consolidado->getAno() << std::endl;
-    //         std::cout << "    Semestre: " << consolidado->getSemestre() << std::endl;
-    //         std::cout << "    Admitidos: " << consolidado->getAdmitidos() << std::endl;
-    //         std::cout << "    Inscritos: " << consolidado->getInscritos() << std::endl;
-    //         std::cout << "    Matriculados: " << consolidado->getMatriculados() << std::endl;
-    //         std::cout << "    Graduados: " << consolidado->getGraduados() << std::endl;
-    //     }
-    // }
+        for (const auto& interiorPair : interiorMap) {
+            const std::string& claveInterior = interiorPair.first;
+            Consolidado* consolidado = interiorPair.second;
+
+            std::cout << "  Clave Interior: " << claveInterior << std::endl;
+            std::cout << "    IdSexo: " << consolidado->getIdSexo() << std::endl;
+            std::cout << "    Sexo: " << consolidado->getSexo() << std::endl;
+            std::cout << "    Año: " << consolidado->getAno() << std::endl;
+            std::cout << "    Semestre: " << consolidado->getSemestre() << std::endl;
+            std::cout << "    Admitidos: " << consolidado->getAdmitidos() << std::endl;
+            std::cout << "    Inscritos: " << consolidado->getInscritos() << std::endl;
+            std::cout << "    Matriculados: " << consolidado->getMatriculados() << std::endl;
+            std::cout << "    Graduados: " << consolidado->getGraduados() << std::endl;
+            std::cout << "    Matriculados Primer Semestre: " << consolidado->getMatriculadosPrimerSemestre() << std::endl;
+        }
+    }
 
 }
 
@@ -257,6 +275,20 @@ std::vector<std::vector<std::string>> SNIESController::asignarInscritos(int anio
 std::vector<std::vector<std::string>> SNIESController::asignarMatriculados(int anio) {
 
     std::string ruta = Settings::MATRICULADOS_FILE_PATH + std::to_string(anio) + ".csv";
+
+    // Extraer los índices y datos del archivo de matriculados
+    std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta, Settings::camposConsolidados);
+    std::vector<std::vector<std::string>> datos;
+    std::unordered_map<std::string, int> posicionesEncabezados(indices.size());
+    datos = gestorCsvObj->extraerDatos(ruta);
+
+    gestorCsvObj->eliminarIndices(indices, datos);
+
+    return datos;
+}
+std::vector<std::vector<std::string>> SNIESController::asignarMatriculadosPrimerSemestre(int anio) {
+
+    std::string ruta = Settings::NEOS_FILE_PATH + std::to_string(anio) + ".csv";
 
     // Extraer los índices y datos del archivo de matriculados
     std::unordered_map<std::string, int> indices = gestorCsvObj->extraerIndices(ruta, Settings::camposConsolidados);

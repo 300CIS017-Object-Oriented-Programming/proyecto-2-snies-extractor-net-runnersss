@@ -8,6 +8,7 @@ string Settings::DELIMITADOR = ";";
 string Settings::PROGRAMAS_FILTRAR_FILE_PATH = "";
 string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
 string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
+string Settings::NEOS_FILE_PATH = BASE_PATH + "matriculadosPrimerSemestre";
 string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
 string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
 std::vector<std::string> Settings::camposImportantes = {"CÓDIGO DE LA INSTITUCIÓN","IES_PADRE","INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)",
@@ -17,7 +18,7 @@ std::vector<std::string> Settings::camposImportantes = {"CÓDIGO DE LA INSTITUCI
 "ID CINE CAMPO AMPLIO","DESC CINE CAMPO AMPLIO","ID CINE CAMPO ESPECIFICO","DESC CINE CAMPO ESPECIFICO","ID CINE CODIGO DETALLADO","DESC CINE CODIGO DETALLADO",
 "CÓDIGO DEL DEPARTAMENTO (PROGRAMA)","DEPARTAMENTO DE OFERTA DEL PROGRAMA","CÓDIGO DEL MUNICIPIO (PROGRAMA)","MUNICIPIO DE OFERTA DEL PROGRAMA"};
 //Se añade el CODIGO SNIES DEL PROGRAMA y CÓDIGO DEL MUNICIPIO (PROGRAMA) en consolidados para tener una clave de referencia que una los datos con los campos importates
-std::vector<std::string> Settings::camposConsolidados={"CÓDIGO SNIES DEL PROGRAMA","CÓDIGO DEL MUNICIPIO (PROGRAMA)","ID SEXO","SEXO","AÑO","SEMESTRE","ADMITIDOS","GRADUADOS","INSCRITOS","MATRICULADOS","PRIMER CURSO"};
+std::vector<std::string> Settings::camposConsolidados={"CÓDIGO SNIES DEL PROGRAMA","CÓDIGO DEL MUNICIPIO (PROGRAMA)","ID SEXO","SEXO","AÑO","SEMESTRE","ADMITIDOS","GRADUADOS","INSCRITOS","MATRICULADOS","MATRICULADOS PRIMER CURSO","PRIMER CURSO"};
 
 void Settings::setRutaBase(const string& nuevaRutaBase){
     BASE_PATH = nuevaRutaBase;
