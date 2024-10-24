@@ -7,7 +7,9 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(SNIES_extractor_V2 src/Settings.h src/Settings.cpp src/ProgramaAcademico.h 
-src/ProgramaAcademico.cpp src/DatosInstitucion.h src/DatosInstitucion.cpp src/Consolidado.h src/Consolidado.cpp src/GestorCsv.h src/GestorCsv.cpp 
-src/UnionDatos.h src/UnionDatos.cpp src/SNIESController.h src/SNIESController.cpp src/View.h src/View.cpp src/main.cpp src/main.cpp)
+src/ProgramaAcademico.cpp src/DatosInstitucion.h src/DatosInstitucion.cpp src/Consolidado.h 
+src/Consolidado.cpp src/GestorCsv.h src/GestorCsv.cpp src/UnionDatos.h src/UnionDatos.cpp 
+src/Escritura.h src/EscrituraJson.cpp src/EscrituraJson.h src/EscrituraTxt.cpp src/EscrituraTxt.h 
+src/SNIESController.h src/SNIESController.cpp src/View.h src/View.cpp src/main.cpp src/main.cpp)
 
 
