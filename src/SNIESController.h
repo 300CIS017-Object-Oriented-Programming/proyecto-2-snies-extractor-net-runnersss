@@ -43,6 +43,7 @@ public:
     // Mantenimiento: Este método tiene un nombre confuso.
     map<std::string, pair<int, int>> diferenciaPorcentualAnual();
     int formulaPorcentual(int totalAnio1, int totalAnio2);
+    map<std::string, std::string> sinMatriculasNuevas();
     void calcularDatosExtra(bool);
     void buscarProgramas(bool, string &, int);
 };
