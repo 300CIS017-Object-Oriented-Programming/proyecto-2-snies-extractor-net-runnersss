@@ -4,7 +4,7 @@ using namespace std;
 
 ProgramaAcademico::ProgramaAcademico()
 {
-    consolidados = unordered_map<int, Consolidado *>(8);
+    
 }
 
 void ProgramaAcademico::setCodigoSniesDelPrograma(const std::string& nuevoCodigoSniesDelPrograma)

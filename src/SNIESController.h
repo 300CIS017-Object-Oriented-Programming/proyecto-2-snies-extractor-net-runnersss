@@ -7,31 +7,42 @@
 #include "ProgramaAcademico.h"
 #include "GestorCsv.h"
 #include "DatosInstitucion.h"
+#include "Consolidado.h"
+#include "UnionDatos.h"
 using std::multimap;
 using std::string;
+using std::to_string;
+#include <iostream>
 #include "Settings.h"
 
 class SNIESController
 {
 private:
-    multimap<string, ProgramaAcademico *> programasAcademicos;
-    multimap<string, DatosInstitucion*> datosInstituciones;
+    map<string, ProgramaAcademico *> programasAcademicos;
+    map<string, DatosInstitucion *> datosInstituciones;
+    map<string, map<string, Consolidado *>> listaConsolidados;
+    map<std::string, UnionDatos *> unificacion;
     GestorCsv *gestorCsvObj;
     vector<string> etiquetasColumnas;
-    string rutaProgramasCSV;
-    string rutaAdmitidos;
-    string rutaGraduados;
-    string rutaInscritos;
-    string rutaMatriculados;
-    string rutaMatriculadosPrimerSemestre;
     string rutaOutput;
+
 public:
     SNIESController();
     ~SNIESController();
+    std::pair<std::string, std::string> dividirClave(const std::string &clave);
+    void unificacionDatos();
     void determinarObjetosDatos(string &anio1);
-    void determinarObjetosConsolidados(string &anio1, string &anio2);
-    void procesarDatosCsv(string &, string &);
+    void determinarObjetosConsolidados(string &anio1);
+    std::vector<std::vector<std::string>> asignarAdmitidos(int anio1);
+    std::vector<std::vector<std::string>> asignarInscritos(int anio);
+    std::vector<std::vector<std::string>> asignarMatriculados(int anio);
+    std::vector<std::vector<std::string>> asignarMatriculadosPrimerSemestre(int anio);
+    std::vector<std::vector<std::string>> asignarGraduados(int anio);
+    std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> &datos);
+    std::string normalizarCodigo(const string &primerComponente, const string &segundoComponente, const string &separador);
     // Mantenimiento: Este método tiene un nombre confuso.
+    map<std::string, pair<int, int>> diferenciaPorcentualAnual();
+    int formulaPorcentual(int totalAnio1, int totalAnio2);
     void calcularDatosExtra(bool);
     void buscarProgramas(bool, string &, int);
 };

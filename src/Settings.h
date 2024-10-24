@@ -31,13 +31,14 @@ public:
     // FIXME completar para el resto de constantes
     static string ADMITIDOS_FILE_PATH;
     static string MATRICULADOS_FILE_PATH;
+    static string NEOS_FILE_PATH;
     static string INSCRITOS_FILE_PATH;
     static string PROGRAMAS_FILTRAR_FILE_PATH;
     static string BASE_PATH;
     static string DELIMITADOR;
     static string GRADUADOS_FILE_PATH;
     static std::vector<std::string> camposImportantes;
-
+    static std::vector<std::string> camposConsolidados;
     static void setRutaBase(const string &nuevaRutaBase);
     static void setAnioProgramas(string anioProgramas);
     static void setDelimitador(const char &delimitador);
