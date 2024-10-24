@@ -242,7 +242,10 @@ void View::exportacionDatos(map<std::string, UnionDatos *> unificacion)
     switch (eleccion)
     {
     case 1:
-
+        GestorCsv g;
+        flag = g.escrituraCsv(unificacion, Settings::OUTPUT_PATH);
+        if (!flag)
+            cout << "error escritura" << endl;
         break;
     case 2:
         Escritura *j = new EscrituraTxt();
@@ -258,5 +261,29 @@ void View::exportacionDatos(map<std::string, UnionDatos *> unificacion)
         break;
     default:
         cout << "Se chuleteo" << endl;
+    }
+}
+
+void View::mostrarDatosExtra()
+{
+
+    std::map<std::string, pair<int, int>> mapPorcentual = controlador->diferenciaPorcentualAnual();
+    std::map<std::string, pair<int, int>>::iterator itMap;
+    cout << "===================================================================" << endl;
+    cout << "Diferencia porcentual anual de los nuevos estudiantes matricualados" << endl;
+    for (itMap = mapPorcentual.begin(); itMap != mapPorcentual.end(); itMap++)
+    {
+        cout << "Para el programa: " << itMap->first << endl;
+        cout << "Hay una diferencia anual del 2021 al 2022 de: " << itMap->second.first << endl;
+        cout << "Y una diferencia del 2022 al 2023 de: " << itMap->second.second << endl;
+    }
+    map<std::string, std::string> mapSinMatriculasNuevas = controlador->sinMatriculasNuevas();
+    map<std::string, std::string>::iterator itSinMatri;
+    cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+    cout << "Programas los cuales no tienen nuevos estudiantes matriculados durante 3 meses o mas" << endl;
+    for (itSinMatri = mapSinMatriculasNuevas.begin(); itSinMatri != mapSinMatriculasNuevas.end(); itSinMatri++)
+    {
+        cout << "Codigo Snies: " << itSinMatri->first << endl;
+        cout << "Programa: " << itSinMatri->second << endl;
     }
 }
