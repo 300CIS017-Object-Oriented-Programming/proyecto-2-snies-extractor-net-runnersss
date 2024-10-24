@@ -6,6 +6,7 @@ SNIESController::SNIESController()
 {
     gestorCsvObj = new GestorCsv();
     gestorTxtObj = new EscrituraTxt();
+    gestorJsonObj = new EscrituraJson();
 }
 
 SNIESController::~SNIESController()
@@ -332,6 +333,10 @@ void SNIESController::exportarCSV(const string & nombreArchivo){
 void SNIESController::exportarTXT(const string & nombreArchivo){
     string ruta=Settings::OUTPUT_PATH+nombreArchivo+".txt";
     gestorTxtObj->escrituraDatos(unificacion, ruta);
+}
+void SNIESController::exportarJSON(const string & nombreArchivo){
+    string ruta=Settings::OUTPUT_PATH+nombreArchivo+".txt";
+    gestorJsonObj->escrituraDatos(unificacion, ruta);
 }
 std::map<std::string, pair<int, int>> SNIESController::diferenciaPorcentualAnual()
 {
