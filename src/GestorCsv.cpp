@@ -139,15 +139,14 @@ bool GestorCsv::escrituraCsv(map<std::string, UnionDatos *> unificacion, string 
     archivoSalida << "\xEF\xBB\xBF";
 
     // Crear encabezado del CSV
-    archivoSalida << "CodigoSnies,ProgramaAcademico,IdNivelAcademico,NivelAcademico,IdNivelFormacion,NivelFormacion,"
-                     "IdMetodologia,Metodologia,IdArea,AreaConocimiento,IdNucleo,NucleoBasicoConocimiento,"
-                     "IdCineCampoAmplio,DescCineCampoAmplio,IdCineCampoEspecifico,DescCineCampoEspecifico,"
-                     "IdCineCodigoDetallado,DescCineCodigoDetallado,CodigoDepartamentoPrograma,"
-                     "DepartamentoOfertaPrograma,CodigoMunicipio,MunicipioDeOfertaPrograma,CodigoInstitucion,"
-                     "IesPadre,InstitucionEducacionSuperiorIes,PrincipalOSeccional,IdSectorIes,SectorIes,"
-                     "IdCaracter,CaracterIes,CodigoDepartamentoIes,DepartamentoDomicilioIes,CodigoMunicipioIes,"
-                     "MunicipioDomicilioIes,IdSexo,Sexo,Anio,Semestre,Inscritos,Admitidos,Matriculados,"
-                     "MatriculadosPrimerSemestre,Graduados\n";
+    archivoSalida << "CodigoSnies;ProgramaAcademico;IdNivelAcademico;NivelAcademico;IdNivelFormacion;NivelFormacion;"
+                     "IdMetodologia;Metodologia;IdArea;AreaConocimiento;IdNucleo;NucleoBasicoConocimiento;"
+                     "IdCineCampoAmplio;DescCineCampoAmplio;IdCineCampoEspecifico;DescCineCampoEspecifico;"
+                     "IdCineCodigoDetallado;DescCineCodigoDetallado;CodigoDepartamentoPrograma;"
+                     "DepartamentoOfertaPrograma;CodigoMunicipio;MunicipioDeOfertaPrograma;CodigoInstitucion;"
+                     "IesPadre;InstitucionEducacionSuperiorIes;PrincipalOSeccional;IdSectorIes;SectorIes;"
+                     "IdCaracter;CaracterIes;CodigoDepartamentoIes;DepartamentoDomicilioIes;CodigoMunicipioIes;"
+                     "MunicipioDomicilioIes\n";
 
     // Iterar sobre los datos y escribir cada línea
     for (auto it = unificacion.begin(); it != unificacion.end(); ++it)
@@ -204,7 +203,8 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
     texto += datosInstiActuales->getDepartamentoDeDomicilioDeLaIes() + delimitador;
     texto += datosInstiActuales->getCodigoDelMunicipioIes() + delimitador;
     texto += datosInstiActuales->getMunicipioDeDomicilioDeLaIes() + delimitador;
-
+    texto += "\n";
+    texto += "IdSexo;Sexo;Anio;Semestre;Inscritos;Admitidos;Matriculados;MatriculadosPrimerSemestre;Graduados\n";
     // Datos de los consolidados (podría haber varios, se necesita un bucle)
     vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidado();
     for (int i = 0; i < consolidadosActuales.size(); i++)
@@ -217,7 +217,7 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
         texto += (consolidadosActuales[i]->getAdmitidos()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculados()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
-        texto += (consolidadosActuales[i]->getGraduados()) + "\n"; // Fin de la fila
+        texto += (consolidadosActuales[i]->getGraduados())+"\n"; // Fin de la fila
     }
 
     return texto;

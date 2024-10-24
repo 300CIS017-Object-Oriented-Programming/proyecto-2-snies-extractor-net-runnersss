@@ -82,7 +82,7 @@ bool View::mostrarPantallaBienvenido()
     string nombreArchivo;
     cout<<"Ingrese el nombre del archivo que se exportara: "<<endl;
     cin >> nombreArchivo;
-    controlador->exportarCSV(nombreArchivo);
+    controlador->exportarTXT(nombreArchivo);
 
     return true;
 }
