@@ -35,6 +35,7 @@ public:
     static string INSCRITOS_FILE_PATH;
     static string PROGRAMAS_FILTRAR_FILE_PATH;
     static string BASE_PATH;
+    static string OUTPUT_PATH;
     static string DELIMITADOR;
     static string GRADUADOS_FILE_PATH;
     static std::vector<std::string> camposImportantes;

@@ -40,6 +40,7 @@ public:
     std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> &datos);
     std::string normalizarCodigo(const string &primerComponente, const string &segundoComponente, const string &separador);
 
+    void exportarCSV(const string & nombreArchivo);
     map<std::string, pair<int, int>> diferenciaPorcentualAnual();
     int formulaPorcentual(int totalAnio1, int totalAnio2);
     map<std::string, std::string> sinMatriculasNuevas();

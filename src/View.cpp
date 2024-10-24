@@ -79,6 +79,11 @@ bool View::mostrarPantallaBienvenido()
     // controlador.procesarDatosCsv(anio1, anio2);
     cout << "Datos procesados con exito!" << endl;
 
+    string nombreArchivo;
+    cout<<"Ingrese el nombre del archivo que se exportara: "<<endl;
+    cin >> nombreArchivo;
+    controlador->exportarCSV(nombreArchivo);
+
     return true;
 }
 

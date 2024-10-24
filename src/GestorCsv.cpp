@@ -123,33 +123,40 @@ void GestorCsv::eliminarIndices(std::unordered_map<std::string, int> &indices, s
     }
 }
 
+
+
 bool GestorCsv::escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta)
 {
     bool confirmacion = true;
-    std::string texto;
+    std::ofstream archivoSalida(ruta);
+    
+    if (!archivoSalida.is_open())
+    {
+        throw std::ios_base::failure("No se pudo abrir el archivo de salida");
+    }
+
+    // Utiliza UTF-8 BOM para permitir caracteres especiales
+    archivoSalida << "\xEF\xBB\xBF";
 
     // Crear encabezado del CSV
-    texto += "CodigoSnies,ProgramaAcademico,IdNivelAcademico,NivelAcademico,IdNivelFormacion,NivelFormacion,IdMetodologia,Metodologia,IdArea,AreaConocimiento,IdNucleo,NucleoBasicoConocimiento,IdCineCampoAmplio,DescCineCampoAmplio,IdCineCampoEspecifico,DescCineCampoEspecifico,IdCineCodigoDetallado,DescCineCodigoDetallado,CodigoDepartamentoPrograma,DepartamentoOfertaPrograma,CodigoMunicipio,MunicipioDeOfertaPrograma,CodigoInstitucion,IesPadre,InstitucionEducacionSuperiorIes,PrincipalOSeccional,IdSectorIes,SectorIes,IdCaracter,CaracterIes,CodigoDepartamentoIes,DepartamentoDomicilioIes,CodigoMunicipioIes,MunicipioDomicilioIes,IdSexo,Sexo,Anio,Semestre,Inscritos,Admitidos,Matriculados,MatriculadosPrimerSemestre,Graduados\n";
+    archivoSalida << "CodigoSnies,ProgramaAcademico,IdNivelAcademico,NivelAcademico,IdNivelFormacion,NivelFormacion,"
+                     "IdMetodologia,Metodologia,IdArea,AreaConocimiento,IdNucleo,NucleoBasicoConocimiento,"
+                     "IdCineCampoAmplio,DescCineCampoAmplio,IdCineCampoEspecifico,DescCineCampoEspecifico,"
+                     "IdCineCodigoDetallado,DescCineCodigoDetallado,CodigoDepartamentoPrograma,"
+                     "DepartamentoOfertaPrograma,CodigoMunicipio,MunicipioDeOfertaPrograma,CodigoInstitucion,"
+                     "IesPadre,InstitucionEducacionSuperiorIes,PrincipalOSeccional,IdSectorIes,SectorIes,"
+                     "IdCaracter,CaracterIes,CodigoDepartamentoIes,DepartamentoDomicilioIes,CodigoMunicipioIes,"
+                     "MunicipioDomicilioIes,IdSexo,Sexo,Anio,Semestre,Inscritos,Admitidos,Matriculados,"
+                     "MatriculadosPrimerSemestre,Graduados\n";
 
     // Iterar sobre los datos y escribir cada línea
-    map<std::string, UnionDatos *>::iterator it;
-    for (it = unificacion.begin(); it != unificacion.end(); it++)
+    for (auto it = unificacion.begin(); it != unificacion.end(); ++it)
     {
-        texto += escribirDatosCsv(it->second); // Concatenamos los datos en formato CSV por cada objeto
+        std::string texto = escribirDatosCsv(it->second);
+        archivoSalida << texto;
     }
-
-    std::ofstream archivo(ruta);
-
-    if (!archivo.is_open())
-    {
-        confirmacion = false;
-    }
-    else
-    {
-        archivo << texto; // Escribimos todo el contenido en formato CSV
-        archivo.close();
-    }
-
+    
+    archivoSalida.close();
     return confirmacion;
 }
 
@@ -210,7 +217,7 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
         texto += (consolidadosActuales[i]->getAdmitidos()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculados()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
-        texto += (consolidadosActuales[i]->getGraduados()) + delimitador; // Fin de la fila (nueva línea)
+        texto += (consolidadosActuales[i]->getGraduados()) + "\n"; // Fin de la fila
     }
 
     return texto;
