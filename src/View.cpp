@@ -70,17 +70,18 @@ bool View::mostrarPantallaBienvenido()
     int incremento;
     string incrementoString;
 
-    for (incremento=stoi(anio1); incremento<=stoi(anio2); incremento++){
-        incrementoString=std::to_string(incremento);
+    for (incremento = stoi(anio1); incremento <= stoi(anio2); incremento++)
+    {
+        incrementoString = std::to_string(incremento);
         controlador->determinarObjetosConsolidados(incrementoString);
     }
-    
+
     controlador->unificacionDatos();
     // controlador.procesarDatosCsv(anio1, anio2);
     cout << "Datos procesados con exito!" << endl;
 
     string nombreArchivo;
-    cout<<"Ingrese el nombre del archivo que se exportara: "<<endl;
+    cout << "Ingrese el nombre del archivo que se exportara: " << endl;
     cin >> nombreArchivo;
     controlador->exportarCSV(nombreArchivo);
 
@@ -93,18 +94,19 @@ void View::parametrizacion()
     cout << "=============Parametros Por Defecto================" << endl;
     cout << "Ruta base de la carpeta SNIES_EXTRACTOR/inputs es: " << endl;
     cout << Settings::BASE_PATH << std::endl;
-    cout << "Delimitador por defecto: " << Settings::DELIMITADOR<< std::endl;
+    cout << "Delimitador por defecto: " << Settings::DELIMITADOR << std::endl;
     cout << "Desea realizar cambios?" << std::endl;
     cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
-    
-    if(eleccionUsuario()){
+
+    if (eleccionUsuario())
+    {
         string nuevaRuta;
         char delimitador;
-        cout<<"Ingrese la nueva ruta base: "<< std::endl;
+        cout << "Ingrese la nueva ruta base: " << std::endl;
         cin >> nuevaRuta;
         ajustes.setRutaBase(nuevaRuta);
-        
-        cout<<"Ingrese el nuevo delimitador: "<< std::endl;
+
+        cout << "Ingrese el nuevo delimitador: " << std::endl;
         cin >> delimitador;
         ajustes.setDelimitador(delimitador);
     }
@@ -112,7 +114,6 @@ void View::parametrizacion()
     // cout <<"Ingrese el anio que se va a tomar como base"<<endl;
     // cout <<"para extraer los programas academicos"<<endl;
     // cin >>anioProgramas;
-    
 }
 bool View::eleccionUsuario()
 {
@@ -226,5 +227,36 @@ bool View::isConvetibleToInt(const string &str)
     {
         // No se pudo convertir: el número está fuera del rango de int
         return false;
+    }
+}
+
+void View::exportacionDatos(map<std::string, UnionDatos *> unificacion)
+{
+    int eleccion;
+    cout << "En que desea exportar el archivo" << endl;
+    cout << "1) CVS" << endl;
+    cout << "2) txt" << endl;
+    cout << "3) json" << endl;
+    bool flag;
+    cin >> eleccion;
+    switch (eleccion)
+    {
+    case 1:
+
+        break;
+    case 2:
+        Escritura *j = new EscrituraTxt();
+        flag = j->escrituraDatos(unificacion, Settings::OUTPUT_PATH);
+        if (!flag)
+            cout << "error escritura" << endl;
+        break;
+    case 3:
+        Escritura *j = new EscrituraJson();
+        flag = j->escrituraDatos(unificacion, Settings::OUTPUT_PATH);
+        if (!flag)
+            cout << "error escritura" << endl;
+        break;
+    default:
+        cout << "Se chuleteo" << endl;
     }
 }
