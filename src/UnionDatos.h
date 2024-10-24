@@ -11,31 +11,37 @@ using std::map;
 using std::string;
 using std::vector;
 
-class UnionDatos {
+class UnionDatos
+{
 private:
-    ProgramaAcademico* programa;
-    DatosInstitucion* institucion;
-    vector<Consolidado*> consolidados;
+    ProgramaAcademico *programa;
+    DatosInstitucion *institucion;
+    vector<Consolidado *> consolidados;
 
 public:
-    void setPrograma(ProgramaAcademico* prog);
-    void setInstitucion(DatosInstitucion* inst);
-    
-    void setConsolidados(const vector<Consolidado*>& nuevosConsolidados);
+    void setPrograma(ProgramaAcademico *prog);
+    void setInstitucion(DatosInstitucion *inst);
 
-    ProgramaAcademico* getPrograma() const;
-    DatosInstitucion* getInstitucion() const;
-    Consolidado* getConsolidado(const string& clave) const;
-    void imprimir() {
-        if (programa) {
+    void setConsolidados(const vector<Consolidado *> &nuevosConsolidados);
+
+    ProgramaAcademico *getPrograma() const;
+    DatosInstitucion *getInstitucion() const;
+    vector<Consolidado *> getConsolidado() const;
+    void imprimir()
+    {
+        if (programa)
+        {
             programa->imprimir();
         }
-        if (institucion) {
+        if (institucion)
+        {
             institucion->imprimir();
         }
-        for (const auto& consolidado : consolidados) {
-            if (consolidado) { 
-                consolidado->imprimir(); 
+        for (const auto &consolidado : consolidados)
+        {
+            if (consolidado)
+            {
+                consolidado->imprimir();
             }
         }
     }
