@@ -28,12 +28,12 @@ bool View::esEntero(const std::string &str)
 bool View::mostrarPantallaBienvenido()
 {
     char userAnswer;
-    cout << "=================Bienvenido al SNIES-Extractor!=====================" << endl;
-    cout << "====================================================================" << endl;
+    cout << "=========================Bienvenido al SNIES-Extractor!============================" << endl;
+    cout << "===================================================================================" << endl;
     cout << "Recuerde: Los archivos deben estar en una carpeta SNIES_EXTRACTOR" << endl;
     cout << "con sus respectivas carpetas inputs y outputs, donde se encuentren" << endl;
     cout << "todos los archivos CSV del SNIES." << endl;
-    cout << "====================================================================" << endl;
+    cout << "===================================================================================" << endl;
     parametrizacion();
 
     string userText;
@@ -51,7 +51,7 @@ bool View::mostrarPantallaBienvenido()
         throw std::invalid_argument("El valor ingresado no es correcto");
     }
 
-    cout << "Escriba el segundo ano de busqueda: ";
+    cout << "Escriba el segundo anio de busqueda: ";
     cin >> anio2;
     cout << endl;
 
@@ -65,7 +65,8 @@ bool View::mostrarPantallaBienvenido()
         throw std::invalid_argument("El segundo anio debe ser mayor que el primero");
     }
 
-    cout << "Procesando datos ..." << endl;
+    cout << "..................................Procesando datos................................." << endl;
+
     controlador->determinarObjetosDatos(anio1);
     int incremento;
     string incrementoString;
@@ -77,13 +78,21 @@ bool View::mostrarPantallaBienvenido()
     }
 
     controlador->unificacionDatos();
-    // controlador.procesarDatosCsv(anio1, anio2);
+
+    cout << endl;
     cout << "Datos procesados con exito!" << endl;
 
-    string nombreArchivo;
-    cout << "Ingrese el nombre del archivo que se exportara: " << endl;
-    cin >> nombreArchivo;
-    controlador->exportarJSON(nombreArchivo);
+    menuExportacionDatos();
+
+    cout<<endl;
+    cout<<"Desea visualizar los datos extra calculados?"<<endl;
+    cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
+ 
+    if (eleccionUsuario()){
+        mostrarDatosExtra();
+    }
+
+    
 
     return true;
 }
@@ -91,12 +100,12 @@ bool View::mostrarPantallaBienvenido()
 void View::parametrizacion()
 {
     string anioProgramas;
-    cout << "=============Parametros Por Defecto================" << endl;
+    cout << "==========================Parametros Por Defecto===================================" << endl;
     cout << "Ruta base de la carpeta SNIES_EXTRACTOR/inputs es: " << endl;
     cout << Settings::BASE_PATH << std::endl;
     cout << "Delimitador por defecto: " << Settings::DELIMITADOR << std::endl;
     cout << "Desea realizar cambios?" << std::endl;
-    cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
+    cout << "Ingrese 'Y' o 'N' segun corresponda: ";
 
     if (eleccionUsuario())
     {
@@ -129,84 +138,7 @@ bool View::eleccionUsuario()
 
     return false;
 }
-// void View::salir()
-// {
-//     cout << "Cerrando programa..." << endl;
-//     cout << "Recuerde revisar la carpeta de outputs para los archivos .csv exportados" << endl;
-//     cout << "Programa Cerrado con exito!" << endl;
-// }
 
-// void View::mostrarDatosExtra()
-// {
-//     char opcionYN;
-//     cout << "A continuacion vamos a mostrar datos relevantes de los programas academicos seleccionados" << "\n"
-//          << endl;
-//     cout << "Desea Convertir los datos a un archivo CSV?(Y/N): " << endl;
-//     cin >> opcionYN;
-//     opcionYN = tolower(opcionYN);
-//     cout << "\n";
-//     // FIXME verificar que el usuario ingrese un valor igual al esperado, return true si es Y, false si es N, y no sale si no retorna un valor válido
-//     // Simplificar el código de acuerdo a ese ajuste
-//     if (opcionYN == 'y')
-//     {
-//         controlador.calcularDatosExtra(true);
-//     }
-
-//     else
-//     {
-//         controlador.calcularDatosExtra(false);
-//     }
-// }
-
-// void View::buscarPorPalabraClaveYFormacion()
-// {
-//     char opcionYN = 'y', opcionCSV;
-//     string palabraClave;
-//     bool convertirCSV;
-//     int idFormacionAcademica;
-
-//     while (opcionYN == 'y')
-//     {
-//         cout << "Desea hacer una busqueda por palabra clave del nombre del programa(Y/N): " << endl;
-//         cin >> opcionYN;
-//         cout << "\n";
-//         opcionYN = tolower(opcionYN);
-
-//         if (opcionYN == 'y')
-//         {
-//             cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
-//             cin >> opcionCSV;
-//             cout << "\n";
-//             opcionCSV = tolower(opcionCSV);
-
-//             if (opcionCSV == 'y')
-//             {
-//                 convertirCSV = true;
-//             }
-
-//             else
-//             {
-//                 convertirCSV = false;
-//             }
-
-//             cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
-//             cin >> palabraClave;
-//             cout << endl;
-
-//             cout << "Seleccione un nivel de formacion para filtrar: \n 1->Especializacion Universitaria\n 2->Maestria\n 3->Doctorado\n 4->Formacion Tecnica Profesional \n 5->Tecnologico\n 6->Universitario\n 7->Especializacion Tecnico Profesional\n 8->Especializacion Tecnologica\n 10->Especializacion Medico Quirurgica\n " << endl;
-//             cin >> idFormacionAcademica;
-//             cout << "\n";
-//             while ((idFormacionAcademica > 10) || (idFormacionAcademica == 9) || (idFormacionAcademica < 1))
-//             {
-//                 cout << "Seleccione una opcion entre 1-10 excluyendo el 9\n"
-//                      << endl;
-//                 cin >> idFormacionAcademica;
-//             }
-
-//             controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
-//         }
-//     }
-// }
 
 bool View::isConvetibleToInt(const string &str)
 {
@@ -230,43 +162,42 @@ bool View::isConvetibleToInt(const string &str)
     }
 }
 
-void View::exportacionDatos(map<std::string, UnionDatos *> unificacion)
+void View::menuExportacionDatos()
 {
+    string nombreArchivo;
+    cout << endl;
+    cout <<"==================================================================================="<<endl;
+    cout << "Ingrese el nombre con el que se almacenara el archivo exportado: " << endl;
+    cin >> nombreArchivo;
+    cout << endl;
     int eleccion;
-    cout << "En que desea exportar el archivo" << endl;
+    cout << "Ingrese la opcion del tipo de formato para el archivo" << endl;
     cout << "1) CVS" << endl;
     cout << "2) txt" << endl;
     cout << "3) json" << endl;
-    bool flag;
     cin >> eleccion;
+
     switch (eleccion)
     {
     case 1:
-        GestorCsv g;
-        flag = g.escrituraCsv(unificacion, Settings::OUTPUT_PATH);
-        if (!flag)
-            cout << "error escritura" << endl;
+        controlador->exportarCSV(nombreArchivo);
         break;
     case 2:
-        Escritura *j = new EscrituraTxt();
-        flag = j->escrituraDatos(unificacion, Settings::OUTPUT_PATH);
-        if (!flag)
-            cout << "error escritura" << endl;
+        controlador->exportarTXT(nombreArchivo);
         break;
     case 3:
-        Escritura *j = new EscrituraJson();
-        flag = j->escrituraDatos(unificacion, Settings::OUTPUT_PATH);
-        if (!flag)
-            cout << "error escritura" << endl;
+        controlador->exportarJSON(nombreArchivo);
         break;
     default:
-        cout << "Se chuleteo" << endl;
+        cout << "Eleccion no correcta" << endl;
     }
+    cout << "Archivo exportado exitosamente!" << endl;
+    cout<<endl;
+    cout << "Se encuentra en la ruta: "<<Settings::OUTPUT_PATH<<endl;
 }
 
 void View::mostrarDatosExtra()
 {
-
     std::map<std::string, pair<int, int>> mapPorcentual = controlador->diferenciaPorcentualAnual();
     std::map<std::string, pair<int, int>>::iterator itMap;
     cout << "===================================================================" << endl;
@@ -280,7 +211,7 @@ void View::mostrarDatosExtra()
     map<std::string, std::string> mapSinMatriculasNuevas = controlador->sinMatriculasNuevas();
     map<std::string, std::string>::iterator itSinMatri;
     cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
-    cout << "Programas los cuales no tienen nuevos estudiantes matriculados durante 3 meses o mas" << endl;
+    cout << "Programas los cuales no tienen nuevos estudiantes matriculados durante 3 anios o mas" << endl;
     for (itSinMatri = mapSinMatriculasNuevas.begin(); itSinMatri != mapSinMatriculasNuevas.end(); itSinMatri++)
     {
         cout << "Codigo Snies: " << itSinMatri->first << endl;

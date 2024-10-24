@@ -28,7 +28,7 @@ public:
     void salir();
     bool isConvetibleToInt(const string &);
     void parametrizacion();
-    void exportacionDatos(map<std::string, UnionDatos *> unificacion);
+    void menuExportacionDatos();
 };
 
 #endif
