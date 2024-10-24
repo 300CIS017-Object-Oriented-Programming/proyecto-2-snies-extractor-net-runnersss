@@ -399,6 +399,42 @@ int SNIESController::formulaPorcentual(int totalAnio1, int totalAnio2)
     return (((totalAnio2 * 100) / totalAnio1) - 100);
 }
 
+map<std::string, std::string> SNIESController::sinMatriculasNuevas()
+{
+    map<std::string, std::string> programasSinMatriculados;
+    map<std::string, UnionDatos *>::iterator itMapUnion;
+    std::vector<Consolidado *> consolidadostmp;
+    std::string codigoSnies, programa;
+    int contador, matriculados;
+    bool flag;
+
+    for (itMapUnion = unificacion.begin(); itMapUnion != unificacion.end(); itMapUnion++)
+    {
+        consolidadostmp = itMapUnion->second->getConsolidado();
+        contador = 0;
+        flag = true;
+        for (int i = 0; i != consolidadostmp.size() && flag; i++)
+        {
+            if (std::stoi(consolidadostmp[i]->getMatriculadosPrimerSemestre()) == 0)
+            {
+                contador++;
+                if (contador == 3)
+                {
+                    programa = itMapUnion->second->getPrograma()->getProgramaAcademico();
+                    codigoSnies = itMapUnion->second->getPrograma()->getCodigoSniesDelPrograma();
+                    programasSinMatriculados[codigoSnies] = programa;
+                    flag = false;
+                }
+            }
+            else
+            {
+                contador = 0;
+            }
+        }
+    }
+    return programasSinMatriculados;
+}
+
 // // Mantenimiento: El nombre de esta función es confuso.
 // void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)
 // {
