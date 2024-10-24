@@ -3,6 +3,9 @@
 #include "SNIESController.h"
 #include "Settings.h"
 #include <cctype>
+#include "EscrituraTxt.h"
+#include "EscrituraJson.h"
+#include "Escritura.h"
 using std::to_string;
 #include <iostream>
 
@@ -13,8 +16,9 @@ class View
 private:
     SNIESController *controlador;
     Settings ajustes;
-    bool esEntero(const std::string& str);
+    bool esEntero(const std::string &str);
     bool eleccionUsuario();
+
 public:
     View();
     ~View();
@@ -24,6 +28,7 @@ public:
     void salir();
     bool isConvetibleToInt(const string &);
     void parametrizacion();
+    void exportacionDatos(map<std::string, UnionDatos *> unificacion);
 };
 
 #endif
