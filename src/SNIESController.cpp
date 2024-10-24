@@ -127,7 +127,7 @@ void SNIESController::determinarObjetosDatos(string &anio1){
     // }
 }
 void SNIESController::determinarObjetosConsolidados(string &anio1){
-
+//Debido a inconsistencias en los archivos se opta por asignar el campo año por el valor ingresado por el usuario
     std::vector<std::vector<std::string>> admitidos=asignarAdmitidos(stoi(anio1));
     std::vector<std::vector<std::string>> inscritos=asignarInscritos(stoi(anio1));
     std::vector<std::vector<std::string>> matriculados=asignarMatriculados(stoi(anio1));
@@ -144,7 +144,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1){
         Consolidado *consolidado = new Consolidado();
         consolidado->setIdSexo(fila[inscritosIndices["ID SEXO"]]);
         consolidado->setSexo(fila[inscritosIndices["SEXO"]]);
-        consolidado->setAno(fila[inscritosIndices["AÑO"]]);
+        consolidado->setAno(anio1);
         consolidado->setSemestre(fila[inscritosIndices["SEMESTRE"]]);
         consolidado->setInscritos(fila[inscritosIndices["INSCRITOS"]]);
         consolidado->setAdmitidos("0");
@@ -156,7 +156,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1){
         string separador=",";
         string claveExterior = normalizarCodigo((fila[inscritosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[inscritosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
 
-        std::string claveInterior = fila[inscritosIndices["ID SEXO"]] + "," + fila[inscritosIndices["AÑO"]] + "," + fila[inscritosIndices["SEMESTRE"]];
+        std::string claveInterior = fila[inscritosIndices["ID SEXO"]] + "," + anio1 + "," + fila[inscritosIndices["SEMESTRE"]];
         
         // Almacenar en el mapa de mapas
         listaConsolidados[claveExterior][claveInterior] = consolidado;
@@ -165,7 +165,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1){
     for(const auto &fila : admitidos) { 
         string separador=",";
         string claveExterior = normalizarCodigo((fila[admitidosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[admitidosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
-        std::string claveInterior = fila[admitidosIndices["ID SEXO"]] + "," + fila[admitidosIndices["AÑO"]] + "," + fila[admitidosIndices["SEMESTRE"]];
+        std::string claveInterior = fila[admitidosIndices["ID SEXO"]] + "," + anio1 + "," + fila[admitidosIndices["SEMESTRE"]];
 
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
         listaConsolidados[claveExterior].find(claveInterior) != listaConsolidados[claveExterior].end()) {
@@ -176,7 +176,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1){
     for(const auto &fila : matriculados) { 
         string separador=",";
         string claveExterior = normalizarCodigo((fila[matriculadosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[matriculadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
-        std::string claveInterior = fila[matriculadosIndices["ID SEXO"]] + "," + fila[matriculadosIndices["AÑO"]] + "," + fila[matriculadosIndices["SEMESTRE"]];
+        std::string claveInterior = fila[matriculadosIndices["ID SEXO"]] + "," + anio1 + "," + fila[matriculadosIndices["SEMESTRE"]];
 
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
         listaConsolidados[claveExterior].find(claveInterior) != listaConsolidados[claveExterior].end()) {
@@ -187,7 +187,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1){
     for(const auto &fila : graduados) { 
         string separador=",";
         string claveExterior = normalizarCodigo((fila[graduadosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[graduadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
-        std::string claveInterior = fila[graduadosIndices["ID SEXO"]] + "," + fila[graduadosIndices["AÑO"]] + "," + fila[graduadosIndices["SEMESTRE"]];
+        std::string claveInterior = fila[graduadosIndices["ID SEXO"]] + "," + anio1 + "," + fila[graduadosIndices["SEMESTRE"]];
         
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
         listaConsolidados[claveExterior].find(claveInterior) != listaConsolidados[claveExterior].end()) {
@@ -197,7 +197,7 @@ void SNIESController::determinarObjetosConsolidados(string &anio1){
     for(const auto &fila : neos) { 
         string separador=",";
         string claveExterior = normalizarCodigo((fila[neosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[neosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
-        std::string claveInterior = fila[neosIndices["ID SEXO"]] + "," + fila[neosIndices["AÑO"]] + "," + fila[neosIndices["SEMESTRE"]];
+        std::string claveInterior = fila[neosIndices["ID SEXO"]] + "," + anio1 + "," + fila[neosIndices["SEMESTRE"]];
 
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
             listaConsolidados[claveExterior].find(claveInterior) != listaConsolidados[claveExterior].end()) {
