@@ -1,4 +1,3 @@
-// After
 #ifndef GESTOR_CSV_H
 #define GESTOR_CSV_H
 
@@ -39,7 +38,6 @@ public:
     void eliminarIndices(std::unordered_map<std::string, int> &indices, std::vector<std::vector<std::string>> &datos);
     bool escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta);
     string escribirDatosCsv(const UnionDatos *unionDatos);
-    map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
 };
 
 #endif

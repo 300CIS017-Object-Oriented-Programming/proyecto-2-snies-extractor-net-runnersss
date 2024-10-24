@@ -5,6 +5,8 @@ using namespace std;
 SNIESController::SNIESController()
 {
     gestorCsvObj = new GestorCsv();
+    gestorTxtObj = new EscrituraTxt();
+    gestorJsonObj = new EscrituraJson();
 }
 
 SNIESController::~SNIESController()
@@ -43,18 +45,6 @@ void SNIESController::unificacionDatos()
         }
     }
 
-    // for (const auto &par : unificacion)
-    // {
-    //     std::cout << "Clave del mapa: " << par.first << std::endl;
-    //     if (par.second)
-    //     {
-    //         par.second->imprimir();
-    //     }
-    //     else
-    //     {
-    //         std::cout << "UnionDatos es nulo." << std::endl;
-    //     }
-    // }
 }
 
 void SNIESController::determinarObjetosDatos(string &anio1)
@@ -131,10 +121,6 @@ void SNIESController::determinarObjetosDatos(string &anio1)
         programasAcademicos[codigo] = programa;
     }
 
-    // for (const auto& par : programasAcademicos) {
-    // std::cout << "Código: " << par.first << std::endl; // Imprimir la clave
-    // par.second->imprimir(); // Llamar al método de impresión del objeto
-    // }
 }
 void SNIESController::determinarObjetosConsolidados(string &anio1)
 {
@@ -232,29 +218,6 @@ void SNIESController::determinarObjetosConsolidados(string &anio1)
             }
         }
     }
-
-    // for (const auto& exteriorPair : listaConsolidados) {
-    //     const std::string& claveExterior = exteriorPair.first;
-    //     const std::map<std::string, Consolidado*>& interiorMap = exteriorPair.second;
-
-    //     std::cout << "Clave Exterior: " << claveExterior << std::endl;
-
-    //     for (const auto& interiorPair : interiorMap) {
-    //         const std::string& claveInterior = interiorPair.first;
-    //         Consolidado* consolidado = interiorPair.second;
-
-    //         std::cout << "  Clave Interior: " << claveInterior << std::endl;
-    //         std::cout << "    IdSexo: " << consolidado->getIdSexo() << std::endl;
-    //         std::cout << "    Sexo: " << consolidado->getSexo() << std::endl;
-    //         std::cout << "    Año: " << consolidado->getAno() << std::endl;
-    //         std::cout << "    Semestre: " << consolidado->getSemestre() << std::endl;
-    //         std::cout << "    Admitidos: " << consolidado->getAdmitidos() << std::endl;
-    //         std::cout << "    Inscritos: " << consolidado->getInscritos() << std::endl;
-    //         std::cout << "    Matriculados: " << consolidado->getMatriculados() << std::endl;
-    //         std::cout << "    Graduados: " << consolidado->getGraduados() << std::endl;
-    //         std::cout << "    Matriculados Primer Semestre: " << consolidado->getMatriculadosPrimerSemestre() << std::endl;
-    //     }
-    // }
 }
 
 std::string SNIESController::normalizarCodigo(const string &primerComponente, const string &segundoComponente, const string &separador)
@@ -366,6 +329,14 @@ std::vector<std::vector<std::string>> SNIESController::asignarGraduados(int anio
 void SNIESController::exportarCSV(const string & nombreArchivo){
     string ruta=Settings::OUTPUT_PATH+nombreArchivo+".csv";
     gestorCsvObj->escrituraCsv(unificacion, ruta);
+}
+void SNIESController::exportarTXT(const string & nombreArchivo){
+    string ruta=Settings::OUTPUT_PATH+nombreArchivo+".txt";
+    gestorTxtObj->escrituraDatos(unificacion, ruta);
+}
+void SNIESController::exportarJSON(const string & nombreArchivo){
+    string ruta=Settings::OUTPUT_PATH+nombreArchivo+".txt";
+    gestorJsonObj->escrituraDatos(unificacion, ruta);
 }
 std::map<std::string, pair<int, int>> SNIESController::diferenciaPorcentualAnual()
 {

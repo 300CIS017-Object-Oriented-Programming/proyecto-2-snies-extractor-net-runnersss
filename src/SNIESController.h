@@ -9,6 +9,8 @@
 #include "DatosInstitucion.h"
 #include "Consolidado.h"
 #include "UnionDatos.h"
+#include "EscrituraTxt.h"
+#include "EscrituraJson.h"
 using std::multimap;
 using std::string;
 using std::to_string;
@@ -23,6 +25,8 @@ private:
     map<string, map<string, Consolidado *>> listaConsolidados;
     map<std::string, UnionDatos *> unificacion;
     GestorCsv *gestorCsvObj;
+    EscrituraTxt *gestorTxtObj;
+    EscrituraJson *gestorJsonObj;
     vector<string> etiquetasColumnas;
     string rutaOutput;
 
@@ -41,6 +45,8 @@ public:
     std::string normalizarCodigo(const string &primerComponente, const string &segundoComponente, const string &separador);
 
     void exportarCSV(const string & nombreArchivo);
+    void exportarTXT(const string & nombreArchivo);
+    void exportarJSON(const string & nombreArchivo);
     map<std::string, pair<int, int>> diferenciaPorcentualAnual();
     int formulaPorcentual(int totalAnio1, int totalAnio2);
     map<std::string, std::string> sinMatriculasNuevas();
