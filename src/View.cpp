@@ -1,5 +1,5 @@
 #include "View.h"
-
+using namespace std;
 View::View()
 {
     controlador = new SNIESController();
@@ -67,7 +67,14 @@ bool View::mostrarPantallaBienvenido()
 
     cout << "Procesando datos ..." << endl;
     controlador->determinarObjetosDatos(anio1);
-    controlador->determinarObjetosConsolidados(anio1,anio2);
+    int incremento;
+    string incrementoString;
+
+    for (incremento=stoi(anio1); incremento<=stoi(anio2); incremento++){
+        incrementoString=std::to_string(incremento);
+        controlador->determinarObjetosConsolidados(incrementoString);
+    }
+    
     controlador->unificacionDatos();
     // controlador.procesarDatosCsv(anio1, anio2);
     cout << "Datos procesados con exito!" << endl;

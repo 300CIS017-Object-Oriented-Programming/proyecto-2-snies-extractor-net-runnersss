@@ -3,6 +3,8 @@
 #include "SNIESController.h"
 #include "Settings.h"
 #include <cctype>
+using std::to_string;
+#include <iostream>
 
 using namespace std;
 

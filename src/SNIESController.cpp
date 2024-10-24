@@ -16,15 +16,6 @@ SNIESController::~SNIESController()
     // }
 }
 
-std::pair<std::string, std::string> SNIESController::dividirClave(const std::string& clave) {
-    size_t pos = clave.find(',');
-    if (pos == std::string::npos) {
-        return {"", ""}; 
-    }
-    std::string clave1 = clave.substr(0, pos);
-    std::string clave2 = clave.substr(pos + 1, clave.find(',', pos + 1) - (pos + 1)); 
-    return {clave1, clave2}; 
-}
 void SNIESController::unificacionDatos(){
     for (const auto& programa : programasAcademicos) {
         const std::string& clave = programa.first;
@@ -47,14 +38,14 @@ void SNIESController::unificacionDatos(){
         }
     }
     
-    // for (const auto& par : unificacion) {
-    //     std::cout << "Clave del mapa: " << par.first << std::endl;
-    //     if (par.second) {
-    //         par.second->imprimir();
-    //     } else {
-    //         std::cout << "UnionDatos es nulo." << std::endl;
-    //     }
-    // }
+    for (const auto& par : unificacion) {
+        std::cout << "Clave del mapa: " << par.first << std::endl;
+        if (par.second) {
+            par.second->imprimir();
+        } else {
+            std::cout << "UnionDatos es nulo." << std::endl;
+        }
+    }
 
 }
 
@@ -91,7 +82,9 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         institucion->setCodigoDelMunicipioIes(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO IES"]]);
         institucion->setMunicipioDeDomicilioDeLaIes(fila[posicionesEncabezados["MUNICIPIO DE DOMICILIO DE LA IES"]]);
 
-        string codigo = (fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
+        // string codigo = (fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
+        string separador=",";
+        string codigo = normalizarCodigo((fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
         datosInstituciones[codigo] = institucion;
     }
 
@@ -122,7 +115,9 @@ void SNIESController::determinarObjetosDatos(string &anio1){
         programa->setCodigoDelMunicipioPrograma(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
         programa->setMunicipioDeOfertaDelPrograma(fila[posicionesEncabezados["MUNICIPIO DE OFERTA DEL PROGRAMA"]]);
 
-        string codigo = (fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
+        // string codigo = (fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]])+","+(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]);
+        string separador=",";
+        string codigo = normalizarCodigo((fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
         programasAcademicos[codigo]=programa;
     }
 
@@ -131,7 +126,7 @@ void SNIESController::determinarObjetosDatos(string &anio1){
     // par.second->imprimir(); // Llamar al método de impresión del objeto
     // }
 }
-void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2){
+void SNIESController::determinarObjetosConsolidados(string &anio1){
 
     std::vector<std::vector<std::string>> admitidos=asignarAdmitidos(stoi(anio1));
     std::vector<std::vector<std::string>> inscritos=asignarInscritos(stoi(anio1));
@@ -158,15 +153,18 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
         consolidado->setMatriculadosPrimerSemestre("0");
 
         // Separar la clave en dos partes
-        std::string claveExterior = fila[admitidosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[admitidosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
-        std::string claveInterior = fila[admitidosIndices["ID SEXO"]] + "," + fila[admitidosIndices["AÑO"]] + "," + fila[admitidosIndices["SEMESTRE"]];
+        string separador=",";
+        string claveExterior = normalizarCodigo((fila[admitidosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[admitidosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
 
+        std::string claveInterior = fila[admitidosIndices["ID SEXO"]] + "," + fila[admitidosIndices["AÑO"]] + "," + fila[admitidosIndices["SEMESTRE"]];
+        
         // Almacenar en el mapa de mapas
         listaConsolidados[claveExterior][claveInterior] = consolidado;
     }
 
     for(const auto &fila : inscritos) { 
-        std::string claveExterior = fila[inscritosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[inscritosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
+        string separador=",";
+        string claveExterior = normalizarCodigo((fila[inscritosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[inscritosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
         std::string claveInterior = fila[inscritosIndices["ID SEXO"]] + "," + fila[inscritosIndices["AÑO"]] + "," + fila[inscritosIndices["SEMESTRE"]];
 
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
@@ -176,7 +174,8 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
     }
 
     for(const auto &fila : matriculados) { 
-        std::string claveExterior = fila[matriculadosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[matriculadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
+        string separador=",";
+        string claveExterior = normalizarCodigo((fila[matriculadosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[matriculadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
         std::string claveInterior = fila[matriculadosIndices["ID SEXO"]] + "," + fila[matriculadosIndices["AÑO"]] + "," + fila[matriculadosIndices["SEMESTRE"]];
 
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
@@ -186,16 +185,18 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
     }
 
     for(const auto &fila : graduados) { 
-        std::string claveExterior = fila[graduadosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[graduadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
+        string separador=",";
+        string claveExterior = normalizarCodigo((fila[graduadosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[graduadosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
         std::string claveInterior = fila[graduadosIndices["ID SEXO"]] + "," + fila[graduadosIndices["AÑO"]] + "," + fila[graduadosIndices["SEMESTRE"]];
-
+        
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
         listaConsolidados[claveExterior].find(claveInterior) != listaConsolidados[claveExterior].end()) {
             listaConsolidados[claveExterior][claveInterior]->setGraduados(fila[graduadosIndices["GRADUADOS"]]);
         }
     }
     for(const auto &fila : neos) { 
-        std::string claveExterior = fila[neosIndices["CÓDIGO SNIES DEL PROGRAMA"]] + "," + fila[neosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]];
+        string separador=",";
+        string claveExterior = normalizarCodigo((fila[neosIndices["CÓDIGO SNIES DEL PROGRAMA"]]),(fila[neosIndices["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]),separador);
         std::string claveInterior = fila[neosIndices["ID SEXO"]] + "," + fila[neosIndices["AÑO"]] + "," + fila[neosIndices["SEMESTRE"]];
 
         if(listaConsolidados.find(claveExterior) != listaConsolidados.end() && 
@@ -209,32 +210,45 @@ void SNIESController::determinarObjetosConsolidados(string &anio1, string &anio2
         }
     }
 
-    for (const auto& exteriorPair : listaConsolidados) {
-        const std::string& claveExterior = exteriorPair.first;
-        const std::map<std::string, Consolidado*>& interiorMap = exteriorPair.second;
+    // for (const auto& exteriorPair : listaConsolidados) {
+    //     const std::string& claveExterior = exteriorPair.first;
+    //     const std::map<std::string, Consolidado*>& interiorMap = exteriorPair.second;
 
-        std::cout << "Clave Exterior: " << claveExterior << std::endl;
+    //     std::cout << "Clave Exterior: " << claveExterior << std::endl;
 
-        for (const auto& interiorPair : interiorMap) {
-            const std::string& claveInterior = interiorPair.first;
-            Consolidado* consolidado = interiorPair.second;
+    //     for (const auto& interiorPair : interiorMap) {
+    //         const std::string& claveInterior = interiorPair.first;
+    //         Consolidado* consolidado = interiorPair.second;
 
-            std::cout << "  Clave Interior: " << claveInterior << std::endl;
-            std::cout << "    IdSexo: " << consolidado->getIdSexo() << std::endl;
-            std::cout << "    Sexo: " << consolidado->getSexo() << std::endl;
-            std::cout << "    Año: " << consolidado->getAno() << std::endl;
-            std::cout << "    Semestre: " << consolidado->getSemestre() << std::endl;
-            std::cout << "    Admitidos: " << consolidado->getAdmitidos() << std::endl;
-            std::cout << "    Inscritos: " << consolidado->getInscritos() << std::endl;
-            std::cout << "    Matriculados: " << consolidado->getMatriculados() << std::endl;
-            std::cout << "    Graduados: " << consolidado->getGraduados() << std::endl;
-            std::cout << "    Matriculados Primer Semestre: " << consolidado->getMatriculadosPrimerSemestre() << std::endl;
-        }
-    }
+    //         std::cout << "  Clave Interior: " << claveInterior << std::endl;
+    //         std::cout << "    IdSexo: " << consolidado->getIdSexo() << std::endl;
+    //         std::cout << "    Sexo: " << consolidado->getSexo() << std::endl;
+    //         std::cout << "    Año: " << consolidado->getAno() << std::endl;
+    //         std::cout << "    Semestre: " << consolidado->getSemestre() << std::endl;
+    //         std::cout << "    Admitidos: " << consolidado->getAdmitidos() << std::endl;
+    //         std::cout << "    Inscritos: " << consolidado->getInscritos() << std::endl;
+    //         std::cout << "    Matriculados: " << consolidado->getMatriculados() << std::endl;
+    //         std::cout << "    Graduados: " << consolidado->getGraduados() << std::endl;
+    //         std::cout << "    Matriculados Primer Semestre: " << consolidado->getMatriculadosPrimerSemestre() << std::endl;
+    //     }
+    // }
 
 }
 
-std::unordered_map<std::string, int> SNIESController::nombresEncabezados(std::vector<std::vector<std::string>> datos){
+std::string SNIESController::normalizarCodigo(const string& primerComponente,const string& segundoComponente, const string& separador){
+    try {
+        int sinCeroInicialPrimer = std::stoi(primerComponente);
+        int sinCeroInicialSegundo = std::stoi(segundoComponente);
+        std::string codigo = std::to_string(sinCeroInicialPrimer) + separador + std::to_string(sinCeroInicialSegundo);
+        return codigo;
+    } catch (const std::invalid_argument& e) {
+        return "Sin Código SNIES";
+    } catch (const std::out_of_range& e) {
+        return "Sin Código SNIES";
+    }
+}
+
+std::unordered_map<std::string, int> SNIESController::nombresEncabezados(std::vector<std::vector<std::string>>& datos){
     std::unordered_map<std::string, int> posicionesEncabezados;  
     std::vector<string> encabezados = datos.at(0); 
     datos.erase(datos.begin()); 

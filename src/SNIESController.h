@@ -31,13 +31,14 @@ public:
     std::pair<std::string, std::string> dividirClave(const std::string& clave);
     void unificacionDatos();
     void determinarObjetosDatos(string &anio1);
-    void determinarObjetosConsolidados(string &anio1, string &anio2);
+    void determinarObjetosConsolidados(string &anio1);
     std::vector<std::vector<std::string>> asignarAdmitidos(int anio1);
     std::vector<std::vector<std::string>> asignarInscritos(int anio);
     std::vector<std::vector<std::string>> asignarMatriculados(int anio);
     std::vector<std::vector<std::string>> asignarMatriculadosPrimerSemestre(int anio);
     std::vector<std::vector<std::string>> asignarGraduados(int anio);
-    std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> datos);
+    std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>>& datos);
+    std::string normalizarCodigo(const string& primerComponente,const string& segundoComponente, const string& separador);
     // Mantenimiento: Este método tiene un nombre confuso.
     void calcularDatosExtra(bool);
     void buscarProgramas(bool, string &, int);
