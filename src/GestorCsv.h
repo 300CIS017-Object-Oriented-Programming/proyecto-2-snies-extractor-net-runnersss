@@ -13,10 +13,11 @@
 #include "DatosInstitucion.h"
 #include "UnionDatos.h"
 #include "Settings.h"
+#include "EscrituraTxt.h"
+#include "EscrituraJson.h"
 #include <fstream>
 #include <sstream>
 #include <cctype>
-#include "json.hpp"
 
 using std::getline;
 using std::list;
@@ -24,7 +25,6 @@ using std::map;
 using std::string;
 using std::unordered_map;
 using std::vector;
-using json = nlohmann::json;
 using namespace std;
 
 class GestorCsv
@@ -32,6 +32,8 @@ class GestorCsv
 private:
     string convertirStringFormaEstandar(string &stringIn);
     Settings config;
+    EscrituraTxt writeTxt;
+    EscrituraJson writeJson;
 
 public:
     GestorCsv() = default;
