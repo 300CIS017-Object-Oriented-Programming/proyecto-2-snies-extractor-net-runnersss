@@ -435,6 +435,60 @@ map<std::string, std::string> SNIESController::sinMatriculasNuevas()
     return programasSinMatriculados;
 }
 
+map<std::string, UnionDatos *> SNIESController::busquedaPalabraClave(std::string &palabraClave)
+{
+    map<std::string, UnionDatos *> mapDatosConpalabraclave;
+    map<std::string, UnionDatos *>::iterator itMapUnion;
+    ProgramaAcademico *programa;
+    DatosInstitucion *institucion;
+
+    for (itMapUnion = unificacion.begin(); itMapUnion != unificacion.end(); itMapUnion++)
+    {
+        programa = itMapUnion->second->getPrograma();
+        institucion = itMapUnion->second->getInstitucion();
+        if (programa->getCodigoSniesDelPrograma() == palabraClave ||
+            programa->getProgramaAcademico() == palabraClave ||
+            programa->getIdNivelAcademico() == palabraClave ||
+            programa->getNivelAcademico() == palabraClave ||
+            programa->getIdNivelDeFormacion() == palabraClave ||
+            programa->getNivelDeFormacion() == palabraClave ||
+            programa->getIdMetodologia() == palabraClave ||
+            programa->getMetodologia() == palabraClave ||
+            programa->getIdArea() == palabraClave ||
+            programa->getAreaDeConocimiento() == palabraClave ||
+            programa->getIdNucleo() == palabraClave ||
+            programa->getNucleoBasicoDelConocimientoNbc() == palabraClave ||
+            programa->getIdCineCampoAmplio() == palabraClave ||
+            programa->getDescCineCampoAmplio() == palabraClave ||
+            programa->getIdCineCampoEspecifico() == palabraClave ||
+            programa->getDescCineCampoEspecifico() == palabraClave ||
+            programa->getIdCineCodigoDetallado() == palabraClave ||
+            programa->getDescCineCodigoDetallado() == palabraClave ||
+            programa->getCodigoDelDepartamentoPrograma() == palabraClave ||
+            programa->getDepartamentoDeOfertaDelPrograma() == palabraClave ||
+            programa->getCodigoDelMunicipioPrograma() == palabraClave ||
+            programa->getMunicipioDeOfertaDelPrograma() == palabraClave ||
+
+            institucion->getCodigoDeLaInstitucion() == palabraClave ||
+            institucion->getIesPadre() == palabraClave ||
+            institucion->getInstitucionDeEducacionSuperiorIes() == palabraClave ||
+            institucion->getPrincipalOSeccional() == palabraClave ||
+            institucion->getIdSectorIes() == palabraClave ||
+            institucion->getSectorIes() == palabraClave ||
+            institucion->getIdCaracter() == palabraClave ||
+            institucion->getCaracterIes() == palabraClave ||
+            institucion->getCodigoDelDepartamentoIes() == palabraClave ||
+            institucion->getDepartamentoDeDomicilioDeLaIes() == palabraClave ||
+            institucion->getCodigoDelMunicipioIes() == palabraClave ||
+            institucion->getMunicipioDeDomicilioDeLaIes() == palabraClave)
+
+        {
+            mapDatosConpalabraclave[itMapUnion->first] = itMapUnion->second;
+        }
+    }
+    return mapDatosConpalabraclave;
+}
+
 // // Mantenimiento: El nombre de esta función es confuso.
 // void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)
 // {
