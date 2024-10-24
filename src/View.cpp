@@ -287,34 +287,3 @@ void View::mostrarDatosExtra()
         cout << "Programa: " << itSinMatri->second << endl;
     }
 }
-
-// void View::exportacionDatos(map<std::string, UnionDatos *> unificacion)
-// {
-//     int eleccion;
-//     cout << "En que desea exportar el archivo" << endl;
-//     cout << "1) CVS" << endl;
-//     cout << "2) txt" << endl;
-//     cout << "3) json" << endl;
-//     bool flag;
-//     cin >> eleccion;
-//     switch (eleccion)
-//     {
-//     case 1:
-
-//         break;
-//     case 2:
-//         Escritura *j = new EscrituraTxt();
-//         flag = j->escrituraDatos(unificacion, Settings::OUTPUT_PATH);
-//         if (!flag)
-//             cout << "error escritura" << endl;
-//         break;
-//     case 3:
-//         Escritura *j = new EscrituraJson();
-//         flag = j->escrituraDatos(unificacion, Settings::OUTPUT_PATH);
-//         if (!flag)
-//             cout << "error escritura" << endl;
-//         break;
-//     default:
-//         cout << "Se chuleteo" << endl;
-//     }
-// }
