@@ -28,30 +28,28 @@ bool View::esEntero(const std::string &str)
 void View::mostrarPantallaBienvenido()
 {
     char userAnswer;
-    cout << "=========================Bienvenido al SNIES-Extractor!============================" << endl;
+    cout << "======================  !Bienvenido al SNIES-Extractor!  ==========================" << endl;
     cout << "===================================================================================" << endl;
-    cout << "Recuerde: Los archivos deben estar en una carpeta SNIES_EXTRACTOR" << endl;
-    cout << "con sus respectivas carpetas inputs y outputs, donde se encuentren" << endl;
-    cout << "todos los archivos CSV del SNIES." << endl;
+    cout << "IMPORTANTE: Los archivos deben estar en una carpeta 'SNIES_EXTRACTOR' con carpetas" << endl;
+    cout << "inputs y outputs, donde se encuentren todos los archivos CSV del SNIES." << endl;
     cout << "===================================================================================" << endl;
     parametrizacion();
 
     string userText;
     cout << endl;
-    cout << "A continuacion, se procesaran los datos de los programas academicos seleccionados" << endl;
+    cout << "A continuacion, se procesaran los datos de los programas academicos que seleccione" << endl;
 
     string anio1;
     string anio2;
-    cout << "Escriba el primer anio de busqueda: ";
+    cout << "--Escriba el primer anio de busqueda: ";
     cin >> anio1;
-    cout << endl;
 
     if (!esEntero(anio1))
     {
         throw std::invalid_argument("El valor ingresado no es correcto");
     }
 
-    cout << "Escriba el segundo anio de busqueda: ";
+    cout << "--Escriba el segundo anio de busqueda: ";
     cin >> anio2;
     cout << endl;
 
@@ -80,27 +78,33 @@ void View::mostrarPantallaBienvenido()
     controlador->unificacionDatos();
 
     cout << endl;
-    cout << "Datos procesados con exito!" << endl;
+    cout << "!Datos procesados con exito!" << endl;
 
     menuExportacionDatos();
 
-    cout<<endl;
-    cout<<"Desea realizar un filtrado de programas academicos?"<<endl;
-    cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
- 
-    if (eleccionUsuario()){
+    cout << endl;
+    cout << "===================================================================================" << endl;
+    cout << "Desea realizar un filtrado de programas academicos?" << endl;
+    cout << "--Ingrese 'Y' o 'N' segun corresponda:" << endl;
+
+    if (eleccionUsuario())
+    {
         menuBusqueda();
     }
 
-    cout<<endl;
-    cout<<"Desea visualizar los datos extra calculados?"<<endl;
-    cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
- 
-    if (eleccionUsuario()){
+    cout << endl;
+    cout << "===================================================================================" << endl;
+    cout << "Desea visualizar los datos extra calculados?" << endl;
+    cout << "--Ingrese 'Y' o 'N' segun corresponda:" << endl;
+
+    if (eleccionUsuario())
+    {
         mostrarDatosExtra();
     }
+    cout << endl;
+
     cout << "===================================================================================" << endl;
-    cout << "                    !Gracias Por Utilizar SNIES-EXTRACTOR! :D"<<endl;
+    cout << "                    !Gracias Por Utilizar SNIES-EXTRACTOR! :D                      " << endl;
     cout << "===================================================================================" << endl;
 }
 
@@ -112,24 +116,21 @@ void View::parametrizacion()
     cout << Settings::BASE_PATH << std::endl;
     cout << "Delimitador por defecto: " << Settings::DELIMITADOR << std::endl;
     cout << "Desea realizar cambios?" << std::endl;
-    cout << "Ingrese 'Y' o 'N' segun corresponda: ";
+    cout << "--Ingrese 'Y' o 'N' segun corresponda: ";
 
     if (eleccionUsuario())
     {
         string nuevaRuta;
         char delimitador;
-        cout << "Ingrese la nueva ruta base: " << std::endl;
+        cout << "--Ingrese la nueva ruta base: " << std::endl;
         cin >> nuevaRuta;
         ajustes.setRutaBase(nuevaRuta);
 
-        cout << "Ingrese el nuevo delimitador: " << std::endl;
+        cout << "--Ingrese el nuevo delimitador: " << std::endl;
         cin >> delimitador;
         ajustes.setDelimitador(delimitador);
     }
-
-    // cout <<"Ingrese el anio que se va a tomar como base"<<endl;
-    // cout <<"para extraer los programas academicos"<<endl;
-    // cin >>anioProgramas;
+    cout << "===================================================================================" << endl;
 }
 bool View::eleccionUsuario()
 {
@@ -145,7 +146,6 @@ bool View::eleccionUsuario()
 
     return false;
 }
-
 
 bool View::isConvetibleToInt(const string &str)
 {
@@ -173,15 +173,16 @@ void View::menuExportacionDatos()
 {
     string nombreArchivo;
     cout << endl;
-    cout <<"==================================================================================="<<endl;
-    cout << "Ingrese el nombre con el que se almacenara el archivo exportado: " << endl;
+    cout << "===================================================================================" << endl;
+    cout << "--Ingrese el nombre con el que se almacenara el archivo exportado: " << endl;
     cin >> nombreArchivo;
     cout << endl;
     int eleccion;
-    cout << "Ingrese la opcion del tipo de formato para el archivo" << endl;
+    cout << "--Ingrese la opcion del tipo de formato para el archivo" << endl;
     cout << "1) CVS" << endl;
     cout << "2) txt" << endl;
     cout << "3) json" << endl;
+    cout << endl;
     cin >> eleccion;
 
     switch (eleccion)
@@ -199,15 +200,15 @@ void View::menuExportacionDatos()
         cout << "Eleccion no correcta" << endl;
     }
     cout << "Archivo exportado exitosamente!" << endl;
-    cout<<endl;
-    cout << "Se encuentra en la ruta: "<<Settings::OUTPUT_PATH<<endl;
+    cout << endl;
+    cout << "Se encuentra en la ruta: " << Settings::OUTPUT_PATH << endl;
 }
 
 void View::mostrarDatosExtra()
 {
     std::map<std::string, pair<int, int>> mapPorcentual = controlador->diferenciaPorcentualAnual();
     std::map<std::string, pair<int, int>>::iterator itMap;
-    cout << "===================================================================" << endl;
+    cout << "===================================================================================" << endl;
     cout << "Diferencia porcentual anual de los nuevos estudiantes matricualados" << endl;
     for (itMap = mapPorcentual.begin(); itMap != mapPorcentual.end(); itMap++)
     {
@@ -218,8 +219,8 @@ void View::mostrarDatosExtra()
 
     map<std::string, std::string> mapSinMatriculasNuevas = controlador->sinMatriculasNuevas();
     map<std::string, std::string>::iterator itSinMatri;
-    cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
-    cout << "Programas los cuales no tienen nuevos estudiantes matriculados durante 3 anios o mas" << endl;
+    cout << "===================================================================================" << endl;
+    cout << "Programas que no tienen nuevos estudiantes matriculados durante 3 anios o mas" << endl;
     for (itSinMatri = mapSinMatriculasNuevas.begin(); itSinMatri != mapSinMatriculasNuevas.end(); itSinMatri++)
     {
         cout << "Codigo Snies: " << itSinMatri->first << endl;
@@ -227,11 +228,12 @@ void View::mostrarDatosExtra()
     }
 }
 
-void View::menuBusqueda(){
+void View::menuBusqueda()
+{
     string palabraClave;
     cout << endl;
-    cout <<"==================================================================================="<<endl;
-    cout << "Ingrese la palabra clave con la que desea filtrar los programas academicos: " << endl;
+    cout << "===================================================================================" << endl;
+    cout << "--Ingrese la palabra clave con la que desea filtrar los programas academicos: " << endl;
     cin >> palabraClave;
     controlador->busquedaPalabraClave(palabraClave);
 }

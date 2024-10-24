@@ -480,7 +480,8 @@ void SNIESController::busquedaPalabraClave(const string &palabraClave)
         std::cout << "No se encontraron resultados para la palabra clave." << std::endl;
         return;
     }
-
+    
+    std::cout<<"==================================================================================="<<endl;
     for (it = mapDatosConpalabraclave.begin(); it != mapDatosConpalabraclave.end(); ++it)
     {
         std::cout << "Clave: " << it->first << std::endl;
@@ -502,7 +503,7 @@ void SNIESController::busquedaPalabraClave(const string &palabraClave)
         std::cout << "Departamento de Domicilio: " << institucion->getDepartamentoDeDomicilioDeLaIes() << std::endl;
         std::cout << "Municipio de Domicilio: " << institucion->getMunicipioDeDomicilioDeLaIes() << std::endl;
 
-        std::cout << "---------------------------------------------" << std::endl;
+        std::cout<<"==================================================================================="<<endl;
     }
 
 }
