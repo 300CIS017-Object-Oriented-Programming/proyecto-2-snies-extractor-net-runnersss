@@ -22,10 +22,9 @@ private:
 public:
     View();
     ~View();
-    bool mostrarPantallaBienvenido();
+    void menuBusqueda();
+    void mostrarPantallaBienvenido();
     void mostrarDatosExtra();
-    void buscarPorPalabraClaveYFormacion();
-    void salir();
     bool isConvetibleToInt(const string &);
     void parametrizacion();
     void menuExportacionDatos();

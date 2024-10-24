@@ -25,7 +25,7 @@ bool View::esEntero(const std::string &str)
     return true;
 }
 
-bool View::mostrarPantallaBienvenido()
+void View::mostrarPantallaBienvenido()
 {
     char userAnswer;
     cout << "=========================Bienvenido al SNIES-Extractor!============================" << endl;
@@ -85,16 +85,23 @@ bool View::mostrarPantallaBienvenido()
     menuExportacionDatos();
 
     cout<<endl;
+    cout<<"Desea realizar un filtrado de programas academicos?"<<endl;
+    cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
+ 
+    if (eleccionUsuario()){
+        menuBusqueda();
+    }
+
+    cout<<endl;
     cout<<"Desea visualizar los datos extra calculados?"<<endl;
     cout << "Ingrese 'Y' o 'N' segun corresponda:" << endl;
  
     if (eleccionUsuario()){
         mostrarDatosExtra();
     }
-
-    
-
-    return true;
+    cout << "===================================================================================" << endl;
+    cout << "                    !Gracias Por Utilizar SNIES-EXTRACTOR! :D"<<endl;
+    cout << "===================================================================================" << endl;
 }
 
 void View::parametrizacion()
@@ -208,6 +215,7 @@ void View::mostrarDatosExtra()
         cout << "Hay una diferencia anual del 2021 al 2022 de: " << itMap->second.first << endl;
         cout << "Y una diferencia del 2022 al 2023 de: " << itMap->second.second << endl;
     }
+
     map<std::string, std::string> mapSinMatriculasNuevas = controlador->sinMatriculasNuevas();
     map<std::string, std::string>::iterator itSinMatri;
     cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
@@ -217,4 +225,13 @@ void View::mostrarDatosExtra()
         cout << "Codigo Snies: " << itSinMatri->first << endl;
         cout << "Programa: " << itSinMatri->second << endl;
     }
+}
+
+void View::menuBusqueda(){
+    string palabraClave;
+    cout << endl;
+    cout <<"==================================================================================="<<endl;
+    cout << "Ingrese la palabra clave con la que desea filtrar los programas academicos: " << endl;
+    cin >> palabraClave;
+    controlador->busquedaPalabraClave(palabraClave);
 }

@@ -409,7 +409,13 @@ map<std::string, std::string> SNIESController::sinMatriculasNuevas()
     return programasSinMatriculados;
 }
 
-map<std::string, UnionDatos *> SNIESController::busquedaPalabraClave(std::string &palabraClave)
+std::string SNIESController::convertirMinusculas(const std::string &cadena) {
+    std::string minuscula = cadena;
+    std::transform(minuscula.begin(), minuscula.end(), minuscula.begin(), ::tolower);
+    return minuscula;
+}
+
+void SNIESController::busquedaPalabraClave(const string &palabraClave)
 {
     map<std::string, UnionDatos *> mapDatosConpalabraclave;
     map<std::string, UnionDatos *>::iterator itMapUnion;
@@ -420,45 +426,83 @@ map<std::string, UnionDatos *> SNIESController::busquedaPalabraClave(std::string
     {
         programa = itMapUnion->second->getPrograma();
         institucion = itMapUnion->second->getInstitucion();
-        if (programa->getCodigoSniesDelPrograma() == palabraClave ||
-            programa->getProgramaAcademico() == palabraClave ||
-            programa->getIdNivelAcademico() == palabraClave ||
-            programa->getNivelAcademico() == palabraClave ||
-            programa->getIdNivelDeFormacion() == palabraClave ||
-            programa->getNivelDeFormacion() == palabraClave ||
-            programa->getIdMetodologia() == palabraClave ||
-            programa->getMetodologia() == palabraClave ||
-            programa->getIdArea() == palabraClave ||
-            programa->getAreaDeConocimiento() == palabraClave ||
-            programa->getIdNucleo() == palabraClave ||
-            programa->getNucleoBasicoDelConocimientoNbc() == palabraClave ||
-            programa->getIdCineCampoAmplio() == palabraClave ||
-            programa->getDescCineCampoAmplio() == palabraClave ||
-            programa->getIdCineCampoEspecifico() == palabraClave ||
-            programa->getDescCineCampoEspecifico() == palabraClave ||
-            programa->getIdCineCodigoDetallado() == palabraClave ||
-            programa->getDescCineCodigoDetallado() == palabraClave ||
-            programa->getCodigoDelDepartamentoPrograma() == palabraClave ||
-            programa->getDepartamentoDeOfertaDelPrograma() == palabraClave ||
-            programa->getCodigoDelMunicipioPrograma() == palabraClave ||
-            programa->getMunicipioDeOfertaDelPrograma() == palabraClave ||
 
-            institucion->getCodigoDeLaInstitucion() == palabraClave ||
-            institucion->getIesPadre() == palabraClave ||
-            institucion->getInstitucionDeEducacionSuperiorIes() == palabraClave ||
-            institucion->getPrincipalOSeccional() == palabraClave ||
-            institucion->getIdSectorIes() == palabraClave ||
-            institucion->getSectorIes() == palabraClave ||
-            institucion->getIdCaracter() == palabraClave ||
-            institucion->getCaracterIes() == palabraClave ||
-            institucion->getCodigoDelDepartamentoIes() == palabraClave ||
-            institucion->getDepartamentoDeDomicilioDeLaIes() == palabraClave ||
-            institucion->getCodigoDelMunicipioIes() == palabraClave ||
-            institucion->getMunicipioDeDomicilioDeLaIes() == palabraClave)
+        // Convertir palabra clave a minúsculas
+        std::string palabraClaveMinus = convertirMinusculas(palabraClave);
 
+        // Convertir los campos a minúsculas antes de compararlos
+        if (convertirMinusculas(programa->getCodigoSniesDelPrograma()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getProgramaAcademico()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdNivelAcademico()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getNivelAcademico()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdNivelDeFormacion()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getNivelDeFormacion()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdMetodologia()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getMetodologia()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdArea()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getAreaDeConocimiento()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdNucleo()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getNucleoBasicoDelConocimientoNbc()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdCineCampoAmplio()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getDescCineCampoAmplio()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdCineCampoEspecifico()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getDescCineCampoEspecifico()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getIdCineCodigoDetallado()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getDescCineCodigoDetallado()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getCodigoDelDepartamentoPrograma()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getDepartamentoDeOfertaDelPrograma()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getCodigoDelMunicipioPrograma()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(programa->getMunicipioDeOfertaDelPrograma()).find(palabraClaveMinus) != std::string::npos ||
+
+            convertirMinusculas(institucion->getCodigoDeLaInstitucion()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getIesPadre()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getInstitucionDeEducacionSuperiorIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getPrincipalOSeccional()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getIdSectorIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getSectorIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getIdCaracter()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getCaracterIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getCodigoDelDepartamentoIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getDepartamentoDeDomicilioDeLaIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getCodigoDelMunicipioIes()).find(palabraClaveMinus) != std::string::npos ||
+            convertirMinusculas(institucion->getMunicipioDeDomicilioDeLaIes()).find(palabraClaveMinus) != std::string::npos)
         {
             mapDatosConpalabraclave[itMapUnion->first] = itMapUnion->second;
         }
     }
-    return mapDatosConpalabraclave;
+
+
+
+    map<std::string, UnionDatos *>::const_iterator it;
+
+    if (mapDatosConpalabraclave.empty())
+    {
+        std::cout << "No se encontraron resultados para la palabra clave." << std::endl;
+        return;
+    }
+
+    for (it = mapDatosConpalabraclave.begin(); it != mapDatosConpalabraclave.end(); ++it)
+    {
+        std::cout << "Clave: " << it->first << std::endl;
+
+        ProgramaAcademico *programa = it->second->getPrograma();
+        DatosInstitucion *institucion = it->second->getInstitucion();
+
+        // Mostrar datos del programa académico
+        std::cout << "Programa Académico: " << programa->getProgramaAcademico() << std::endl;
+        std::cout << "Nivel Académico: " << programa->getNivelAcademico() << std::endl;
+        std::cout << "Nivel de Formación: " << programa->getNivelDeFormacion() << std::endl;
+        std::cout << "Metodología: " << programa->getMetodologia() << std::endl;
+        std::cout << "Área de Conocimiento: " << programa->getAreaDeConocimiento() << std::endl;
+        std::cout << "Núcleo Básico del Conocimiento (NBC): " << programa->getNucleoBasicoDelConocimientoNbc() << std::endl;
+
+        // Mostrar datos de la institución
+        std::cout << "Código de la Institución: " << institucion->getCodigoDeLaInstitucion() << std::endl;
+        std::cout << "Institución de Educación Superior (IES): " << institucion->getInstitucionDeEducacionSuperiorIes() << std::endl;
+        std::cout << "Departamento de Domicilio: " << institucion->getDepartamentoDeDomicilioDeLaIes() << std::endl;
+        std::cout << "Municipio de Domicilio: " << institucion->getMunicipioDeDomicilioDeLaIes() << std::endl;
+
+        std::cout << "---------------------------------------------" << std::endl;
+    }
+
 }

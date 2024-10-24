@@ -29,13 +29,6 @@ private:
     EscrituraJson *gestorJsonObj;
     vector<string> etiquetasColumnas;
     string rutaOutput;
-
-public:
-    SNIESController();
-    ~SNIESController();
-    void unificacionDatos();
-    void determinarObjetosDatos(string &anio1);
-    void determinarObjetosConsolidados(string &anio1);
     std::vector<std::vector<std::string>> asignarAdmitidos(int anio1);
     std::vector<std::vector<std::string>> asignarInscritos(int anio);
     std::vector<std::vector<std::string>> asignarMatriculados(int anio);
@@ -43,6 +36,14 @@ public:
     std::vector<std::vector<std::string>> asignarGraduados(int anio);
     std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> &datos);
     std::string normalizarCodigo(const string &primerComponente, const string &segundoComponente, const string &separador);
+    std::string convertirMinusculas(const std::string &cadena);
+public:
+    SNIESController();
+    ~SNIESController();
+    void unificacionDatos();
+    void determinarObjetosDatos(string &anio1);
+    void determinarObjetosConsolidados(string &anio1);
+
 
     void exportarCSV(const string & nombreArchivo);
     void exportarTXT(const string & nombreArchivo);
@@ -50,7 +51,8 @@ public:
     map<std::string, pair<int, int>> diferenciaPorcentualAnual();
     int formulaPorcentual(int totalAnio1, int totalAnio2);
     map<std::string, std::string> sinMatriculasNuevas();
-    map<std::string, UnionDatos *> busquedaPalabraClave(std::string &palabraClave);
+    void busquedaPalabraClave(const string &palabraClave);
+    void mostrarMapa(const map<std::string, UnionDatos *> &mapDatosConpalabraclave);
 };
 
 #endif
