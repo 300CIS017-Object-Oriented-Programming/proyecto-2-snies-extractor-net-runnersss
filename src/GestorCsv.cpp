@@ -25,8 +25,6 @@ std::unordered_map<std::string, int> GestorCsv::extraerEncabezados(string const 
     return encabezados;
 }
 
-
-
 std::string normalizarCadena(const std::string &str)
 {
     std::string resultado;
@@ -40,8 +38,8 @@ std::string normalizarCadena(const std::string &str)
     return resultado;
 }
 
-
-std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta,std::vector<std::string> camposImportantes){
+std::unordered_map<std::string, int> GestorCsv::extraerIndices(string &ruta, std::vector<std::string> camposImportantes)
+{
     std::unordered_map<std::string, int> indices;
     std::unordered_map<std::string, int> encabezados;
 
@@ -51,13 +49,14 @@ std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta,std::
     {
         std::string encabezadoNormalizado = normalizarCadena(encabezado.first);
 
-
         auto it = std::find_if(camposImportantes.begin(), camposImportantes.end(),
-            [&encabezadoNormalizado](const std::string& campo) {
-                return normalizarCadena(campo) == encabezadoNormalizado;
-            });
+                               [&encabezadoNormalizado](const std::string &campo)
+                               {
+                                   return normalizarCadena(campo) == encabezadoNormalizado;
+                               });
 
-        if (it == camposImportantes.end()) {
+        if (it == camposImportantes.end())
+        {
             indices[encabezado.first] = encabezado.second;
         }
     }
@@ -136,8 +135,6 @@ bool GestorCsv::crearArchivoExtra(string &, vector<vector<string>>)
 {
     return true;
 }
-
-
 
 // bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
 // {
@@ -463,7 +460,7 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
 {
     std::string texto;
     string delimitador = config.getDelimitador();
-    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+    ProgramaAcademico *programaActual = unionDatos->getPrograma();
 
     // Datos del programa académico
     texto += programaActual->getCodigoSniesDelPrograma() + delimitador;
@@ -490,7 +487,7 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
     texto += programaActual->getMunicipioDeOfertaDelPrograma() + delimitador;
 
     // Datos de la institución
-    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    DatosInstitucion *datosInstiActuales = unionDatos->getInstitucion();
     texto += datosInstiActuales->getCodigoDeLaInstitucion() + delimitador;
     texto += datosInstiActuales->getIesPadre() + delimitador;
     texto += datosInstiActuales->getInstitucionDeEducacionSuperiorIes() + delimitador;
@@ -505,7 +502,7 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
     texto += datosInstiActuales->getMunicipioDeDomicilioDeLaIes() + delimitador;
 
     // Datos de los consolidados (podría haber varios, se necesita un bucle)
-    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidado();
     for (int i = 0; i < consolidadosActuales.size(); i++)
     {
         texto += std::to_string(consolidadosActuales[i]->getIdSexo()) + delimitador;
@@ -548,7 +545,7 @@ bool GestorCsv::escrituraTxt(map<std::string, UnionDatos *> unificacion, string 
 string GestorCsv::escribirDatosTxt(const UnionDatos *unionDatos)
 {
     string texto;
-    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+    ProgramaAcademico *programaActual = unionDatos->getPrograma();
     texto += "Programa:\n";
     texto += "  CodigoSnies: " + programaActual->getCodigoSniesDelPrograma() + "\n";
     texto += "  ProgramaAcademico: " + programaActual->getProgramaAcademico() + "\n";
@@ -573,7 +570,7 @@ string GestorCsv::escribirDatosTxt(const UnionDatos *unionDatos)
     texto += "  CodigoMunicipio: " + programaActual->getCodigoDelMunicipioPrograma() + "\n";
     texto += "  MunicipioDeOfertaPrograma: " + programaActual->getMunicipioDeOfertaDelPrograma() + "\n";
 
-    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    DatosInstitucion *datosInstiActuales = unionDatos->getInstitucion();
     texto += "\nDatos de la Institución:\n";
     texto += "  CodigoInstitucion: " + datosInstiActuales->getCodigoDeLaInstitucion() + "\n";
     texto += "  IesPadre: " + datosInstiActuales->getIesPadre() + "\n";
@@ -588,7 +585,7 @@ string GestorCsv::escribirDatosTxt(const UnionDatos *unionDatos)
     texto += "  CodigoMunicipioIes: " + datosInstiActuales->getCodigoDelMunicipioIes() + "\n";
     texto += "  MunicipioDomicilioIes: " + datosInstiActuales->getMunicipioDeDomicilioDeLaIes() + "\n";
 
-    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidado();
     texto += "\nConsolidados:\n";
     for (int i = 0; i < consolidadosActuales.size(); i++)
     {
@@ -629,7 +626,7 @@ bool GestorCsv::escrituraJson(map<std::string, UnionDatos *> unificacion, string
 json GestorCsv::convertirDatosJson(const UnionDatos *unionDatos)
 {
     json j;
-    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+    ProgramaAcademico *programaActual = unionDatos->getPrograma();
     j["programa"] = {
         {"CoditoSnies", programaActual->getCodigoSniesDelPrograma()},
         {"ProgramaAcademico", programaActual->getProgramaAcademico()},
@@ -653,7 +650,7 @@ json GestorCsv::convertirDatosJson(const UnionDatos *unionDatos)
         {"DepartamentoOfertaPrograma", programaActual->getDepartamentoDeOfertaDelPrograma()},
         {"CodigoMunicipio", programaActual->getCodigoDelMunicipioPrograma()},
         {"MunicioDeOfertaPrograma", programaActual->getMunicipioDeOfertaDelPrograma()}};
-    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    DatosInstitucion *datosInstiActuales = unionDatos->getInstitucion();
     j["datosInstitucion"] = {
         {"CodigoInstitucion", datosInstiActuales->getCodigoDeLaInstitucion()},
         {"IesPadre", datosInstiActuales->getIesPadre()},
@@ -667,7 +664,7 @@ json GestorCsv::convertirDatosJson(const UnionDatos *unionDatos)
         {"DepartamentoDeDomiciolioDeLaIes", datosInstiActuales->getDepartamentoDeDomicilioDeLaIes()},
         {"CodigoDelMunicipioIes", datosInstiActuales->getCodigoDelMunicipioIes()},
         {"municioDeDomicilioDeLaIes", datosInstiActuales->getMunicipioDeDomicilioDeLaIes()}};
-    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidado();
     j["consolidados"] = json::array();
     for (int i = 0; i < consolidadosActuales.size(); i++)
     {

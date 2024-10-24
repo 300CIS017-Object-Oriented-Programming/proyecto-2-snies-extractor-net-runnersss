@@ -12,6 +12,7 @@
 #include "Consolidado.h"
 #include "DatosInstitucion.h"
 #include "Settings.h"
+#include "UnionDatos.h"
 #include <fstream>
 #include <sstream>
 #include <cctype>
@@ -35,10 +36,10 @@ private:
 public:
     GestorCsv() = default;
     // unordered_map<std::string,std::string> definirProgramas();
-    std::unordered_map<std::string,int> extraerEncabezados(const string& ruta);
+    std::unordered_map<std::string, int> extraerEncabezados(const string &ruta);
     std::vector<std::vector<std::string>> extraerDatos(string &ruta);
-    std::unordered_map<std::string,int> extraerIndices(string &ruta,std::vector<std::string> camposImportantes);
-    void eliminarIndices(std::unordered_map<std::string, int>& indices, std::vector<std::vector<std::string>>& datos);
+    std::unordered_map<std::string, int> extraerIndices(string &ruta, std::vector<std::string> camposImportantes);
+    void eliminarIndices(std::unordered_map<std::string, int> &indices, std::vector<std::vector<std::string>> &datos);
     vector<int> leerProgramasCsv(string &ruta);
     // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva
     vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
