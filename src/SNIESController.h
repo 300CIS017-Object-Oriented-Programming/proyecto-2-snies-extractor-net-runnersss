@@ -44,6 +44,7 @@ public:
     map<std::string, pair<int, int>> diferenciaPorcentualAnual();
     int formulaPorcentual(int totalAnio1, int totalAnio2);
     map<std::string, std::string> sinMatriculasNuevas();
+    map<std::string, UnionDatos *> busquedaPalabraClave(std::string &palabraClave);
     void calcularDatosExtra(bool);
     void buscarProgramas(bool, string &, int);
 };
