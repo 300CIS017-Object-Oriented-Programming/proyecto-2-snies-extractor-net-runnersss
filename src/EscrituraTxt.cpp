@@ -4,7 +4,7 @@ bool EscrituraTxt::escrituraDatos(map<std::string, UnionDatos *> unificacion, st
 {
     bool confirmacion = true;
     std::ofstream archivoSalida(ruta);
-    
+
     if (!archivoSalida.is_open())
     {
         throw std::ios_base::failure("No se pudo abrir el archivo de salida");
@@ -29,7 +29,7 @@ bool EscrituraTxt::escrituraDatos(map<std::string, UnionDatos *> unificacion, st
         std::string texto = convertirDatos(it->second);
         archivoSalida << texto;
     }
-    
+
     archivoSalida.close();
     return confirmacion;
 }
@@ -92,7 +92,7 @@ std::string EscrituraTxt::convertirDatos(const UnionDatos *unionDatos)
         texto += (consolidadosActuales[i]->getAdmitidos()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculados()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
-        texto += (consolidadosActuales[i]->getGraduados())+"\n"; // Fin de la fila
+        texto += (consolidadosActuales[i]->getGraduados()) + "\n"; // Fin de la fila
     }
 
     return texto;

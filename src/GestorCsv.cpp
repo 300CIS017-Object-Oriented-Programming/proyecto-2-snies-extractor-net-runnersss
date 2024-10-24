@@ -123,13 +123,11 @@ void GestorCsv::eliminarIndices(std::unordered_map<std::string, int> &indices, s
     }
 }
 
-
-
 bool GestorCsv::escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta)
 {
     bool confirmacion = true;
     std::ofstream archivoSalida(ruta);
-    
+
     if (!archivoSalida.is_open())
     {
         throw std::ios_base::failure("No se pudo abrir el archivo de salida");
@@ -154,7 +152,7 @@ bool GestorCsv::escrituraCsv(map<std::string, UnionDatos *> unificacion, string 
         std::string texto = escribirDatosCsv(it->second);
         archivoSalida << texto;
     }
-    
+
     archivoSalida.close();
     return confirmacion;
 }
@@ -217,7 +215,7 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
         texto += (consolidadosActuales[i]->getAdmitidos()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculados()) + delimitador;
         texto += (consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
-        texto += (consolidadosActuales[i]->getGraduados())+"\n"; // Fin de la fila
+        texto += (consolidadosActuales[i]->getGraduados()) + "\n"; // Fin de la fila
     }
 
     return texto;

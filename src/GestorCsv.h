@@ -30,6 +30,7 @@ class GestorCsv
 {
 private:
     Settings config;
+
 public:
     GestorCsv() = default;
     std::unordered_map<std::string, int> extraerEncabezados(const string &ruta);
