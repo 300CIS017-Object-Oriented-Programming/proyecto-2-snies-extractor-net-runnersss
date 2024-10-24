@@ -10,10 +10,12 @@
 #include <algorithm>
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
+#include "DatosInstitucion.h"
 #include "Settings.h"
 #include <fstream>
 #include <sstream>
 #include <cctype>
+#include "json.hpp"
 
 using std::getline;
 using std::list;
@@ -21,11 +23,14 @@ using std::map;
 using std::string;
 using std::unordered_map;
 using std::vector;
+using json = nlohmann::json;
+using namespace std;
 
 class GestorCsv
 {
 private:
     string convertirStringFormaEstandar(string &stringIn);
+    Settings config;
 
 public:
     GestorCsv() = default;
@@ -42,6 +47,12 @@ public:
     bool crearArchivo(string &, map<int, ProgramaAcademico *> &, vector<string>);
     bool crearArchivoBuscados(string &, list<ProgramaAcademico *> &, vector<string>);
     bool crearArchivoExtra(string &, vector<vector<string>>);
+    bool escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta);
+    string escribirDatosCsv(const UnionDatos *unionDatos);
+    bool escrituraTxt(map<std::string, UnionDatos *> unificacion, string &ruta);
+    string escribirDatosTxt(const UnionDatos *unionDatos);
+    bool escrituraJson(map<std::string, UnionDatos *> unificacion, string &ruta);
+    json convertirDatosJson(const UnionDatos *unionDatos);
     map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
     int conseguirCantColumnas(map<string, int>);
     string quitarEspacioYAgregarMayus(string cadena);

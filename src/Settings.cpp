@@ -1,7 +1,7 @@
 
 #include "Settings.h"
 // Declaración:
-// Inicialización: La inicialización de estas variables se realiza fuera de la clase. 
+// Inicialización: La inicialización de estas variables se realiza fuera de la clase.
 // Esto es necesario porque las variables estáticas deben ser definidas en un solo lugar en el archivo de implementación (o en el mismo archivo, pero fuera de la clase) para que el compilador sepa cuánto espacio reservar en memoria.
 string Settings::BASE_PATH = "C:/SNIES_EXTRACTOR/inputs/";
 string Settings::DELIMITADOR = ";";
@@ -20,7 +20,9 @@ std::vector<std::string> Settings::camposImportantes = {"CÓDIGO DE LA INSTITUCI
 //Se añade el CODIGO SNIES DEL PROGRAMA y CÓDIGO DEL MUNICIPIO (PROGRAMA) en consolidados para tener una clave de referencia que una los datos con los campos importates
 std::vector<std::string> Settings::camposConsolidados={"CÓDIGO SNIES DEL PROGRAMA","CÓDIGO DEL MUNICIPIO (PROGRAMA)","ID SEXO","SEXO","AÑO","SEMESTRE","ADMITIDOS","GRADUADOS","INSCRITOS","MATRICULADOS","MATRICULADOS PRIMER CURSO","PRIMER CURSO"};
 
-void Settings::setRutaBase(const string& nuevaRutaBase){
+
+void Settings::setRutaBase(const string &nuevaRutaBase)
+{
     BASE_PATH = nuevaRutaBase;
 
     ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
@@ -29,12 +31,16 @@ void Settings::setRutaBase(const string& nuevaRutaBase){
     GRADUADOS_FILE_PATH = BASE_PATH + "graduados";
 }
 
-void Settings::setAnioProgramas(string anioProgramas){
-    PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "admitidos"+anioProgramas+".csv";
+void Settings::setAnioProgramas(string anioProgramas)
+{
+    PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "admitidos" + anioProgramas + ".csv";
 }
-void Settings::setDelimitador(const char& delimitador){
+void Settings::setDelimitador(const char &delimitador)
+{
     DELIMITADOR = delimitador;
 }
 
-
-
+string Settings::getDelimitador()
+{
+    return DELIMITADOR;
+}

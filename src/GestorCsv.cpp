@@ -27,24 +27,30 @@ std::unordered_map<std::string, int> GestorCsv::extraerEncabezados(string const 
 
 
 
-std::string normalizarCadena(const std::string& str) {
+std::string normalizarCadena(const std::string &str)
+{
     std::string resultado;
-    for (char c : str) {
-        if (std::isalnum(c)) { // Mantener solo caracteres alfanuméricos
+    for (char c : str)
+    {
+        if (std::isalnum(c))
+        {                                 // Mantener solo caracteres alfanuméricos
             resultado += std::tolower(c); // Convertir a minúsculas
         }
     }
     return resultado;
 }
 
+
 std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta,std::vector<std::string> camposImportantes){
     std::unordered_map<std::string, int> indices;
     std::unordered_map<std::string, int> encabezados;
 
-    encabezados=extraerEncabezados(ruta);
+    encabezados = extraerEncabezados(ruta);
 
-    for (const auto& encabezado : encabezados) {
+    for (const auto &encabezado : encabezados)
+    {
         std::string encabezadoNormalizado = normalizarCadena(encabezado.first);
+
 
         auto it = std::find_if(camposImportantes.begin(), camposImportantes.end(),
             [&encabezadoNormalizado](const std::string& campo) {
@@ -58,9 +64,10 @@ std::unordered_map<std::string,int> GestorCsv::extraerIndices(string &ruta,std::
     return indices;
 }
 
-std::vector<std::vector<std::string>> GestorCsv::extraerDatos(string &ruta){
-    std::vector<std::vector<std::string>> datos;  
-    std::ifstream archivo(ruta);         
+std::vector<std::vector<std::string>> GestorCsv::extraerDatos(string &ruta)
+{
+    std::vector<std::vector<std::string>> datos;
+    std::ifstream archivo(ruta);
     std::string linea;
 
     if (!archivo.is_open())
@@ -68,59 +75,66 @@ std::vector<std::vector<std::string>> GestorCsv::extraerDatos(string &ruta){
         throw std::ios_base::failure("No se pudo abrir el archivo");
     }
 
-    while (std::getline(archivo, linea)) {
-        std::vector<std::string> fila;          
-        std::stringstream sstream(linea);      
+    while (std::getline(archivo, linea))
+    {
+        std::vector<std::string> fila;
+        std::stringstream sstream(linea);
         std::string valor;
 
-        
-        while (std::getline(sstream, valor, ';')) {
-            fila.push_back(valor);              
+        while (std::getline(sstream, valor, ';'))
+        {
+            fila.push_back(valor);
         }
 
-        datos.push_back(fila);                  
+        datos.push_back(fila);
     }
 
-    archivo.close();    
+    archivo.close();
     return datos;
 }
 
-void GestorCsv::eliminarIndices(std::unordered_map<std::string, int>& indices, std::vector<std::vector<std::string>>& datos) {
-    
-    for (auto& fila : datos) {
-        
+void GestorCsv::eliminarIndices(std::unordered_map<std::string, int> &indices, std::vector<std::vector<std::string>> &datos)
+{
+
+    for (auto &fila : datos)
+    {
+
         std::vector<std::string> fila_filtrada;
-        
-        
-        for (size_t i = 0; i < fila.size(); ++i) {
-            
+
+        for (size_t i = 0; i < fila.size(); ++i)
+        {
+
             bool eliminar = false;
-            for (const auto& par : indices) {
-                if (i == par.second) {
+            for (const auto &par : indices)
+            {
+                if (i == par.second)
+                {
                     eliminar = true;
                     break;
                 }
             }
-            
-            if (!eliminar) {
+
+            if (!eliminar)
+            {
                 fila_filtrada.push_back(fila[i]);
             }
         }
-        
+
         fila = fila_filtrada;
     }
 }
 
-
-
-bool GestorCsv::crearArchivo(string&, map<int, ProgramaAcademico*>&, vector<string>){
-return true;
+bool GestorCsv::crearArchivo(string &, map<int, ProgramaAcademico *> &, vector<string>)
+{
+    return true;
 }
-bool GestorCsv::crearArchivoBuscados(string&, list<ProgramaAcademico*>&, vector<string>){
-return true;
+bool GestorCsv::crearArchivoBuscados(string &, list<ProgramaAcademico *> &, vector<string>)
+{
+    return true;
 }
-bool GestorCsv::crearArchivoExtra(string&, vector<vector<string>>){
-return true;
+bool GestorCsv::crearArchivoExtra(string &, vector<vector<string>>)
+{
+    return true;
 }
 
 
@@ -346,7 +360,6 @@ return true;
 //         stringstream streamFila;
 //         int columna;
 
-
 //         // Primera iteracion del ciclo para guardar las etiquetas
 //         getline(archivo, fila);
 //         streamFila = stringstream(fila);
@@ -415,3 +428,259 @@ return true;
 
 //     return ans;
 // }
+
+bool GestorCsv::escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta)
+{
+    bool confirmacion = true;
+    std::string texto;
+
+    // Crear encabezado del CSV
+    texto += "CodigoSnies,ProgramaAcademico,IdNivelAcademico,NivelAcademico,IdNivelFormacion,NivelFormacion,IdMetodologia,Metodologia,IdArea,AreaConocimiento,IdNucleo,NucleoBasicoConocimiento,IdCineCampoAmplio,DescCineCampoAmplio,IdCineCampoEspecifico,DescCineCampoEspecifico,IdCineCodigoDetallado,DescCineCodigoDetallado,CodigoDepartamentoPrograma,DepartamentoOfertaPrograma,CodigoMunicipio,MunicipioDeOfertaPrograma,CodigoInstitucion,IesPadre,InstitucionEducacionSuperiorIes,PrincipalOSeccional,IdSectorIes,SectorIes,IdCaracter,CaracterIes,CodigoDepartamentoIes,DepartamentoDomicilioIes,CodigoMunicipioIes,MunicipioDomicilioIes,IdSexo,Sexo,Anio,Semestre,Inscritos,Admitidos,Matriculados,MatriculadosPrimerSemestre,Graduados\n";
+
+    // Iterar sobre los datos y escribir cada línea
+    map<std::string, UnionDatos *>::iterator it;
+    for (it = unificacion.begin(); it != unificacion.end(); it++)
+    {
+        texto += escribirDatosCsv(it->second); // Concatenamos los datos en formato CSV por cada objeto
+    }
+
+    std::ofstream archivo(ruta);
+
+    if (!archivo.is_open())
+    {
+        confirmacion = false;
+    }
+    else
+    {
+        archivo << texto; // Escribimos todo el contenido en formato CSV
+        archivo.close();
+    }
+
+    return confirmacion;
+}
+
+std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
+{
+    std::string texto;
+    string delimitador = config.getDelimitador();
+    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+
+    // Datos del programa académico
+    texto += programaActual->getCodigoSniesDelPrograma() + delimitador;
+    texto += programaActual->getProgramaAcademico() + delimitador;
+    texto += (programaActual->getIdNivelAcademico()) + delimitador;
+    texto += programaActual->getNivelAcademico() + delimitador;
+    texto += (programaActual->getIdNivelDeFormacion()) + delimitador;
+    texto += programaActual->getNivelDeFormacion() + delimitador;
+    texto += (programaActual->getIdMetodologia()) + delimitador;
+    texto += programaActual->getMetodologia() + delimitador;
+    texto += (programaActual->getIdArea()) + delimitador;
+    texto += programaActual->getAreaDeConocimiento() + delimitador;
+    texto += (programaActual->getIdNucleo()) + delimitador;
+    texto += programaActual->getNucleoBasicoDelConocimientoNbc() + delimitador;
+    texto += (programaActual->getIdCineCampoAmplio()) + delimitador;
+    texto += programaActual->getDescCineCampoAmplio() + delimitador;
+    texto += (programaActual->getIdCineCampoEspecifico()) + delimitador;
+    texto += programaActual->getDescCineCampoEspecifico() + delimitador;
+    texto += (programaActual->getIdCineCodigoDetallado()) + delimitador;
+    texto += programaActual->getDescCineCodigoDetallado() + delimitador;
+    texto += programaActual->getCodigoDelDepartamentoPrograma() + delimitador;
+    texto += programaActual->getDepartamentoDeOfertaDelPrograma() + delimitador;
+    texto += programaActual->getCodigoDelMunicipioPrograma() + delimitador;
+    texto += programaActual->getMunicipioDeOfertaDelPrograma() + delimitador;
+
+    // Datos de la institución
+    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    texto += datosInstiActuales->getCodigoDeLaInstitucion() + delimitador;
+    texto += datosInstiActuales->getIesPadre() + delimitador;
+    texto += datosInstiActuales->getInstitucionDeEducacionSuperiorIes() + delimitador;
+    texto += datosInstiActuales->getPrincipalOSeccional() + delimitador;
+    texto += (datosInstiActuales->getIdSectorIes()) + delimitador;
+    texto += datosInstiActuales->getSectorIes() + delimitador;
+    texto += (datosInstiActuales->getIdCaracter()) + delimitador;
+    texto += datosInstiActuales->getCaracterIes() + delimitador;
+    texto += datosInstiActuales->getCodigoDelDepartamentoIes() + delimitador;
+    texto += datosInstiActuales->getDepartamentoDeDomicilioDeLaIes() + delimitador;
+    texto += datosInstiActuales->getCodigoDelMunicipioIes() + delimitador;
+    texto += datosInstiActuales->getMunicipioDeDomicilioDeLaIes() + delimitador;
+
+    // Datos de los consolidados (podría haber varios, se necesita un bucle)
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    for (int i = 0; i < consolidadosActuales.size(); i++)
+    {
+        texto += std::to_string(consolidadosActuales[i]->getIdSexo()) + delimitador;
+        texto += consolidadosActuales[i]->getSexo() + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getAno()) + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getSemestre()) + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getInscritos()) + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getAdmitidos()) + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getMatriculados()) + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
+        texto += std::to_string(consolidadosActuales[i]->getGraduados()) + delimitador; // Fin de la fila (nueva línea)
+    }
+
+    return texto;
+}
+
+bool GestorCsv::escrituraTxt(map<std::string, UnionDatos *> unificacion, string &ruta)
+{
+    bool confirmacion = true;
+    string texto;
+    map<std::string, UnionDatos *>::iterator it;
+    for (it = unificacion.begin(); it != unificacion.end(); it++)
+    {
+        texto += escribirDatosTxt(it->second);
+    }
+
+    std::ofstream archivo(ruta);
+
+    if (!archivo.is_open())
+    {
+        confirmacion = false;
+    }
+
+    archivo << texto; // Aquí se supone que el contenido ha sido escrito en formato texto.
+    archivo.close();
+
+    return confirmacion;
+}
+
+string GestorCsv::escribirDatosTxt(const UnionDatos *unionDatos)
+{
+    string texto;
+    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+    texto += "Programa:\n";
+    texto += "  CodigoSnies: " + programaActual->getCodigoSniesDelPrograma() + "\n";
+    texto += "  ProgramaAcademico: " + programaActual->getProgramaAcademico() + "\n";
+    texto += "  IdNivelAcademico: " + (programaActual->getIdNivelAcademico()) + "\n";
+    texto += "  NivelAcademico: " + programaActual->getNivelAcademico() + "\n";
+    texto += "  IdNivelFormacion: " + (programaActual->getIdNivelDeFormacion()) + "\n";
+    texto += "  NivelFormacion: " + programaActual->getNivelDeFormacion() + "\n";
+    texto += "  IdMetodologia: " + (programaActual->getIdMetodologia()) + "\n";
+    texto += "  Metodologia: " + programaActual->getMetodologia() + "\n";
+    texto += "  IdArea: " + (programaActual->getIdArea()) + "\n";
+    texto += "  AreaConocimiento: " + programaActual->getAreaDeConocimiento() + "\n";
+    texto += "  IdNucleo: " + (programaActual->getIdNucleo()) + "\n";
+    texto += "  NucleoBasicoConocimiento: " + programaActual->getNucleoBasicoDelConocimientoNbc() + "\n";
+    texto += "  IdCineCampoAmplio: " + (programaActual->getIdCineCampoAmplio()) + "\n";
+    texto += "  DescCineCampoAmplio: " + programaActual->getDescCineCampoAmplio() + "\n";
+    texto += "  IdCineCampoEspecifico: " + (programaActual->getIdCineCampoEspecifico()) + "\n";
+    texto += "  DescCineCampoEspecifico: " + programaActual->getDescCineCampoEspecifico() + "\n";
+    texto += "  IdCineCodigoDetallado: " + (programaActual->getIdCineCodigoDetallado()) + "\n";
+    texto += "  DescCineCodigoDetallado: " + programaActual->getDescCineCodigoDetallado() + "\n";
+    texto += "  CodigoDepartamentoPrograma: " + programaActual->getCodigoDelDepartamentoPrograma() + "\n";
+    texto += "  DepartamentoOfertaPrograma: " + programaActual->getDepartamentoDeOfertaDelPrograma() + "\n";
+    texto += "  CodigoMunicipio: " + programaActual->getCodigoDelMunicipioPrograma() + "\n";
+    texto += "  MunicipioDeOfertaPrograma: " + programaActual->getMunicipioDeOfertaDelPrograma() + "\n";
+
+    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    texto += "\nDatos de la Institución:\n";
+    texto += "  CodigoInstitucion: " + datosInstiActuales->getCodigoDeLaInstitucion() + "\n";
+    texto += "  IesPadre: " + datosInstiActuales->getIesPadre() + "\n";
+    texto += "  InstitucionEducacionSuperiorIes: " + datosInstiActuales->getInstitucionDeEducacionSuperiorIes() + "\n";
+    texto += "  PrincipalOSeccional: " + datosInstiActuales->getPrincipalOSeccional() + "\n";
+    texto += "  IdSectorIes: " + (datosInstiActuales->getIdSectorIes()) + "\n";
+    texto += "  SectorIes: " + datosInstiActuales->getSectorIes() + "\n";
+    texto += "  IdCaracter: " + (datosInstiActuales->getIdCaracter()) + "\n";
+    texto += "  CaracterIes: " + datosInstiActuales->getCaracterIes() + "\n";
+    texto += "  CodigoDepartamentoIes: " + datosInstiActuales->getCodigoDelDepartamentoIes() + "\n";
+    texto += "  DepartamentoDomicilioIes: " + datosInstiActuales->getDepartamentoDeDomicilioDeLaIes() + "\n";
+    texto += "  CodigoMunicipioIes: " + datosInstiActuales->getCodigoDelMunicipioIes() + "\n";
+    texto += "  MunicipioDomicilioIes: " + datosInstiActuales->getMunicipioDeDomicilioDeLaIes() + "\n";
+
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    texto += "\nConsolidados:\n";
+    for (int i = 0; i < consolidadosActuales.size(); i++)
+    {
+        texto += "  Sexo: " + consolidadosActuales[i]->getSexo() + " (Id: " + std::to_string(consolidadosActuales[i]->getIdSexo()) + ")\n";
+        texto += "  Año: " + std::to_string(consolidadosActuales[i]->getAno()) + "\n";
+        texto += "  Semestre: " + std::to_string(consolidadosActuales[i]->getSemestre()) + "\n";
+        texto += "  Inscritos: " + std::to_string(consolidadosActuales[i]->getInscritos()) + "\n";
+        texto += "  Admitidos: " + std::to_string(consolidadosActuales[i]->getAdmitidos()) + "\n";
+        texto += "  Matriculados: " + std::to_string(consolidadosActuales[i]->getMatriculados()) + "\n";
+        texto += "  Matriculados Primer Semestre: " + std::to_string(consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + "\n";
+        texto += "  Graduados: " + std::to_string(consolidadosActuales[i]->getGraduados()) + "\n";
+    }
+}
+
+bool GestorCsv::escrituraJson(map<std::string, UnionDatos *> unificacion, string &ruta)
+{
+    bool confirmacion = true;
+    json jMap;
+    map<std::string, UnionDatos *>::iterator it;
+    for (it = unificacion.begin(); it != unificacion.end(); it++)
+    {
+        jMap[it->first] = convertirDatosJson(it->second);
+    }
+
+    std::ofstream archivo(ruta);
+
+    if (!archivo.is_open())
+    {
+        confirmacion = false;
+    }
+
+    archivo << jMap.dump(4);
+    archivo.close();
+
+    return confirmacion;
+}
+
+json GestorCsv::convertirDatosJson(const UnionDatos *unionDatos)
+{
+    json j;
+    ProgramaAcademico *programaActual = unionDatos->getProgramas();
+    j["programa"] = {
+        {"CoditoSnies", programaActual->getCodigoSniesDelPrograma()},
+        {"ProgramaAcademico", programaActual->getProgramaAcademico()},
+        {"IdNivelAcademico", programaActual->getIdNivelAcademico()},
+        {"NivelAcademico", programaActual->getNivelAcademico()},
+        {"IdNivelFormacion", programaActual->getIdNivelDeFormacion()},
+        {"NivelFormacion", programaActual->getNivelDeFormacion()},
+        {"IdMetodologia", programaActual->getIdMetodologia()},
+        {"Metodologia", programaActual->getMetodologia()},
+        {"IdArea", programaActual->getIdArea()},
+        {"AreaConocimiento", programaActual->getAreaDeConocimiento()},
+        {"IdNucleo", programaActual->getIdNucleo()},
+        {"NucleoBasicoConocimineto", programaActual->getNucleoBasicoDelConocimientoNbc()},
+        {"IdCineCampoAmplio", programaActual->getIdCineCampoAmplio()},
+        {"DescCinecampoAmplio", programaActual->getDescCineCampoAmplio()},
+        {"IdCineCampoEspecifico", programaActual->getIdCineCampoEspecifico()},
+        {"DescCineCampoEspecifico", programaActual->getDescCineCampoEspecifico()},
+        {"IdCineCodigoDetallado", programaActual->getIdCineCodigoDetallado()},
+        {"DescCineCodigoDetalaldo", programaActual->getDescCineCodigoDetallado()},
+        {"CodigoDepartamentoPrograma", programaActual->getCodigoDelDepartamentoPrograma()},
+        {"DepartamentoOfertaPrograma", programaActual->getDepartamentoDeOfertaDelPrograma()},
+        {"CodigoMunicipio", programaActual->getCodigoDelMunicipioPrograma()},
+        {"MunicioDeOfertaPrograma", programaActual->getMunicipioDeOfertaDelPrograma()}};
+    DatosInstitucion *datosInstiActuales = unionDatos->getDatosIntitucion();
+    j["datosInstitucion"] = {
+        {"CodigoInstitucion", datosInstiActuales->getCodigoDeLaInstitucion()},
+        {"IesPadre", datosInstiActuales->getIesPadre()},
+        {"InstitucionEducacionSuperiorIes", datosInstiActuales->getInstitucionDeEducacionSuperiorIes()},
+        {"PrincipalOSeccional", datosInstiActuales->getPrincipalOSeccional()},
+        {"IdSectorIes", datosInstiActuales->getIdSectorIes()},
+        {"SectorIes", datosInstiActuales->getSectorIes()},
+        {"IdCaracter", datosInstiActuales->getIdCaracter()},
+        {"CaracterIes", datosInstiActuales->getCaracterIes()},
+        {"CodigoDepartamentoIes", datosInstiActuales->getCodigoDelDepartamentoIes()},
+        {"DepartamentoDeDomiciolioDeLaIes", datosInstiActuales->getDepartamentoDeDomicilioDeLaIes()},
+        {"CodigoDelMunicipioIes", datosInstiActuales->getCodigoDelMunicipioIes()},
+        {"municioDeDomicilioDeLaIes", datosInstiActuales->getMunicipioDeDomicilioDeLaIes()}};
+    vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidados();
+    j["consolidados"] = json::array();
+    for (int i = 0; i < consolidadosActuales.size(); i++)
+    {
+        j["consolidados"].push_back({{"IdSexo", consolidadosActuales[i]->getIdSexo()},
+                                     {"Sexo", consolidadosActuales[i]->getSexo()},
+                                     {"Anio", consolidadosActuales[i]->getAno()},
+                                     {"Semetre", consolidadosActuales[i]->getSemestre()},
+                                     {"Inscritos", consolidadosActuales[i]->getInscritos()},
+                                     {"Admitidos", consolidadosActuales[i]->getAdmitidos()},
+                                     {"Matriculados", consolidadosActuales[i]->getMatriculados()},
+                                     {"MatriculadosPrimerSemestre", consolidadosActuales[i]->getMatriculadosPrimerSemestre()},
+                                     {"Graduados", consolidadosActuales[i]->getGraduados()}});
+    }
+
+    return j;
+}
