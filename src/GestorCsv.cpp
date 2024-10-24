@@ -505,15 +505,15 @@ std::string GestorCsv::escribirDatosCsv(const UnionDatos *unionDatos)
     vector<Consolidado *> consolidadosActuales = unionDatos->getConsolidado();
     for (int i = 0; i < consolidadosActuales.size(); i++)
     {
-        texto += std::to_string(consolidadosActuales[i]->getIdSexo()) + delimitador;
+        texto += (consolidadosActuales[i]->getIdSexo()) + delimitador;
         texto += consolidadosActuales[i]->getSexo() + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getAno()) + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getSemestre()) + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getInscritos()) + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getAdmitidos()) + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getMatriculados()) + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
-        texto += std::to_string(consolidadosActuales[i]->getGraduados()) + delimitador; // Fin de la fila (nueva línea)
+        texto += (consolidadosActuales[i]->getAno()) + delimitador;
+        texto += (consolidadosActuales[i]->getSemestre()) + delimitador;
+        texto += (consolidadosActuales[i]->getInscritos()) + delimitador;
+        texto += (consolidadosActuales[i]->getAdmitidos()) + delimitador;
+        texto += (consolidadosActuales[i]->getMatriculados()) + delimitador;
+        texto += (consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + delimitador;
+        texto += (consolidadosActuales[i]->getGraduados()) + delimitador; // Fin de la fila (nueva línea)
     }
 
     return texto;
@@ -589,14 +589,14 @@ string GestorCsv::escribirDatosTxt(const UnionDatos *unionDatos)
     texto += "\nConsolidados:\n";
     for (int i = 0; i < consolidadosActuales.size(); i++)
     {
-        texto += "  Sexo: " + consolidadosActuales[i]->getSexo() + " (Id: " + std::to_string(consolidadosActuales[i]->getIdSexo()) + ")\n";
-        texto += "  Año: " + std::to_string(consolidadosActuales[i]->getAno()) + "\n";
-        texto += "  Semestre: " + std::to_string(consolidadosActuales[i]->getSemestre()) + "\n";
-        texto += "  Inscritos: " + std::to_string(consolidadosActuales[i]->getInscritos()) + "\n";
-        texto += "  Admitidos: " + std::to_string(consolidadosActuales[i]->getAdmitidos()) + "\n";
-        texto += "  Matriculados: " + std::to_string(consolidadosActuales[i]->getMatriculados()) + "\n";
-        texto += "  Matriculados Primer Semestre: " + std::to_string(consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + "\n";
-        texto += "  Graduados: " + std::to_string(consolidadosActuales[i]->getGraduados()) + "\n";
+        texto += "  Sexo: " + consolidadosActuales[i]->getSexo() + " (Id: " + (consolidadosActuales[i]->getIdSexo()) + ")\n";
+        texto += "  Año: " + (consolidadosActuales[i]->getAno()) + "\n";
+        texto += "  Semestre: " + (consolidadosActuales[i]->getSemestre()) + "\n";
+        texto += "  Inscritos: " + (consolidadosActuales[i]->getInscritos()) + "\n";
+        texto += "  Admitidos: " + (consolidadosActuales[i]->getAdmitidos()) + "\n";
+        texto += "  Matriculados: " + (consolidadosActuales[i]->getMatriculados()) + "\n";
+        texto += "  Matriculados Primer Semestre: " + (consolidadosActuales[i]->getMatriculadosPrimerSemestre()) + "\n";
+        texto += "  Graduados: " + (consolidadosActuales[i]->getGraduados()) + "\n";
     }
 }
 

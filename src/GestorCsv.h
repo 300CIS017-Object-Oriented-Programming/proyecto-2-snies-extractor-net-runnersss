@@ -11,8 +11,8 @@
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
 #include "DatosInstitucion.h"
-#include "Settings.h"
 #include "UnionDatos.h"
+#include "Settings.h"
 #include <fstream>
 #include <sstream>
 #include <cctype>
