@@ -94,7 +94,7 @@ void View::mostrarPantallaBienvenido()
 
     cout << endl;
     cout << "===================================================================================" << endl;
-    cout << "Desea visualizar los datos extra calculados?" << endl;
+    cout << "Desea obtener los datos extra calculados?" << endl;
     cout << "--Ingrese 'Y' o 'N' segun corresponda:" << endl;
 
     if (eleccionUsuario())
@@ -207,7 +207,7 @@ void View::mostrarDatosExtra()
     int eleccion;
     cout << "===================================================================================" << endl;
     cout << "Diferencia porcentual anual de los nuevos estudiantes matricualados" << endl;
-    cout << "¿Como desea que se muestren los datos los datoss?" << endl;
+    cout << "Como desea que se muestren los datos los datos?" << endl;
     cout << "1) Mostrar en terminal" << endl;
     cout << "2) Exportar como archivo" << endl;
     cin >> eleccion;
@@ -226,6 +226,7 @@ void View::mostrarDatosExtra()
         cin >> eleccion;
         if (eleccion == 1)
         {
+            controlador->exportarCVSPorcentajeAnual(mapPorcentual);
         }
         else if (eleccion == 2)
         {
@@ -244,7 +245,7 @@ void View::mostrarDatosExtra()
     map<std::string, std::string>::iterator itSinMatri;
     cout << "===================================================================================" << endl;
     cout << "Programas que no tienen nuevos estudiantes matriculados durante 3 anios o mas" << endl;
-    cout << "¿Como desea que se muestren los datos los datoss?" << endl;
+    cout << "Como desea que se muestren los datos los datos?" << endl;
     cout << "1) Mostrar en terminal" << endl;
     cout << "2) Exportar como archivo" << endl;
     cin >> eleccion;
@@ -262,6 +263,7 @@ void View::mostrarDatosExtra()
         cin >> eleccion;
         if (eleccion == 1)
         {
+            controlador->exportarCVSDExtraSinMatricula(mapSinMatriculasNuevas);
         }
         else if (eleccion == 2)
         {
@@ -288,7 +290,7 @@ void View::menuBusqueda()
     controlador->busquedaPalabraClave(palabraClave);
 }
 
-void printTextTiposExportacion()
+void View::printTextTiposExportacion()
 {
     cout << "--Ingrese la opcion del tipo de formato para el archivo" << endl;
     cout << "1) CVS" << endl;

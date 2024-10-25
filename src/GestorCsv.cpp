@@ -122,6 +122,45 @@ void GestorCsv::eliminarIndices(std::unordered_map<std::string, int> &indices, s
         fila = fila_filtrada;
     }
 }
+void GestorCsv::escrituraPorcentajeDesencenso(const std::map<std::string, pair<int, int>> &programaYDifirencialAnual)
+{
+    bool escritura = true;
+    std::map<std::string, pair<int, int>>::const_iterator itMap;
+    string delimitador = Settings::DELIMITADOR;
+    std::ofstream archivoSalida(Settings::OUTPUT_PATH+"ProgramasDiferenciaAnual"+".csv");
+    archivoSalida << "\xEF\xBB\xBF";
+    archivoSalida << "Programa" << delimitador << "2021 a 2022" << delimitador << "2022 a 2023\n";
+
+    for (itMap = programaYDifirencialAnual.begin(); itMap != programaYDifirencialAnual.end(); itMap++)
+    {
+        archivoSalida << itMap->first << delimitador << itMap->second.first << delimitador << itMap->second.second << std::endl;
+    }
+    if (!archivoSalida.is_open())
+    {
+        escritura = false;
+    }
+
+    archivoSalida.close();
+}
+void GestorCsv::escrituraNoMatriculados(const std::map<std::string, std::string> &programasSinMatriculados)
+{
+    string delimitador = Settings::DELIMITADOR;
+    map<std::string, std::string>::const_iterator itMap;
+    std::ofstream archivoSalida(Settings::OUTPUT_PATH+"ProgramasSinMatriculados"+".csv");
+    bool escritura = true;
+    archivoSalida << "\xEF\xBB\xBF";
+    archivoSalida << "CodigoSnies" << delimitador << "Programa";
+    for (itMap = programasSinMatriculados.begin(); itMap != programasSinMatriculados.end(); itMap++)
+    {
+        archivoSalida << itMap->first << delimitador << itMap->second << std::endl;
+    }
+    if (!archivoSalida.is_open())
+    {
+        escritura = false;
+    }
+
+    archivoSalida.close();
+}
 
 bool GestorCsv::escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta)
 {

@@ -93,7 +93,7 @@ bool EscrituraJson::escrituraNoMatriculados(const std::map<std::string, std::str
         j[it->first] = it->second;
     }
 
-    std::ofstream archivo(Settings::OUTPUT_PATH);
+    std::ofstream archivo(Settings::OUTPUT_PATH+"ProgramasSinMatriculados"+".json");
     if (!archivo.is_open())
     {
         escritura = false;
@@ -117,7 +117,7 @@ bool EscrituraJson::escrituraPorcentajeDesencenso(const std::map<std::string, st
         };
     }
 
-    std::ofstream archivo(Settings::OUTPUT_PATH);
+    std::ofstream archivo(Settings::OUTPUT_PATH+"ProgramasDiferenciaAnual"+".json");
     if (!archivo.is_open())
     {
         escritura = false;

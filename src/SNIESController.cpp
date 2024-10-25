@@ -508,7 +508,7 @@ void SNIESController::busquedaPalabraClave(const string &palabraClave)
 }
 void SNIESController::exportarCVSDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados)
 {
-    // gestorCsvObj->
+    gestorCsvObj->escrituraNoMatriculados(programasSinMatriculados);
 }
 void SNIESController::exportarTXTDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados)
 {
@@ -520,7 +520,7 @@ void SNIESController::exportarJSONDExtraSinMatricula(const map<std::string, std:
 }
 void SNIESController::exportarCVSPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual)
 {
-    // gestorCVSObj->
+    gestorCsvObj->escrituraPorcentajeDesencenso(programaDiferenciaPorcentual);
 }
 void SNIESController::exportarTXTPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual)
 {

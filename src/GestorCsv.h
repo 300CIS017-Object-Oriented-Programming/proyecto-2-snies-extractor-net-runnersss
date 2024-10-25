@@ -39,6 +39,8 @@ public:
     void eliminarIndices(std::unordered_map<std::string, int> &indices, std::vector<std::vector<std::string>> &datos);
     bool escrituraCsv(map<std::string, UnionDatos *> unificacion, string &ruta);
     string escribirDatosCsv(const UnionDatos *unionDatos);
+    void escrituraNoMatriculados(const std::map<std::string, std::string> &programasSinMatriculados);
+    void escrituraPorcentajeDesencenso(const std::map<std::string, pair<int, int>> &programaYDifirencialAnual);
 };
 
 #endif
