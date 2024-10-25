@@ -44,7 +44,6 @@ void SNIESController::unificacionDatos()
             unificacion[clave] = unionDatos;
         }
     }
-
 }
 
 void SNIESController::determinarObjetosDatos(string &anio1)
@@ -120,7 +119,6 @@ void SNIESController::determinarObjetosDatos(string &anio1)
         string codigo = normalizarCodigo((fila[posicionesEncabezados["CÓDIGO SNIES DEL PROGRAMA"]]), (fila[posicionesEncabezados["CÓDIGO DEL MUNICIPIO (PROGRAMA)"]]), separador);
         programasAcademicos[codigo] = programa;
     }
-
 }
 void SNIESController::determinarObjetosConsolidados(string &anio1)
 {
@@ -326,16 +324,19 @@ std::vector<std::vector<std::string>> SNIESController::asignarGraduados(int anio
 
     return datos;
 }
-void SNIESController::exportarCSV(const string & nombreArchivo){
-    string ruta=Settings::OUTPUT_PATH+nombreArchivo+".csv";
+void SNIESController::exportarCSV(const string &nombreArchivo)
+{
+    string ruta = Settings::OUTPUT_PATH + nombreArchivo + ".csv";
     gestorCsvObj->escrituraCsv(unificacion, ruta);
 }
-void SNIESController::exportarTXT(const string & nombreArchivo){
-    string ruta=Settings::OUTPUT_PATH+nombreArchivo+".txt";
+void SNIESController::exportarTXT(const string &nombreArchivo)
+{
+    string ruta = Settings::OUTPUT_PATH + nombreArchivo + ".txt";
     gestorTxtObj->escrituraDatos(unificacion, ruta);
 }
-void SNIESController::exportarJSON(const string & nombreArchivo){
-    string ruta=Settings::OUTPUT_PATH+nombreArchivo+".txt";
+void SNIESController::exportarJSON(const string &nombreArchivo)
+{
+    string ruta = Settings::OUTPUT_PATH + nombreArchivo + ".txt";
     gestorJsonObj->escrituraDatos(unificacion, ruta);
 }
 std::map<std::string, pair<int, int>> SNIESController::diferenciaPorcentualAnual()
@@ -409,7 +410,8 @@ map<std::string, std::string> SNIESController::sinMatriculasNuevas()
     return programasSinMatriculados;
 }
 
-std::string SNIESController::convertirMinusculas(const std::string &cadena) {
+std::string SNIESController::convertirMinusculas(const std::string &cadena)
+{
     std::string minuscula = cadena;
     std::transform(minuscula.begin(), minuscula.end(), minuscula.begin(), ::tolower);
     return minuscula;
@@ -471,8 +473,6 @@ void SNIESController::busquedaPalabraClave(const string &palabraClave)
         }
     }
 
-
-
     map<std::string, UnionDatos *>::const_iterator it;
 
     if (mapDatosConpalabraclave.empty())
@@ -480,8 +480,8 @@ void SNIESController::busquedaPalabraClave(const string &palabraClave)
         std::cout << "No se encontraron resultados para la palabra clave." << std::endl;
         return;
     }
-    
-    std::cout<<"==================================================================================="<<endl;
+
+    std::cout << "===================================================================================" << endl;
     for (it = mapDatosConpalabraclave.begin(); it != mapDatosConpalabraclave.end(); ++it)
     {
         std::cout << "Clave: " << it->first << std::endl;
@@ -503,7 +503,30 @@ void SNIESController::busquedaPalabraClave(const string &palabraClave)
         std::cout << "Departamento de Domicilio: " << institucion->getDepartamentoDeDomicilioDeLaIes() << std::endl;
         std::cout << "Municipio de Domicilio: " << institucion->getMunicipioDeDomicilioDeLaIes() << std::endl;
 
-        std::cout<<"==================================================================================="<<endl;
+        std::cout << "===================================================================================" << endl;
     }
-
+}
+void SNIESController::exportarCVSDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados)
+{
+    // gestorCsvObj->
+}
+void SNIESController::exportarTXTDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados)
+{
+    gestorTxtObj->escrituraNoMatriculados(programasSinMatriculados);
+}
+void SNIESController::exportarJSONDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados)
+{
+    gestorJsonObj->escrituraNoMatriculados(programasSinMatriculados);
+}
+void SNIESController::exportarCVSPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual)
+{
+    // gestorCVSObj->
+}
+void SNIESController::exportarTXTPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual)
+{
+    gestorTxtObj->escrituraPorcentajeDesencenso(programaDiferenciaPorcentual);
+}
+void SNIESController::exportarJSONPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual)
+{
+    gestorJsonObj->escrituraPorcentajeDesencenso(programaDiferenciaPorcentual);
 }

@@ -107,11 +107,11 @@ std::string EscrituraTxt::convertirDatos(const UnionDatos *unionDatos)
     return texto;
 }
 
-bool EscrituraTxt::escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
+bool EscrituraTxt::escrituraNoMatriculados(const std::map<std::string, std::string> &programasSinMatriculados)
 {
 
     string delimitador = Settings::DELIMITADOR;
-    map<std::string, std::string>::iterator itMap;
+    map<std::string, std::string>::const_iterator itMap;
     std::ofstream archivoSalida(Settings::OUTPUT_PATH);
     bool escritura = true;
     archivoSalida << "\xEF\xBB\xBF";
@@ -129,10 +129,10 @@ bool EscrituraTxt::escrituraNoMatriculados(map<std::string, std::string> &progra
     return escritura;
 }
 
-bool EscrituraTxt::escrituraPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual)
+bool EscrituraTxt::escrituraPorcentajeDesencenso(const std::map<std::string, pair<int, int>> &programaYDifirencialAnual)
 {
     bool escritura = true;
-    map<std::string, pair<int, int>>::iterator itMap;
+    std::map<std::string, pair<int, int>>::const_iterator itMap;
     string delimitador = Settings::DELIMITADOR;
     std::ofstream archivoSalida(Settings::OUTPUT_PATH);
     archivoSalida << "\xEF\xBB\xBF";

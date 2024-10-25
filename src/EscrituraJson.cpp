@@ -82,12 +82,12 @@ json EscrituraJson::convertirDatos(const UnionDatos *unionDatos)
     return j;
 }
 
-bool EscrituraJson::escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
+bool EscrituraJson::escrituraNoMatriculados(const std::map<std::string, std::string> &programasSinMatriculados)
 {
     json j;
     bool escritura = true;
 
-    map<std::string, std::string>::iterator it;
+    std::map<std::string, std::string>::const_iterator it;
     for (it = programasSinMatriculados.begin(); it != programasSinMatriculados.end(); it++)
     {
         j[it->first] = it->second;
@@ -104,11 +104,11 @@ bool EscrituraJson::escrituraNoMatriculados(map<std::string, std::string> &progr
     return escritura;
 }
 
-bool EscrituraJson::escrituraPorcentajeDesencenso(std::map<std::string, std::pair<int, int>> &programaYDifirencialAnual)
+bool EscrituraJson::escrituraPorcentajeDesencenso(const std::map<std::string, std::pair<int, int>> &programaYDifirencialAnual)
 {
     json j;
     bool escritura = true;
-    map<std::string, pair<int, int>>::iterator itMap;
+    map<std::string, pair<int, int>>::const_iterator itMap;
     for (itMap = programaYDifirencialAnual.begin(); itMap != programaYDifirencialAnual.end(); itMap++)
     {
         j[itMap->first] = {

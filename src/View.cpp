@@ -178,11 +178,7 @@ void View::menuExportacionDatos()
     cin >> nombreArchivo;
     cout << endl;
     int eleccion;
-    cout << "--Ingrese la opcion del tipo de formato para el archivo" << endl;
-    cout << "1) CVS" << endl;
-    cout << "2) txt" << endl;
-    cout << "3) json" << endl;
-    cout << endl;
+    printTextTiposExportacion();
     cin >> eleccion;
 
     switch (eleccion)
@@ -208,24 +204,78 @@ void View::mostrarDatosExtra()
 {
     std::map<std::string, pair<int, int>> mapPorcentual = controlador->diferenciaPorcentualAnual();
     std::map<std::string, pair<int, int>>::iterator itMap;
+    int eleccion;
     cout << "===================================================================================" << endl;
     cout << "Diferencia porcentual anual de los nuevos estudiantes matricualados" << endl;
-    for (itMap = mapPorcentual.begin(); itMap != mapPorcentual.end(); itMap++)
+    cout << "¿Como desea que se muestren los datos los datoss?" << endl;
+    cout << "1) Mostrar en terminal" << endl;
+    cout << "2) Exportar como archivo" << endl;
+    cin >> eleccion;
+    if (eleccion == 1)
     {
-        cout << "Para el programa: " << itMap->first << endl;
-        cout << "Hay una diferencia anual del 2021 al 2022 de: " << itMap->second.first << endl;
-        cout << "Y una diferencia del 2022 al 2023 de: " << itMap->second.second << endl;
+        for (itMap = mapPorcentual.begin(); itMap != mapPorcentual.end(); itMap++)
+        {
+            cout << "Para el programa: " << itMap->first << endl;
+            cout << "Hay una diferencia anual del 2021 al 2022 de: " << itMap->second.first << endl;
+            cout << "Y una diferencia del 2022 al 2023 de: " << itMap->second.second << endl;
+        }
     }
-
+    else if (eleccion == 2)
+    {
+        printTextTiposExportacion();
+        cin >> eleccion;
+        if (eleccion == 1)
+        {
+        }
+        else if (eleccion == 2)
+        {
+            controlador->exportarTXTPorcentajeAnual(mapPorcentual);
+        }
+        else if (eleccion == 3)
+        {
+            controlador->exportarJSONPorcentajeAnual(mapPorcentual);
+        }
+        else
+            cout << "Eleccion no valida" << endl;
+    }
+    else
+        cout << "Eleccion valida" << endl;
     map<std::string, std::string> mapSinMatriculasNuevas = controlador->sinMatriculasNuevas();
     map<std::string, std::string>::iterator itSinMatri;
     cout << "===================================================================================" << endl;
     cout << "Programas que no tienen nuevos estudiantes matriculados durante 3 anios o mas" << endl;
-    for (itSinMatri = mapSinMatriculasNuevas.begin(); itSinMatri != mapSinMatriculasNuevas.end(); itSinMatri++)
+    cout << "¿Como desea que se muestren los datos los datoss?" << endl;
+    cout << "1) Mostrar en terminal" << endl;
+    cout << "2) Exportar como archivo" << endl;
+    cin >> eleccion;
+    if (eleccion == 1)
     {
-        cout << "Codigo Snies: " << itSinMatri->first << endl;
-        cout << "Programa: " << itSinMatri->second << endl;
+        for (itSinMatri = mapSinMatriculasNuevas.begin(); itSinMatri != mapSinMatriculasNuevas.end(); itSinMatri++)
+        {
+            cout << "Codigo Snies: " << itSinMatri->first << endl;
+            cout << "Programa: " << itSinMatri->second << endl;
+        }
     }
+    else if (eleccion == 2)
+    {
+        printTextTiposExportacion();
+        cin >> eleccion;
+        if (eleccion == 1)
+        {
+        }
+        else if (eleccion == 2)
+        {
+            controlador->exportarTXTDExtraSinMatricula(mapSinMatriculasNuevas);
+        }
+        else if (eleccion == 3)
+        {
+            controlador->exportarJSONDExtraSinMatricula(mapSinMatriculasNuevas);
+        }
+        else
+            cout << "Eleccion no valida" << endl;
+    }
+    else
+        cout << "Eleccion no valida" << endl;
 }
 
 void View::menuBusqueda()
@@ -236,4 +286,13 @@ void View::menuBusqueda()
     cout << "--Ingrese la palabra clave con la que desea filtrar los programas academicos: " << endl;
     cin >> palabraClave;
     controlador->busquedaPalabraClave(palabraClave);
+}
+
+void printTextTiposExportacion()
+{
+    cout << "--Ingrese la opcion del tipo de formato para el archivo" << endl;
+    cout << "1) CVS" << endl;
+    cout << "2) txt" << endl;
+    cout << "3) json" << endl;
+    cout << endl;
 }

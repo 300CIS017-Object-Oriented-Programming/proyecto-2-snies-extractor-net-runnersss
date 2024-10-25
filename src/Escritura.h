@@ -20,8 +20,8 @@ class Escritura
 {
 public:
     virtual bool escrituraDatos(map<std::string, UnionDatos *> unificacion, string &ruta) = 0;
-    virtual bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados) = 0;
-    virtual bool escrituraPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual) = 0;
+    virtual bool escrituraNoMatriculados(const map<std::string, std::string> &programasSinMatriculados) = 0;
+    virtual bool escrituraPorcentajeDesencenso(const map<std::string, pair<int, int>> &programaYDifirencialAnual) = 0;
     virtual ~Escritura() = default;
 };
 

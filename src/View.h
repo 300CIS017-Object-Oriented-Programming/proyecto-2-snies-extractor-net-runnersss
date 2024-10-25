@@ -28,6 +28,7 @@ public:
     bool isConvetibleToInt(const string &);
     void parametrizacion();
     void menuExportacionDatos();
+    void printTextTiposExportacion();
 };
 
 #endif

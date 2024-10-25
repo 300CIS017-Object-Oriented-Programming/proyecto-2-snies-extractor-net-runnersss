@@ -37,6 +37,7 @@ private:
     std::unordered_map<std::string, int> nombresEncabezados(std::vector<std::vector<std::string>> &datos);
     std::string normalizarCodigo(const string &primerComponente, const string &segundoComponente, const string &separador);
     std::string convertirMinusculas(const std::string &cadena);
+
 public:
     SNIESController();
     ~SNIESController();
@@ -44,10 +45,15 @@ public:
     void determinarObjetosDatos(string &anio1);
     void determinarObjetosConsolidados(string &anio1);
 
-
-    void exportarCSV(const string & nombreArchivo);
-    void exportarTXT(const string & nombreArchivo);
-    void exportarJSON(const string & nombreArchivo);
+    void exportarCVSDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados);
+    void exportarTXTDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados);
+    void exportarJSONDExtraSinMatricula(const map<std::string, std::string> &programasSinMatriculados);
+    void exportarCVSPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual);
+    void exportarTXTPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual);
+    void exportarJSONPorcentajeAnual(const map<std::string, pair<int, int>> &programaDiferenciaPorcentual);
+    void exportarCSV(const string &nombreArchivo);
+    void exportarTXT(const string &nombreArchivo);
+    void exportarJSON(const string &nombreArchivo);
     map<std::string, pair<int, int>> diferenciaPorcentualAnual();
     int formulaPorcentual(int totalAnio1, int totalAnio2);
     map<std::string, std::string> sinMatriculasNuevas();
