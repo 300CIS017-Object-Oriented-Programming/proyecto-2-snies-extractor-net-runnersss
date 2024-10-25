@@ -4,7 +4,7 @@ bool EscrituraTxt::escrituraDatos(map<std::string, UnionDatos *> unificacion, st
 {
     bool confirmacion = true;
     std::ofstream archivoSalida(ruta);
-
+    string delimitador = Settings::DELIMITADOR;
     if (!archivoSalida.is_open())
     {
         throw std::ios_base::failure("No se pudo abrir el archivo de salida");
@@ -14,14 +14,23 @@ bool EscrituraTxt::escrituraDatos(map<std::string, UnionDatos *> unificacion, st
     archivoSalida << "\xEF\xBB\xBF";
 
     // Crear encabezado del CSV
-    archivoSalida << "CodigoSnies;ProgramaAcademico;IdNivelAcademico;NivelAcademico;IdNivelFormacion;NivelFormacion;"
-                     "IdMetodologia;Metodologia;IdArea;AreaConocimiento;IdNucleo;NucleoBasicoConocimiento;"
-                     "IdCineCampoAmplio;DescCineCampoAmplio;IdCineCampoEspecifico;DescCineCampoEspecifico;"
-                     "IdCineCodigoDetallado;DescCineCodigoDetallado;CodigoDepartamentoPrograma;"
-                     "DepartamentoOfertaPrograma;CodigoMunicipio;MunicipioDeOfertaPrograma;CodigoInstitucion;"
-                     "IesPadre;InstitucionEducacionSuperiorIes;PrincipalOSeccional;IdSectorIes;SectorIes;"
-                     "IdCaracter;CaracterIes;CodigoDepartamentoIes;DepartamentoDomicilioIes;CodigoMunicipioIes;"
-                     "MunicipioDomicilioIes\n";
+    archivoSalida << "CodigoSnies" << delimitador << "ProgramaAcademico" << delimitador
+                  << "IdNivelAcademico" << delimitador << "NivelAcademico" << delimitador
+                  << "IdNivelFormacion" << delimitador << "NivelFormacion" << delimitador
+                  << "IdMetodologia" << delimitador << "Metodologia" << delimitador
+                  << "IdArea" << delimitador << "AreaConocimiento" << delimitador
+                  << "IdNucleo" << delimitador << "NucleoBasicoConocimiento" << delimitador
+                  << "IdCineCampoAmplio" << delimitador << "DescCineCampoAmplio" << delimitador
+                  << "IdCineCampoEspecifico" << delimitador << "DescCineCampoEspecifico" << delimitador
+                  << "IdCineCodigoDetallado" << delimitador << "DescCineCodigoDetallado" << delimitador
+                  << "CodigoDepartamentoPrograma" << delimitador << "DepartamentoOfertaPrograma" << delimitador
+                  << "CodigoMunicipio" << delimitador << "MunicipioDeOfertaPrograma" << delimitador
+                  << "CodigoInstitucion" << delimitador << "IesPadre" << delimitador
+                  << "InstitucionEducacionSuperiorIes" << delimitador << "PrincipalOSeccional" << delimitador
+                  << "IdSectorIes" << delimitador << "SectorIes" << delimitador
+                  << "IdCaracter" << delimitador << "CaracterIes" << delimitador
+                  << "CodigoDepartamentoIes" << delimitador << "DepartamentoDomicilioIes" << delimitador
+                  << "CodigoMunicipioIes" << delimitador << "MunicipioDomicilioIes" << "\n";
 
     // Iterar sobre los datos y escribir cada línea
     for (auto it = unificacion.begin(); it != unificacion.end(); ++it)
@@ -96,4 +105,48 @@ std::string EscrituraTxt::convertirDatos(const UnionDatos *unionDatos)
     }
 
     return texto;
+}
+
+bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
+{
+
+    string delimitador = Settings::DELIMITADOR;
+    map<std::string, std::string>::iterator itMap;
+    std::ofstream archivoSalida(Settings::OUTPUT_PATH);
+    bool escritura = true;
+    archivoSalida << "\xEF\xBB\xBF";
+    archivoSalida << "CodigoSnies" << delimitador << "Programa";
+    for (itMap = programasSinMatriculados.begin(); itMap != programasSinMatriculados.end(); itMap++)
+    {
+        archivoSalida << itMap->first << delimitador << itMap->second << std::endl;
+    }
+    if (!archivoSalida.is_open())
+    {
+        escritura = false;
+    }
+
+    archivoSalida.close();
+    return escritura;
+}
+
+bool escritruaPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual)
+{
+    bool escritura = true;
+    map<std::string, pair<int, int>>::iterator itMap;
+    string delimitador = Settings::DELIMITADOR;
+    std::ofstream archivoSalida(Settings::OUTPUT_PATH);
+    archivoSalida << "\xEF\xBB\xBF";
+    archivoSalida << "Programa" << delimitador << "2021a2022" << delimitador << "2022a2023";
+
+    for (itMap = programaYDifirencialAnual.begin(); itMap != programaYDifirencialAnual.end(); itMap++)
+    {
+        archivoSalida << itMap->first << delimitador << itMap->second.first << delimitador << itMap->second.second << std::endl;
+    }
+    if (!archivoSalida.is_open())
+    {
+        escritura = false;
+    }
+
+    archivoSalida.close();
+    return escritura;
 }
