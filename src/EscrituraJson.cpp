@@ -81,3 +81,48 @@ json EscrituraJson::convertirDatos(const UnionDatos *unionDatos)
 
     return j;
 }
+
+bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
+{
+    json j;
+    bool escritura = true;
+
+    map<std::string, std::string>::iterator it;
+    for (it = programasSinMatriculados.begin(); it != programasSinMatriculados.end(); it++)
+    {
+        j[it->first] = it->second;
+    }
+
+    std::ofstream archivo(Settings::OUTPUT_PATH);
+    if (!archivo.is_open())
+    {
+        escritura = false;
+    }
+
+    archivo << j.dump(4);
+    archivo.close();
+    return escritura;
+}
+bool escritruaPorcentajeDesencenso(map<std::string, pair<int, int>> programaYDifirencialAnual)
+{
+    json j;
+    bool escritura = true;
+    map<std::string, pair<int, int>>::iterator itMap;
+    for (itMap = programaYDifirencialAnual.begin(); itMap != programaYDifirencialAnual.end(); itMap++)
+    {
+        j[itMap->first] = {
+            {"2021 a 2022", itMap->second.first},
+            {"2022 a 2023", itMap->second.second},
+        };
+    }
+
+    std::ofstream archivo(Settings::OUTPUT_PATH);
+    if (!archivo.is_open())
+    {
+        escritura = false;
+    }
+
+    archivo << j.dump(4);
+    archivo.close();
+    return escritura;
+}
