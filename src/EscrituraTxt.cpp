@@ -107,7 +107,7 @@ std::string EscrituraTxt::convertirDatos(const UnionDatos *unionDatos)
     return texto;
 }
 
-bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
+bool EscrituraTxt::escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
 {
 
     string delimitador = Settings::DELIMITADOR;
@@ -129,7 +129,7 @@ bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatricul
     return escritura;
 }
 
-bool escritruaPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual)
+bool EscrituraTxt::escrituraPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual)
 {
     bool escritura = true;
     map<std::string, pair<int, int>>::iterator itMap;

@@ -82,7 +82,7 @@ json EscrituraJson::convertirDatos(const UnionDatos *unionDatos)
     return j;
 }
 
-bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
+bool EscrituraJson::escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados)
 {
     json j;
     bool escritura = true;
@@ -103,7 +103,8 @@ bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatricul
     archivo.close();
     return escritura;
 }
-bool escritruaPorcentajeDesencenso(map<std::string, pair<int, int>> programaYDifirencialAnual)
+
+bool EscrituraJson::escrituraPorcentajeDesencenso(std::map<std::string, std::pair<int, int>> &programaYDifirencialAnual)
 {
     json j;
     bool escritura = true;

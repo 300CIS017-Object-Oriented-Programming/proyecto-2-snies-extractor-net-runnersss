@@ -14,7 +14,7 @@ private:
 public:
     bool escrituraDatos(std::map<std::string, UnionDatos *> unificacion, std::string &ruta) override;
     bool escrituraNoMatriculados(map<std::string, std::string> &programasSinMatriculados) override;
-    bool escritruaPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual) override;
+    bool escrituraPorcentajeDesencenso(map<std::string, pair<int, int>> &programaYDifirencialAnual) override;
 };
 
 #endif // ESCRITURATXT_H
