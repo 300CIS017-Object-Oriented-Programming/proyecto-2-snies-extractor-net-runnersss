@@ -153,18 +153,14 @@ bool View::isConvetibleToInt(const string &str)
     {
         std::size_t pos;
         int num = std::stoi(str, &pos);
-
-        // Verificamos si se ha convertido toda la cadena
         return pos == str.length();
     }
     catch (const std::invalid_argument &)
     {
-        // No se pudo convertir: la cadena no es un número válido
         return false;
     }
     catch (const std::out_of_range &)
     {
-        // No se pudo convertir: el número está fuera del rango de int
         return false;
     }
 }
